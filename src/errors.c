@@ -4,9 +4,11 @@ const char *errorMsg(errorCode code)
 {
     switch (code)
     {
+        case SUCCESS:
+            return "No error.";
         case MEM:
-            return "Memory allocation error."
-        default:
-            return "No error."
+            return "Memory allocation error.";
     }
+
+    return "This should never happen.";
 }
