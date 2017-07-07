@@ -21,6 +21,6 @@
  *  Errors:     ??
 **/
 
-cFloat mainloopCall(*graphBac graph, *simBac sim, rngState state);
+cFloat mainloopCall(graphBac *graph, simBac *sim, rngState randState);
 
 #endif

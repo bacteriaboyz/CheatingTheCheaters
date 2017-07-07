@@ -17,6 +17,6 @@
 *
 *   Errors:     ??
 **/
-cFloat populationEff(*nodeBac node, *simBac sim);
+cFloat populationEff(nodeBac *node, simBac *sim);
 
 #endif

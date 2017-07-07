@@ -1,4 +1,4 @@
-void deathBac(cInt idx, *graphBac graph)
+void deathBac(cInt idx, graphBac *graph)
 {
     graph->bacteria[idx].used = 0; // list node as unused
     

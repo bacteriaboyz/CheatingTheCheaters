@@ -19,6 +19,6 @@
 *
 *   Errors:     ??
 **/
-void fitnessUpdate(*nodeBac node);
+void fitnessUpdate(nodeBac *node);
 
 #endif

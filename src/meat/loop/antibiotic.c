@@ -1,4 +1,4 @@
-cFloat antibioticEff(*nodeBac node, *simBac sim)
+cFloat antibioticEff(nodeBac *node, simBac *sim)
 {
     enz = enzymeConc(node, sim); // get enzyme concentration at this point
 

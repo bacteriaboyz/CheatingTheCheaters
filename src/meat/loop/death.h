@@ -19,6 +19,6 @@
  *
  *  Errors:     ??
  */
-void deathBac(cInt idx, *graphBac graph);
+void deathBac(cInt idx, graphBac *graph);
 
 #endif

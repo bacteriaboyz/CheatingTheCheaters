@@ -17,6 +17,6 @@
 *
 *   Errors:     ??
 **/
-cFloat enzymeConc(*nodeBac node, *simBac sim);
+cFloat enzymeConc(nodeBac *node, simBac *sim);
 
 #endif

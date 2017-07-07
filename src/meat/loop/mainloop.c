@@ -1,10 +1,10 @@
-cFloat mainloopCall(*graphBac graph, *simBac sim, rng randState)
+cFloat mainloopCall(graphBac *graph, simBac *sim, rng randState)
 {
     for (cInt i=0; i< sim->num_Iter; i++)
     {
         if (transformUnif(randState,0.0,1.0) < graphBac->bacteria[i].fitness)
         {
-            reproductionBac(graph->bacteria[i], graph, randState);
+            reproductionBac(graph->bacteria[i], graph, sim, randState);
                 // replicate this node if the probability is below this 
                 // bacteria's fitness 
         }

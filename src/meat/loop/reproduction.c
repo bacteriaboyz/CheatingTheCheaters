@@ -1,4 +1,4 @@
-void reproductionBac(*nodeBac node, *graphBac graph, simBac sim, rngState rand_State)
+void reproductionBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State)
 {
     //TODO: assign new node location using random sampling thing
     //      define child_X, child_Y, child_Z
@@ -11,13 +11,13 @@ void reproductionBac(*nodeBac node, *graphBac graph, simBac sim, rngState rand_S
         distances=dist,
         len=num_neigh,
         deg=num_neigh,
-        x=child_X,y=child_Y,z=child_Z,
+        pos=position,
         fitness=0,
         resistant=node.resistant, // by default, same as parent
         used=1
     };
 
-    if (transform.rand(rand_State) < sim.p_RN*node.resistant + sim.p_NR*(!node.resistant)) 
+    if (transform.rand(rand_State) < sim.p_RN * node.resistant + sim.p_NR * (!node.resistant)) //TODO: split into ifs 
         // Calculate conditional probability of child bacteria mutating
     {
         child.resistant = !child.resistant; // mutate from parent

@@ -1,4 +1,4 @@
-cFloat enzymeConc(*nodeBac node, *simBac sim)
+cFloat enzymeConc(nodeBac *node, simBac *sim)
 {
     cFloat enz = 0; // stores enzyme concentration added from all neighbors
     for (cInt i=0; i < node->len; i++)

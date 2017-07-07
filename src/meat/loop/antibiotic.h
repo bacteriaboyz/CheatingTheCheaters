@@ -19,6 +19,6 @@
 *
 *   Errors:     ??
 **/
-cFloat antibioticEff(*nodeBac node, *simBac sim);
+cFloat antibioticEff(nodeBac *node, simBac *sim);
 
 #endif

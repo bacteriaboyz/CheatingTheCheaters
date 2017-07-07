@@ -21,6 +21,6 @@
 *
 *   Errors:     ??
 **/
-void reproductionBac(*nodeBac node, *graphBac graph, rngState rand_State);
+void reproductionBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State);
 
 #endif

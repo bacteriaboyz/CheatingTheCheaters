@@ -1,4 +1,4 @@
-void fitnessUpdate(*nodeBac node, *simBac sim)
+void fitnessUpdate(nodeBac *node, simBac *sim)
 {
     cFloat eff_AB = antibioticEff(node,sim); // Masking effect of antibiotic
     cFloat eff_Pop = populationEff(node,sim); // Masking effect of population
