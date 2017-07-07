@@ -24,10 +24,10 @@ ifdef profile
 endif
 
 link : $(OBJECTS)
-	$(LD) -o $(EXENAME) *.o $(LDFLAGS)
+	$(LD) -o $(EXENAME) $^ $(LDFLAGS)
 
 %.o : %.c
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean :
-	rm -f *.o *.exe $(EXENAME)
+	rm -f *.exe $(EXENAME) $(OBJECTS)
