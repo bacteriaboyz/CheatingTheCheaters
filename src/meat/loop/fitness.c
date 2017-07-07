@@ -1,3 +1,10 @@
+#include <math.h>
+
+#include "fitness.h"
+#include "population.h"
+#include "antibiotic.h"
+#include "population.h"
+
 void fitnessUpdate(nodeBac *node, simBac *sim)
 {
     cFloat eff_AB = antibioticEff(node,sim); // Masking effect of antibiotic
@@ -10,6 +17,4 @@ void fitnessUpdate(nodeBac *node, simBac *sim)
     }
 
     node->fitness = 1*res_Mask*eff_AB*eff_Pop; // calculates final fitness
-
-    return;
 }

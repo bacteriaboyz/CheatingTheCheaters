@@ -1,11 +1,11 @@
 #ifndef _ENZYME_H
 #define _ENZYME_H
 
-#include "math.h"
+#include <math.h>
 
 #include "types.h"
-#include "dStruct/node.h"
-#include "dStruct/sim.h"
+#include "node.h"
+#include "sim.h"
 
 /** Function returns enzyme concentration at the position of a given bacteria
 *   by adding the concentrations due to the neighboring producer bacteria.

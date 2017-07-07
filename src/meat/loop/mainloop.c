@@ -1,4 +1,10 @@
-cFloat mainloopCall(graphBac *graph, simBac *sim, rng randState)
+#include <math.h>
+
+#include "mainloop.h"
+#include "transform.h"
+#include "node.h"
+
+cFloat mainloopCall(graphBac *graph, simBac *sim)
 {
     for (cInt i=0; i< sim->num_Iter; i++)
     {
@@ -19,6 +25,8 @@ cFloat mainloopCall(graphBac *graph, simBac *sim, rng randState)
             //TODO: write snapshot of graph struct  to file
         }
     }
-     
+
     //TODO: write snapshot of graph struct  to file 
+
+    return 0.0;
 }

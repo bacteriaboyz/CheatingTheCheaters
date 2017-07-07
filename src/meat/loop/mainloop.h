@@ -4,10 +4,8 @@
 #include "math.h"
 
 #include "types.h"
-#include "dStruct/node.h"
-#include "dStruct/sim.h"
-#include "dStruct/graph.h"
-#include "rng/transform.h"
+#include "sim.h"
+#include "graph.h"
 
 /** Function iterates through all nodes on graph, calling reproduction and 
  *  death functions when pertinent.
@@ -21,6 +19,6 @@
  *  Errors:     ??
 **/
 
-cFloat mainloopCall(graphBac *graph, simBac *sim, rngState randState);
+cFloat mainloopCall(graphBac *graph, simBac *sim);
 
 #endif

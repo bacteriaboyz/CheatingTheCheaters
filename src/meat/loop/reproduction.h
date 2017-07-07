@@ -1,13 +1,10 @@
 #ifndef _REPRODUCTION_H
 #define _REPRODUCTION_H
 
-#include "math.h"
-
 #include "types.h"
-#include "dStruct/graph.h"
-#include "dStruct/node.h"
-#include "rng/transform.h"
-#include "meat/fitness.h"
+#include "graph.h"
+#include "node.h"
+#include "sim.h"
 
 /** Function creates new nodeBac struct in a radius around the nodeBac struct 
 *   whose index is passed as an argument. Assigns nodeback neighbors and all 

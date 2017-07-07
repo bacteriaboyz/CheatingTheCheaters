@@ -1,3 +1,7 @@
+#include <math.h>
+
+#include "enzyme.h"
+
 cFloat enzymeConc(nodeBac *node, simBac *sim)
 {
     cFloat enz = 0; // stores enzyme concentration added from all neighbors
@@ -12,4 +16,3 @@ cFloat enzymeConc(nodeBac *node, simBac *sim)
 
     return enz;
 }
- 

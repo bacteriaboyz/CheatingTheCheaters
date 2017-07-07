@@ -2,9 +2,7 @@
 #define _DEATH_H
 
 #include "types.h"
-#include "dStruct/graph.h"
-#include "dStruct/node.h"
-#include "meat/fitness.h"
+#include "graph.h"
 
 /*  Function assigns nodeBac from graphBac struct as unused, and adds its index 
  *  inside the graphBac stack in order to be reused by a new bacteria. If the 

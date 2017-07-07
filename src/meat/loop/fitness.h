@@ -4,11 +4,8 @@
 #include "math.h"
 
 #include "types.h"
-#include "dStruct/graph.h"
-#include "dStruct/node.h"
-#include "meat/enzyme.h"
-#include "meat/antibiotic.h"
-#include "meat/population.h"
+#include "sim.h"
+#include "node.h"
 
 /** Function updates fitness (reproduction probability) of the given node, 
 *   based on the concentration of enzyme and antibiotic at the given node.
@@ -19,6 +16,6 @@
 *
 *   Errors:     ??
 **/
-void fitnessUpdate(nodeBac *node);
+void fitnessUpdate(nodeBac *node, simBac *sim);
 
 #endif
