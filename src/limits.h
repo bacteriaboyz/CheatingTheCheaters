@@ -5,4 +5,8 @@
 #define LIMITS_MAX_BACT 1000
 #endif
 
+#ifndef LIMITS_DIM
+#define LIMITS_DIM 3
+#endif
+
 #endif
