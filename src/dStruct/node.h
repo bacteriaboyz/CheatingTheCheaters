@@ -8,15 +8,15 @@ struct nodeBac
     struct nodeBac **neighbors;
     cFloat *distances;
     cInt len;
+    cInt deg;           // Equal to number of used nodes in neighbors
 
-    cFloat x, y, z;
+    cVec pos;
 
-    cFloat enzyme;
-    cFloat ab_init;
-    cFloat ab_eff;
+    cFloat fitness;
+    cInt resistant : 1; // 2-bit allocation (assigns 1 bit to this variable,
+                        // more efficient than booleans).
 
-    cInt resistant : 1;
-    cInt used : 1;
+    cInt used : 1;      // Used to avoid setting nulls
 };
 
 typedef struct nodeBac nodeBac;

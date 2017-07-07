@@ -2,6 +2,7 @@
 #define _SIM_H
 
 #include "graph.h"
+#include "rng.h"
 #include "types.h"
 
 typedef struct
@@ -10,7 +11,7 @@ typedef struct
 
     nnTree *tree;
 
-    // RNG state
+    rngState state;
 
     cInt t_step;
 } simBac;
