@@ -1,15 +1,16 @@
 #ifndef _SIM_H
 #define _SIM_H
 
+#include "types.h"
 #include "graph.h"
 #include "rng.h"
-#include "types.h"
+#include "nn.h"
 
 typedef struct
 {
-    graphBac *graph;
+    graphBac graph;
 
-    nnTree *tree;
+    nnTree tree;
 
     rngState state;
 
