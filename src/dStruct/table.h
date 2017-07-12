@@ -113,11 +113,11 @@ typedef struct
 bool tableIsEmpty(tableHash *table);
 
 /*
- * Initializes a new hash table with the given (positive) size.
+ * Initializes a new hash table with the given length.
  * Possible errors: MEM
  */
 
-void tableInit(tableHash *table, cInt size, errorCode *error);
+void tableInit(tableHash *table, cInt len, errorCode *error);
 
 /*
  * Adds an entry to the hash table. If the key already exists, the entry is
@@ -190,4 +190,5 @@ void tableDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
  */
 
 void tableFree(tableHash *table);
+
 #endif
