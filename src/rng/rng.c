@@ -10,7 +10,7 @@ void rngInitState(rngState state, char *phrase)
         return;
     }
 
-    cBigInt hash = hash128(phrase);
+    cBigInt hash = hash128(phrase, strlen(phrase));
 
     state[0] = hash & 0xffffffffffffffff;
     state[1] = hash >> 64;

@@ -7,6 +7,6 @@
  * Uses the FNV-1a 128-bit hash algorithm.
  */
 
-cBigInt hash128(char *key);
+cBigInt hash128(char *key, cInt len);
 
 #endif

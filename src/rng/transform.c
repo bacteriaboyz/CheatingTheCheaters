@@ -1,10 +1,8 @@
 #include <math.h>
 
+#include "limits.h"
 #include "rng.h"
 #include "transform.h"
-
-// Maximum number of tries for rejection sampling.
-#define TRANSFORM_MAX_TRIES 128
 
 #define TRANSFORM_DENOMINATOR 0x20000000000000
 
@@ -15,9 +13,9 @@ cFloat transformUnif(rngState state, cFloat l, cFloat u)
     return fma(u - l, raw / TRANSFORM_DENOMINATOR, l);
 }
 
-cFloat transformGauss(rngState state)
+cFloat transformGauss(rngState state, errorCode *error)
 {
-    for (cInt i = 0; i < TRANSFORM_MAX_TRIES; ++i)
+    for (cInt i = 0; i < LIMITS_MAX_TRIES; ++i)
     {
         cFloat u = transformUnif(state, -1, 1);
         cFloat v = transformUnif(state, -1, 1);
@@ -26,14 +24,22 @@ cFloat transformGauss(rngState state)
 
         if (s > 0 && s < 1)
         {
+            *error = SUCCESS;
             return u * sqrt(-2 * log(s) / s);
         }
     }
 
+    *error = REJECT;
     return 0;
 }
 
-void transformBall(rngState state, cFloat radius, cVec center, cVec out)
+void transformBall(
+                    rngState state,
+                    cFloat radius,
+                    cVec center,
+                    cVec out,
+                    errorCode *error
+                  )
 {
     cFloat coef = 0;
     cFloat new_radius = radius * pow(
@@ -41,9 +47,17 @@ void transformBall(rngState state, cFloat radius, cVec center, cVec out)
         (cFloat)1 / LIMITS_DIM
     );
 
+    errorCode internal_error;
+
     for (cInt i = 0; i < LIMITS_DIM; ++i)
     {
-        cFloat v = transformGauss(state);
+        cFloat v = transformGauss(state, &internal_error);
+
+        if (internal_error == REJECT)
+        {
+            *error = REJECT;
+            return;
+        }
 
         out[i] = v;
 
@@ -56,4 +70,6 @@ void transformBall(rngState state, cFloat radius, cVec center, cVec out)
     {
         out[i] = fma(out[i], coef, center[i]);
     }
+
+    *error = SUCCESS;
 }

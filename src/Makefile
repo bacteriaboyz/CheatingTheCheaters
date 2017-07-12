@@ -23,6 +23,10 @@ ifdef profile
 	CFLAGS += $(PROFILE)
 endif
 
+ifdef asm
+	CFLAGS += -S
+endif
+
 link : $(OBJECTS)
 	$(LD) -o $(EXENAME) $^ $(LDFLAGS)
 
