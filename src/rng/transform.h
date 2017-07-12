@@ -12,6 +12,7 @@ cFloat transformUnif(rngState state, cFloat l, cFloat u);
 
 /*
  * Returns a standard normal variate.
+ * Possible errors: REJECT
  */
 
 cFloat transformGauss(rngState state, errorCode *error);
@@ -19,6 +20,7 @@ cFloat transformGauss(rngState state, errorCode *error);
 /*
  * Given a radius and a center, samples a point uniformly from the ball and
  * writes it to "out".
+ * Possible errors: REJECT
  */
 
 void transformBall(

@@ -10,7 +10,8 @@ typedef enum
 {
     SUCCESS,
     MEM,
-    REJECT
+    REJECT,
+    NOT_FOUND
 } errorCode;
 
 /*

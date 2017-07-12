@@ -47,15 +47,12 @@ void transformBall(
         (cFloat)1 / LIMITS_DIM
     );
 
-    errorCode internal_error;
-
     for (cInt i = 0; i < LIMITS_DIM; ++i)
     {
-        cFloat v = transformGauss(state, &internal_error);
+        cFloat v = transformGauss(state, error)
 
-        if (internal_error == REJECT)
+        if (*error == REJECT)
         {
-            *error = REJECT;
             return;
         }
 
