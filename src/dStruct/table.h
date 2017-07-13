@@ -3,9 +3,8 @@
 
 #include <stdbool.h>
 
-#include "bucket.h"
 #include "errors.h"
-#include "node.h"
+#include "limits.h"
 #include "types.h"
 
 static const cInt table_sizes[] =
@@ -45,49 +44,11 @@ static const cInt table_sizes[] =
 
 static const cInt table_num_sizes = sizeof(table_sizes) / sizeof(cInt);
 
-typedef union
-{
-    cInt idx;
-
-    nodeBac *bacterium;
-} tableKeyData;
-
 typedef struct
 {
-    enum
-    {
-        INDEX,
-        BACTERIUM
-    } type;
+    cByte key[LIMITS_TABLE_ENTRY_SIZE];
 
-    tableKeyData data;
-
-} tableKey;
-
-typedef union
-{
-    bucketBac *bucket;
-
-    cFloat dist;
-} tableValData;
-
-typedef struct
-{
-    enum
-    {
-        BUCKET,
-        DISTANCE
-    } type;
-
-    tableValData data;
-
-} tableVal;
-
-typedef struct
-{
-    tableKey key;
-
-    tableVal val;
+    cByte val[LIMITS_TABLE_ENTRY_SIZE];
 
     cInt used : 1;
     cInt used_before : 1;
@@ -96,6 +57,10 @@ typedef struct
 typedef struct
 {
     tableSlot *slots;
+
+    cInt key_len; // Length of key in bytes.
+
+    cInt val_len; // Length of value in bytes.
 
     cInt num; // Number of used entries. Should be <= 50% of capacity.
 
@@ -117,7 +82,13 @@ bool tableIsEmpty(tableHash *table);
  * Possible errors: MEM
  */
 
-void tableInit(tableHash *table, cInt len, errorCode *error);
+void tableInit(
+                tableHash *table,
+                cInt table_len,
+                cInt key_len,
+                cInt val_len,
+                errorCode *error
+              );
 
 /*
  * Adds an entry to the hash table. If the key already exists, the entry is
@@ -125,65 +96,21 @@ void tableInit(tableHash *table, cInt len, errorCode *error);
  * Possible errors: MEM
  */
 
-void tableAdd(
-                tableHash *table,
-                tableKey key,
-                tableVal val,
-                cInt key_len,
-                errorCode *error
-             );
-
-// Use these functions instead for everyday purposes:
-
-void tableAddBucket(
-                    tableHash *table,
-                    cInt idx,
-                    bucketBac *bucket,
-                    errorCode *error
-                   );
-
-void tableAddBacterium(
-                        tableHash *table,
-                        nodeBac *bacterium,
-                        cFloat dist,
-                        errorCode *error
-                      );
+void tableAdd(tableHash *table, cByte *key, cByte *val, errorCode *error);
 
 /*
  * Looks up a value in the hash table.
  * Possible errors: NOT_FOUND
  */
 
-tableVal tableLookup(
-                        tableHash *table,
-                        tableKey key,
-                        cInt key_len,
-                        errorCode *error
-                    );
-
-// Use these functions instead for everyday purposes:
-
-bucketBac *tableLookupBucket(tableHash *table, cInt idx, errorCode *error);
-
-cFloat tableLookupBacterium(
-                            tableHash *table,
-                            nodeBac *bacterium,
-                            errorCode *error
-                           );
-
+cByte *tableLookup(tableHash *table, cByte *key);
 
 /*
  * Deletes an entry from the hash table.
  * Possible errors: NOT_FOUND
  */
 
-void tableDel(tableHash *table, tableKey key, cInt key_len, errorCode *error);
-
-// Use these functions instead for everyday purposes:
-
-void tableDelBucket(tableHash *table, cInt idx, errorCode *error);
-
-void tableDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
+void tableDel(tableHash *table, cByte *key, errorCode *error);
 
 /*
  * Frees the memory used by the hash table.

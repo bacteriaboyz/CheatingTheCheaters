@@ -1,32 +1,29 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "hash.h"
 #include "table.h"
-
-static bool tableKeysEqual(tableKey *k1, tableKey *k2)
-{
-    if (k1->type != k2->type)
-    {
-        return false;
-    }
-    else if (k1->type == INDEX)
-    {
-        return k1->data.idx == k2->data.idx;
-    }
-
-    return k1->data.bacterium == k2->data.bacterium;
-}
 
 bool tableIsEmpty(tableHash *table)
 {
     return table->num == 0;
 }
 
-void tableInit(tableHash *table, cInt len, errorCode *error)
+void tableInit(
+                tableHash *table,
+                cInt table_len,
+                cInt key_len,
+                cInt val_len,
+                errorCode *error
+              )
 {
     cInt len_idx = 0;
 
-    if (len > table_sizes[table_num_sizes - 1])
+    if (
+        table_len > table_sizes[table_num_sizes - 1] ||
+        key_len > LIMITS_TABLE_ENTRY_SIZE ||
+        val_len > LIMITS_TABLE_ENTRY_SIZE
+       )
     {
         *error = MEM;
         return;
@@ -34,18 +31,20 @@ void tableInit(tableHash *table, cInt len, errorCode *error)
 
     for (;; ++len_idx)
     {
-        if (len <= table_sizes[len_idx])
+        if (table_len <= table_sizes[len_idx])
         {
             break;
         }
     }
 
-    if (!(table->slots = calloc(len, sizeof(tableSlot))))
+    if (!(table->slots = calloc(table_len, sizeof(tableSlot))))
     {
         *error = MEM;
         return;
     }
 
+    table->key_len = key_len;
+    table->val_len = val_len;
     table->num = 0;
     table->num_ghosts = 0;
     table->len = table_sizes[len_idx];
@@ -54,38 +53,57 @@ void tableInit(tableHash *table, cInt len, errorCode *error)
     *error = SUCCESS;
 }
 
-// Returns true if we've added an entry to a fresh position.
+/*
+ * Use this function to add entries to a table without resizing. It will get
+ * get caught in a loop if the table fills up. The "slots" argument is for when
+ * a table is being rebuilt. Set it to NULL to add entries to the same table.
+ */
 
 static bool tableUnsafeAdd(
+                            tableHash *table,
                             tableSlot *slots,
-                            cInt table_len,
-                            tableKey key,
-                            tableVal val,
-                            cInt key_len
+                            cInt new_len,
+                            cByte *key,
+                            cByte *val
                           )
 {
-    cInt table_idx = hash32((char *)&key.data, key_len) % table_len;
-    cInt search_idx = table_idx;
+    tableSlot *target;
+    cInt target_len;
+    cInt table_idx;
+    cInt search_idx;
+
+    if (slots)
+    {
+        target = slots;
+        target_len = new_len;
+    }
+    else
+    {
+        target = table->slots;
+        target_len = table->len;
+    }
+
+    search_idx = table_idx = hash32(key, table->key_len) % target_len;
 
     for (;;)
     {
         if (
-            !slots[search_idx].used ||
-            tableKeysEqual(&slots[search_idx].key, &key)
+            !target[search_idx].used ||
+            memcmp(target[search_idx].key, key, table->key_len) == 0
            )
         {
             break;
         }
-        else if (++search_idx == table_len)
+        else if (++search_idx == table->len)
         {
             search_idx = 0;
         }
     }
 
-    tableSlot *slot = slots + search_idx;
+    tableSlot *slot = target + search_idx;
 
-    slot->key = key;
-    slot->val = val;
+    memcpy(slot->key, key, table->key_len);
+    memcpy(slot->val, val, table->val_len);
     slot->used = 1;
 
     if (slot->used_before)
@@ -99,9 +117,8 @@ static bool tableUnsafeAdd(
 
 void tableAdd(
                 tableHash *table,
-                tableKey key,
-                tableVal val,
-                cInt key_len,
+                cByte *key,
+                cByte *val,
                 errorCode *error
              )
 {
@@ -131,11 +148,11 @@ void tableAdd(
             if (slot->used)
             {
                 tableUnsafeAdd(
+                                table,
                                 new_slots,
                                 new_len,
                                 slot->key,
-                                slot->val,
-                                key_len
+                                slot->val
                                );
             }
         }
@@ -147,7 +164,7 @@ void tableAdd(
         table->len = new_len;
     }
 
-    if (tableUnsafeAdd(table->slots, table->len, key, val, key_len))
+    if (tableUnsafeAdd(table, NULL, 0, key, val))
     {
         --table->num_ghosts;
     }
@@ -156,9 +173,9 @@ void tableAdd(
     *error = SUCCESS;
 }
 
-static tableSlot *tablePosLookup(tableHash *table, tableKey key, cInt key_len)
+static tableSlot *tablePosLookup(tableHash *table, cByte *key)
 {
-    cInt table_idx = hash32((char *)&key.data, key_len) % table->len;
+    cInt table_idx = hash32(key, table->key_len) % table->len;
     cInt search_idx = table_idx;
 
     do
@@ -169,7 +186,7 @@ static tableSlot *tablePosLookup(tableHash *table, tableKey key, cInt key_len)
         {
             return NULL;
         }
-        else if (slot->used && tableKeysEqual(&slot->key, &key))
+        else if (slot->used && memcmp(slot->key, key, table->key_len) == 0)
         {
             return slot;
         }
@@ -182,29 +199,21 @@ static tableSlot *tablePosLookup(tableHash *table, tableKey key, cInt key_len)
     return NULL;
 }
 
-tableVal tableLookup(
-                        tableHash *table,
-                        tableKey key,
-                        cInt key_len,
-                        errorCode *error
-                    )
+cByte *tableLookup(tableHash *table, cByte *key)
 {
-    tableSlot *slot = tablePosLookup(table, key, key_len);
-    tableVal garbage;
+    tableSlot *slot = tablePosLookup(table, key);
 
     if (slot)
     {
-        *error = SUCCESS;
-        return slot->val;
+        return &slot->val[0];
     }
 
-    *error = NOT_FOUND;
-    return garbage;
+    return NULL;
 }
 
-void tableDel(tableHash *table, tableKey key, cInt key_len, errorCode *error)
+void tableDel(tableHash *table, cByte *key, errorCode *error)
 {
-    tableSlot *slot = tablePosLookup(table, key, key_len);
+    tableSlot *slot = tablePosLookup(table, key);
 
     if (slot)
     {
@@ -231,11 +240,11 @@ void tableDel(tableHash *table, tableKey key, cInt key_len, errorCode *error)
                 if (slot->used)
                 {
                     tableUnsafeAdd(
+                                    table,
                                     new_slots,
                                     table->len,
                                     slot->key,
-                                    slot->val,
-                                    key_len
+                                    slot->val
                                    );
                 }
             }
@@ -257,76 +266,4 @@ void tableDel(tableHash *table, tableKey key, cInt key_len, errorCode *error)
 void tableFree(tableHash *table)
 {
     free(table->slots);
-}
-
-void tableAddBucket(
-                    tableHash *table,
-                    cInt idx,
-                    bucketBac *bucket,
-                    errorCode *error
-                   )
-{
-    tableKey key = { .type = INDEX, .data = { .idx = idx } };
-    tableVal val = { .type = BUCKET, .data = { .bucket = bucket } };
-
-    tableAdd(table, key, val, sizeof(cInt), error);
-}
-
-bucketBac *tableLookupBucket(tableHash *table, cInt idx, errorCode *error)
-{
-    tableKey key = { .type = INDEX, .data = { .idx = idx } };
-
-    tableVal val = tableLookup(table, key, sizeof(cInt), error);
-
-    if (*error == NOT_FOUND)
-    {
-        return NULL;
-    }
-
-    return val.data.bucket;
-}
-
-void tableDelBucket(tableHash *table, cInt idx, errorCode *error)
-{
-    tableKey key = { .type = INDEX, .data = { .idx = idx} };
-
-    tableDel(table, key, sizeof(cInt), error);
-}
-
-void tableAddBacterium(
-                       tableHash *table,
-                       nodeBac *bacterium,
-                       cFloat dist,
-                       errorCode *error
-                       )
-{
-    tableKey key = { .type = BACTERIUM, .data = { .bacterium = bacterium } };
-    tableVal val = { .type = DISTANCE, .data = { .dist = dist } };
-
-    tableAdd(table, key, val, sizeof(nodeBac *), error);
-}
-
-cFloat tableLookupBacterium(
-                            tableHash *table,
-                            nodeBac *bacterium,
-                            errorCode *error
-                           )
-{
-    tableKey key = { .type = BACTERIUM, .data = { .bacterium = bacterium } };
-
-    tableVal val = tableLookup(table, key, sizeof(nodeBac *), error);
-
-    if (*error == NOT_FOUND)
-    {
-        return 0;
-    }
-
-    return val.data.dist;
-}
-
-void tableDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error)
-{
-    tableKey key = { .type = BACTERIUM, .data = { .bacterium = bacterium } };
-
-    tableDel(table, key, sizeof(nodeBac *), error);
 }
