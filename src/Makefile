@@ -9,7 +9,7 @@ DEBUG = -O0 -g
 PROFILE = -pg
 
 OBJECTS = $(shell find . -name "*.c" | sed "s/\.c/.o/g")
-INCLUDE = -I. -IdStruct -Imeat -Imeat/loop -Irng
+INCLUDE = $(shell find . -type d | sed "s/^/-I/;s/\n/ /")
 
 CFLAGS += $(SWITCHES) $(INCLUDE)
 
@@ -21,10 +21,6 @@ endif
 
 ifdef profile
 	CFLAGS += $(PROFILE)
-endif
-
-ifdef asm
-	CFLAGS += -S
 endif
 
 link : $(OBJECTS)
