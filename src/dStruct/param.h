@@ -38,6 +38,8 @@ typedef struct
                             // um/mL
     cFloat c_c;         // Concentration of antibiotic at cell wall of 
                             // resistant bacteria, um/mL
+    cFloat f_e;         // Relative fitness of enzyme producers to 
+                            // non--producers in absence of antibiotic
     cInt doses_t[];     // Times at which antibiotic is administered, h
     cFloat doses_c[];   // Concentrations in blood after administering each 
                             // each dose, ug/mL
@@ -45,6 +47,11 @@ typedef struct
     // Simulation parameters:
 
     cInt snap_freq;     // Snapshot frequency (in time steps)
+
+    // Parameters calculated during initialization:
+    cFloat r_d;         // Radius of diffusion cutoff, um
+    cFloat n_n_max;     // Maximum number of bacteria in neighborhood
+    cFloat n_max;       // Maximum number of bacteria in simulation
 
 } paramSim;
 

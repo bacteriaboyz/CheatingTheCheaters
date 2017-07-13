@@ -1,5 +1,5 @@
-#ifndef _PDIE_H
-#define _PDIE_H
+#ifndef _PAREP_H
+#define _PAREP_H
 
 #include "sim.h"
 #include "types.h"
@@ -16,7 +16,7 @@
 #include "param.h"
 
 /* 
- * Function updates death probability in t step of given bacterium 
+ * Function updates probability of attempting replication in t step for node
  * 
  *  Arguments:  pointer to node struct to be modified
                 pointer to sim  struct to access constants
@@ -26,6 +26,6 @@
  *  Errors:     ??
  */
 
-void updatePDie(nodeBac *node, simBac *sim);
+void updatePArep(nodeBac *node, simBac *sim);
 
 #endif

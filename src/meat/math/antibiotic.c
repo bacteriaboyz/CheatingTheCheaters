@@ -14,7 +14,7 @@
 #include "nn.h"
 #include "param.h"
 
-#include "math.h"
+#include <math.h>
 
 void updateAB(simBac *sim)
 {

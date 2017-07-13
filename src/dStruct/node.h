@@ -8,13 +8,16 @@
 typedef struct
 {
     tableHash neighbors;    // Hash table with neighboring nodeBac structs
-    cInt numNei;            // Number of neighbors
+    cInt num_nei;           // Number of neighbors
+    cInt num_r_n;           // Number of resistance enzyme-producing neighbors
 
     cVec pos;               // Vector with position coordinates (x,y,z)
-    cFloat alp_e;           // Effective replication rate, 1/h
-    cFloat gam_e;           // Effective death rate, 1/h
-    cFloat s_h;             // Plasmid uptake rate, 1/h
-    cFloat ome_e;           // Event occurrence rate, 1/h
+    cFloat p_a_r;           // Probability of attempting replication in t step
+    cFloat p_a_d;           // Probability of death at replication due to AB
+    cFloat p_rep;           // Effective replication probability in time step
+    cFloat p_die;           // Effective death probability in time step
+    cFloat p_hgt;           // Plasmid uptake probability in time step
+    cFloat p_evt;           // Event occurrence probability in time step
 
     cInt enz : 1;           // Producer of enzyme, true/false variable
                                 // 2-bit allocation (assigns 1 bit to this
