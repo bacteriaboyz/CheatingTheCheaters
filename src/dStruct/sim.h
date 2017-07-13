@@ -5,22 +5,19 @@
 #include "graph.h"
 #include "rng.h"
 #include "nn.h"
+#include "parameter.h"
 
 typedef struct
 {
-    graphBac graph;
+    graphBac graph;     // Graph object with all bacteria and stuff
 
-    nnTree tree;
+    nnTree tree;        // Nearest Neighbor data structure
 
-    rngState state;
+    rngState state;     // Random number generator stuff
 
-    cInt t_step;
+    cInt t_step;        // Time step number, not constant!
 
-    // Biological parameters:
-    cFloat p_Death; // probability of bacteria dying in the time step
-    
-    //Simulation parameters:
-    cInt snap_freq; // snapshot frequency (in time steps)
+    paramSim param;     // Parameter struct with... parameters...
 
 } simBac;
 

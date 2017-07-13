@@ -46,7 +46,7 @@ typedef struct
 
     cInt snap_freq;     // Snapshot frequency (in time steps)
 
-} param;
+} paramSim;
 
 #endif
 

@@ -11,18 +11,14 @@ typedef struct
     cInt numNei;            // Number of neighbors
 
     cVec pos;               // Vector with position coordinates (x,y,z)
-
     cFloat alp_e;           // Effective replication rate, 1/h
-    
     cFloat gam_e;           // Effective death rate, 1/h
-
     cFloat s_h;             // Plasmid uptake rate, 1/h
-
     cFloat ome_e;           // Event occurrence rate, 1/h
-    
-    cInt enz : 1;           // 2-bit allocation (assigns 1 bit to this variable,
-                                // more efficient than booleans).
 
+    cInt enz : 1;           // Producer of enzyme, true/false variable
+                                // 2-bit allocation (assigns 1 bit to this
+                                // more efficient than booleans).
     cInt used : 1;          // Used to avoid setting nulls
 } nodeBac;
 
