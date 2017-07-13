@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "set.h"
 
 bool setIsEmpty(setBac *set)
@@ -7,26 +9,24 @@ bool setIsEmpty(setBac *set)
 
 void setInit(setBac *set, cInt len, errorCode *error)
 {
-    tableInit(set, len, error);
+    tableInit(set, len, sizeof(nodeBac *), sizeof(int), error);
 }
 
 void setAdd(setBac *set, nodeBac *bacterium, errorCode *error)
 {
-    tableAddBacterium(set, bacterium, 0, error);
+    int dummy = 0;
+
+    tableAdd(set, TYPES_CBYTE(&bacterium), TYPES_CBYTE(&dummy), error);
 }
 
 bool setIsMember(setBac *set, nodeBac *bacterium)
 {
-    errorCode error;
-
-    tableLookupBacterium(set, bacterium, &error);
-
-    return error == SUCCESS;
+    return tableLookup(set, TYPES_CBYTE(&bacterium)) != NULL;
 }
 
 void setDel(setBac *set, nodeBac *bacterium, errorCode *error)
 {
-    tableDelBacterium(set, bacterium, error);
+    tableDel(set, TYPES_CBYTE(&bacterium), error);
 }
 
 void setFree(setBac *set)

@@ -13,4 +13,8 @@
 #define LIMITS_DIM 3
 #endif
 
+#ifndef LIMITS_TABLE_ENTRY_SIZE
+#define LIMITS_TABLE_ENTRY_SIZE 8 // Maximum size of cFloat and void*.
+#endif
+
 #endif

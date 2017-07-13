@@ -9,7 +9,7 @@
 
 #define HASH_SMALL_PRIME_INIT 0x1000193
 
-cBigInt hash128(char *key, cInt len)
+cBigInt hash128(cByte *key, cInt len)
 {
     cBigInt hash = HASH_BIG_INIT;
     cBigInt prime = HASH_BIG_PRIME_INIT;
@@ -22,7 +22,7 @@ cBigInt hash128(char *key, cInt len)
     return hash;
 }
 
-uint32_t hash32(char *key, cInt len)
+cInt hash32(cByte *key, cInt len)
 {
     uint32_t hash = HASH_SMALL_INIT;
     uint32_t prime = HASH_SMALL_PRIME_INIT;

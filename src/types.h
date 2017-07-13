@@ -5,6 +5,9 @@
 
 #include "limits.h"
 
+#define TYPES_CBYTE(x) ((cByte *)(x))
+
+typedef unsigned char cByte;
 typedef uint_fast32_t cInt;
 typedef unsigned __int128 cBigInt;
 typedef double cFloat;
