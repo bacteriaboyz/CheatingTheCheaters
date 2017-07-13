@@ -4,13 +4,22 @@
 #include "limits.h"
 #include "node.h"
 #include "types.h"
+#include "stack.h"
 
 typedef struct
 {
-    nodeBac bacteria[LIMITS_MAX_BACT];
-    cInt stack[LIMITS_MAX_BACT + 1];
-
-    cInt idx;
+    nodeBac bacteria[LIMITS_MAX_BACT];  // Contains all bacteria in simulation,
+                                            // in use and out of use
+    
+    stackBac rep_stack;                 // Stack of pointers to bacteria to be 
+                                            // replicated this time step
+    stackBac die_stack;                 // Stack of pointers to bacteria to be 
+                                            // killed this time step
+    stackBac hgt_stack;                 // Stack of pointers to bacteria to be 
+                                            // transferred plasmids this tstep
+    
+    stackBac dead_stack;                // Stack of pointers to bacteria not 
+                                            // currently in use.
 } graphBac;
 
 #endif
