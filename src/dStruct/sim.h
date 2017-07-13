@@ -5,7 +5,7 @@
 #include "graph.h"
 #include "rng.h"
 #include "nn.h"
-#include "parameter.h"
+#include "param.h"
 
 typedef struct
 {
@@ -15,7 +15,11 @@ typedef struct
 
     rngState state;     // Random number generator stuff
 
-    cInt t_step;        // Time step number, not constant!
+    cInt t;             // Current time variable in h, not time step constant!
+
+    cFloat c_b;         // Concentration of antibiotic in blood at current time
+
+    cInt dose_num;       // Tracks what dose number we are in treatment
 
     paramSim param;     // Parameter struct with... parameters...
 

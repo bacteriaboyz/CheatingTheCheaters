@@ -1,14 +1,25 @@
-#include <math.h>
-
 #include "antibiotic.h"
-#include "enzyme.h"
 
-cFloat antibioticEff(nodeBac *node, simBac *sim)
+#include "sim.h"
+#include "types.h"
+#include "graph.h"
+#include "rng.h"
+#include "nn.h"
+#include "param.h"
+
+#include "math.h"
+
+void updateAB(simBac *sim)
 {
-    cFloat enz = enzymeConc(node, sim); // get enzyme concentration at this point
+    sim->c_b = ( 1 - sim->param.k_a * sim->param.v_w ) * sim->c_b * \
+        ( sim->t-sim -> param.t_s );
+        // Exponential decay according to renal clearance rate
 
-    //TODO: code for concentration of AB given enzyme concentration
-
-    return 1-1/(1+(1/(1-simBac->rep_0)-1)*exp(-1*simBac->min_Inhib_Conc//TODO figure out influence using minimum inhibitory concentration));
-    // 1 - logistic equation. x_0 is 1 - initial replication rate
+    if (sim->t == sim->param.doses_t[sim->dose_num]) // If we're at the next 
+                                                        // dosing time...
+    {
+        sim->c_b += sim->param.doses_c[sim->dose_num]; // Add concentration of
+                                                        // next dose to blood       
+        ++sim->dose_num; // Advance dose counter
+    }
 }

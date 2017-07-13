@@ -1,21 +1,24 @@
 #ifndef _ANTIBIOTIC_H
 #define _ANTIBIOTIC_H
 
-#include "types.h"
-#include "node.h"
 #include "sim.h"
+#include "types.h"
+#include "graph.h"
+#include "rng.h"
+#include "nn.h"
+#include "param.h"
 
-/** Function returns masking factor (probability of reproduction) for a given
-*   node due to effective antibiotic concentration at node, taking
-*   into account concentration of enzyme.
-*
-*   Arguments:  pointer to the nodeBac struct to be replicated
-*               pointer to simulation struct, in order to access constants
-*
-*   Returns:    Floating point number (range 0-1) with masking value
-*
-*   Errors:     ??
-**/
-cFloat antibioticEff(nodeBac *node, simBac *sim);
+/* 
+ * Function updates concentration of antibiotic in blood according to renal
+ * renal clearance and new doses. 
+ * 
+ *  Arguments:  pointer to simulation struct, in order to access constants
+ * 
+ *  Returns:    void
+ * 
+ *  Errors:     ??
+ */
+
+void updateAB(simBac *sim);
 
 #endif

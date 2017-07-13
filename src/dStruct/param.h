@@ -1,5 +1,5 @@
-#ifndef _PARAMETERS_H
-#define _PARAMETERS_H
+#ifndef _PARAM_H
+#define _PARAM_H
 
 #include "types.h"
 
