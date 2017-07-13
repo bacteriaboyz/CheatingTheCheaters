@@ -15,6 +15,14 @@ typedef struct
     rngState state;
 
     cInt t_step;
+
+    // Biological parameters:
+    cFloat p_Death; // probability of bacteria dying in the time step
+    
+    //Simulation parameters:
+    cInt snap_freq; // snapshot frequency (in time steps)
+
 } simBac;
 
 #endif
+
