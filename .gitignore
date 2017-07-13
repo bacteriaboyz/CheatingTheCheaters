@@ -56,3 +56,5 @@ dkms.conf
 Thumbs.db
 thumbs.db
 *.swp
+*.s
+idontknow
