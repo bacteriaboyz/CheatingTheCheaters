@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "table.h"
 
-struct nodeBac
+typedef struct
 {
     tableHash neighbors;    // Hash table with neighboring nodeBac structs
     cInt numNei;            // Number of neighbors
@@ -24,7 +24,6 @@ struct nodeBac
                                 // more efficient than booleans).
 
     cInt used : 1;          // Used to avoid setting nulls
-};
+} nodeBac;
 
-typedef struct nodeBac nodeBac;
 #endif
