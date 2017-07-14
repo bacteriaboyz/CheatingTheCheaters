@@ -5,6 +5,7 @@
 #include "map.h"
 #include "update.h"
 #include "dist.h"
+#include "set.h"
 
 /*
  * Creates a new node with the given characteristics at the given position.

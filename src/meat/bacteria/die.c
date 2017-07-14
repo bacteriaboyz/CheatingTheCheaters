@@ -22,7 +22,11 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
         if (node->enz) // if dead node was producer,
         {
             --n->num_r_n; // neighbor has one less resistant neighbor
-            updateNode(n); // update this neighbor's data
+            setAdd(sim->graph.update_set,n,err); // update this neighbor's data
+            if (err != SUCCESSS)
+            {
+                return;
+            }
         }
     }
    

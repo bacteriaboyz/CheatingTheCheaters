@@ -5,6 +5,7 @@
 #include "node.h"
 #include "types.h"
 #include "stack.h"
+#include "set.h"
 
 typedef struct
 {
@@ -17,6 +18,7 @@ typedef struct
                                             // killed this time step
     stackBac hgt_stack;                 // Stack of pointers to bacteria to be 
                                             // transferred plasmids this tstep
+    setBac update_set;                  // Set of nodes to be updated this t_s
     
     stackBac dead_stack;                // Stack of pointers to bacteria not 
                                             // currently in use.

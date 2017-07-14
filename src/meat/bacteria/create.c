@@ -16,13 +16,19 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
 
         newNode->enz = isProducer; // assign enzyme production
-        
-        mapInitBacTable(&newNode->neighbors,1,err); // init neighbor table
-        if (err != SUCCESS) // if there's an error
+        if (tableIsInit(&newNode->neighbors)) // if table has been initialized,
         {
-            return NULL; // run away, run away
+            tableReset(&newNode->neighbors); // just reset it
         }
-        
+        else // if not,
+        {
+            mapInitBacTable(&newNode->neighbors,1,err); // init neighbor table
+            if (err != SUCCESS) // if there's an error
+            {
+                return NULL; // run away, run away
+            }
+        }
+
         newNode->num_nei = 0; // reset neighbor counter
         newNode->num_r_n = 0; // reset producer neighbor counter
 
@@ -65,6 +71,12 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     if (newNode->enz) // if new node is producer
                     {
                         ++n->num_r_n; // increase neighbor's producer neighbors
+                        setAdd(sim->graph.update_set,n,err);
+                            // neighbor added to update set
+                        if (err != SUCCESS))
+                        {
+                            return NULL;
+                        }
                     }
                 }
 
@@ -73,9 +85,12 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
 
             nnIterator(&potNei,NULL); // advance bucket iterator
         }
-
-        updateNode(newNode);
-
+        
+        setAdd(sim->graph.update_set,newNode,err); // new node must be updated
+        if (err != SUCCESS))
+        {
+            return NULL;
+        }
     }
     else
     {
