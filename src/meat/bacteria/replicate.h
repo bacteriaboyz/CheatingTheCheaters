@@ -1,5 +1,5 @@
-#ifndef _REPRODUCTION_H
-#define _REPRODUCTION_H
+#ifndef _REPLICATE_H
+#define _REPLICATE_H
 
 #include "types.h"
 #include "graph.h"
@@ -18,6 +18,6 @@
 *
 *   Errors:     ??
 **/
-void reproductionBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State);
+void replicationBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State);
 
 #endif

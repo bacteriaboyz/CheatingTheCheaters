@@ -1,4 +1,4 @@
-#include "updateRep.h"
+#include "pRep.h"
 
 void updateRep(nodeBac *node, simBac *sim)
 {

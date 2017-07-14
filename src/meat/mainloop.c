@@ -1,12 +1,10 @@
 #include <math.h>
 
 #include "mainloop.h"
-#include "transform.h"
-#include "node.h"
 
-cFloat mainloopCall(graphBac *graph, simBac *sim)
+void mainloopCall(graphBac *graph, simBac *sim)
 {
-    for (cInt i=0; i< sim->num_Iter; i++)
+    /* for (cInt i=0; i< sim->num_Iter; i++)
     {
         if (transformUnif(randState,0.0,1.0) < graphBac->bacteria[i].fitness)
         {
@@ -28,5 +26,5 @@ cFloat mainloopCall(graphBac *graph, simBac *sim)
 
     //TODO: write snapshot of graph struct  to file 
 
-    return 0.0;
+    return 0.0;*/
 }

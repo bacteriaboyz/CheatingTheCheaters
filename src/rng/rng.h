@@ -13,7 +13,7 @@ typedef uint64_t rngState[2];
  * any artifacts from bad seeds.
  */
 
-void rngInitState(rngState state, char *phrase);
+void rngInitState(rngState state, cByte *phrase);
 
 /*
  * Outputs a pseudorandom 64-bit block and updates the state.

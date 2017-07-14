@@ -1,16 +1,14 @@
 #include <math.h>
 
-#include "reproduction.h"
-#include "transform.h"
-#include "fitness.h"
+#include "replicate.h"
 
-void reproductionBac(nodeBac *node, graphBac *graph, simBac *sim)
+void replicationBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State)
 {
     //TODO: assign new node location using random sampling thing
     //      define child_X, child_Y, child_Z
     //TODO: assign new node neighbors and distances using nn tree thing
     //      define neigh and dist arrays, num_neigh int
-
+/*
    nodeBac child =
     {
         .neighbors=neigh,
@@ -39,5 +37,5 @@ void reproductionBac(nodeBac *node, graphBac *graph, simBac *sim)
         }
     }
 
-    return;
+    return;*/
 }

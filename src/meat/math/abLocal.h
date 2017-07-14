@@ -28,6 +28,6 @@
  *  Errors:     ??
  */
 
-void abConc(cFloat d, simBac *sim);
+cFloat abConc(cFloat d, simBac *sim);
 
 #endif

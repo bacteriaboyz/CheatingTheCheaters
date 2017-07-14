@@ -1,5 +1,5 @@
-#ifndef _DEATH_H
-#define _DEATH_H
+#ifndef _DIE_H
+#define _DIE_H
 
 #include "types.h"
 #include "graph.h"
