@@ -91,6 +91,12 @@ void tableInit(
               );
 
 /*
+ * Clears the table while keeping the same internal size.
+ */
+
+void tableReset(tableHash *table);
+
+/*
  * Adds an entry to the hash table. If the key already exists, the entry is
  * overwritten. "key_len" should be set to the size of the primitive key type.
  * Possible errors: MEM

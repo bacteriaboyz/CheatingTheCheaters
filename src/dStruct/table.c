@@ -55,13 +55,19 @@ void tableInit(
     *error = SUCCESS;
 }
 
+void tableReset(tableHash *table)
+{
+    memset(table->slots, 0, table->len * sizeof(tableSlot));
+    table->num = 0;
+    table->num_ghosts = 0
+}
+
 /*
  * Use this function to add entries to a table without resizing. It will get
  * get caught in a loop if the table fills up. The "slots" argument is for when
  * a table is being rebuilt. Set it to NULL to add entries to the same table.
  * Returns true when we're getting rid of a ghost.
  */
-
 
 static bool tableUnsafeAdd(
                             tableHash *table,

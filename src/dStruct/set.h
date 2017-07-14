@@ -20,6 +20,12 @@ bool setIsEmpty(setBac *set);
 void setInit(setBac *set, cInt len, errorCode *error);
 
 /*
+ * Clears the set while keeping the same internal size.
+ */
+
+void setReset(setBac *set);
+
+/*
  * Adds a bacterium to the set.
  * Possible errors: MEM
  */

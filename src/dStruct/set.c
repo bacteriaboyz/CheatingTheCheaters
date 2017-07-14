@@ -12,6 +12,11 @@ void setInit(setBac *set, cInt len, errorCode *error)
     tableInit(set, len, sizeof(nodeBac *), sizeof(int), error);
 }
 
+void setReset(setBac *set)
+{
+    tableReset(set);
+}
+
 void setAdd(setBac *set, nodeBac *bacterium, errorCode *error)
 {
     int dummy = 0;

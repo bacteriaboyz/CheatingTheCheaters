@@ -29,6 +29,12 @@ bool stackIsEmpty(stackBac *stack);
 void stackInit(stackBac *stack, cInt len, errorCode *error);
 
 /*
+ * Clears the stack while keeping the same internal size.
+ */
+
+void stackReset(stackBac *stack);
+
+/*
  * Pushes a pointer onto the stack.
  * Possible errors: MEM
  */

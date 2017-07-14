@@ -21,6 +21,11 @@ void stackInit(stackBac *stack, cInt len, errorCode *error)
     *error = SUCCESS;
 }
 
+void stackReset(stackBac *stack)
+{
+    stack->idx = 0;
+}
+
 void stackPush(stackBac *stack, void *ptr, errorCode *error)
 {
     if (++stack->idx == stack->len)
