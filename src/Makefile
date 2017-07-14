@@ -23,8 +23,8 @@ ifdef profile
 	CFLAGS += $(PROFILE)
 endif
 
-link : $(OBJECTS)
-	$(LD) -o $(EXENAME) $^ $(LDFLAGS)
+$(EXENAME) : $(OBJECTS)
+	$(LD) -o $@ $^ $(LDFLAGS)
 
 %.o : %.c
 	$(CC) $(CFLAGS) -o $@ -c $<
