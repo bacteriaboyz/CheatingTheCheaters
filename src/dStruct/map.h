@@ -57,4 +57,30 @@ void mapDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
 
 void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table);
 
+/*
+ * Initializes a new bucket map with the given length.
+ */
+
+void mapInitBucketTable(tableHash *table, cInt len, errorCode *error);
+
+/*
+ * Adds a new (index, bucket) pair to tha map. You should not overwrite an
+ * existing bucket, as that will lead to a memory leak.
+ * Possible errors: MEM
+ */
+
+void mapAddBucket(
+                    tableHash *table,
+                    cInt idx,
+                    bucketBac *bucket,
+                    errorCode *error
+                 );
+
+/*
+ * Deletes a bucket from the map. The bucket itself should be freed first.
+ * Possible errors: NOT FOUND
+ */
+
+void mapDelBucket(tableHash *table, cInt idx, errorCode *error);
+
 #endif

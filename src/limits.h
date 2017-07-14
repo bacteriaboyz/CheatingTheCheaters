@@ -13,8 +13,21 @@
 #define LIMITS_DIM 3
 #endif
 
+// How wide each coordinate is in the bucket index.
+#define LIMITS_BCOORD_WIDTH (32 / LIMITS_DIM)
+
+#if LIMITS_DIM == 1
+#define LIMITS_BCOORD_MAX 0xffffffff
+#else
+#define LIMITS_BCOORD_MAX ((1 << LIMITS_BCOORD_WIDTH) - 1)
+#endif
+
+#ifndef LIMITS_BNEIGHBORS
+#define LIMITS_BNEIGHBORS 27 // 3 ^ LIMITS_DIM
+#endif
+
 #ifndef LIMITS_TABLE_ENTRY_SIZE
-#define LIMITS_TABLE_ENTRY_SIZE 8 // Maximum size of cFloat and void*.
+#define LIMITS_TABLE_ENTRY_SIZE 64 // size of Intel cache line
 #endif
 
 #endif

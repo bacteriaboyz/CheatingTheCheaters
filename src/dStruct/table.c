@@ -64,7 +64,7 @@ void tableReset(tableHash *table)
 {
     memset(table->slots, 0, table->len * sizeof(tableSlot));
     table->num = 0;
-    table->num_ghosts = 0
+    table->num_ghosts = 0;
 }
 
 /*

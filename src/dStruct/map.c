@@ -76,3 +76,28 @@ void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table)
     *bacterium = NULL;
     *dist = 0;
 }
+
+void mapInitBucketTable(tableHash *table, cInt len, errorCode *error)
+{
+    tableInit(table, len, sizeof(cInt), sizeof(bucketBac), error);
+}
+
+void mapAddBucket(
+                    tableHash *table,
+                    cInt idx,
+                    bucketBac *bucket,
+                    errorCode *error
+                  )
+{
+    tableAdd(table, TYPES_CBYTE(&idx), TYPES_CBYTE(bucket), error);
+}
+
+bucketBac *mapLookupBucket(tableHash *table, cInt idx)
+{
+    return (bucketBac *)tableLookup(table, TYPES_CBYTE(&idx));
+}
+
+void mapDelBucket(tableHash *table, cInt idx, errorCode *error)
+{
+    tableDel(table, TYPES_CBYTE(&idx), error);
+}
