@@ -37,6 +37,8 @@ void tableInit(
         }
     }
 
+    table_len = table_sizes[len_idx];
+
     if (!(table->slots = calloc(table_len, sizeof(tableSlot))))
     {
         *error = MEM;
@@ -47,7 +49,7 @@ void tableInit(
     table->val_len = val_len;
     table->num = 0;
     table->num_ghosts = 0;
-    table->len = table_sizes[len_idx];
+    table->len = table_len;
     table->len_idx = len_idx;
 
     *error = SUCCESS;
@@ -57,7 +59,9 @@ void tableInit(
  * Use this function to add entries to a table without resizing. It will get
  * get caught in a loop if the table fills up. The "slots" argument is for when
  * a table is being rebuilt. Set it to NULL to add entries to the same table.
+ * Returns true when we're getting rid of a ghost.
  */
+
 
 static bool tableUnsafeAdd(
                             tableHash *table,
@@ -69,7 +73,6 @@ static bool tableUnsafeAdd(
 {
     tableSlot *target;
     cInt target_len;
-    cInt table_idx;
     cInt search_idx;
 
     if (slots)
@@ -83,7 +86,7 @@ static bool tableUnsafeAdd(
         target_len = table->len;
     }
 
-    search_idx = table_idx = hash32(key, table->key_len) % target_len;
+    search_idx = hash32(key, table->key_len) % target_len;
 
     for (;;)
     {
@@ -94,7 +97,7 @@ static bool tableUnsafeAdd(
         {
             break;
         }
-        else if (++search_idx == table->len)
+        else if (++search_idx == target_len)
         {
             search_idx = 0;
         }
@@ -108,11 +111,32 @@ static bool tableUnsafeAdd(
 
     if (slot->used_before)
     {
-        return false;
+        return true;
     }
 
     slot->used_before = 1;
-    return true;
+    return false;
+}
+
+// Transfers all the contents of the old table into a new one.
+
+static void tableRebuild(tableHash *table, tableSlot *new_slots, cInt new_len)
+{
+    for (cInt i = 0; i < table->len; ++i)
+    {
+        tableSlot *slot = table->slots + i;
+
+        if (slot->used)
+        {
+            tableUnsafeAdd(
+                            table,
+                            new_slots,
+                            new_len,
+                            slot->key,
+                            slot->val
+                          );
+        }
+    }
 }
 
 void tableAdd(
@@ -141,21 +165,7 @@ void tableAdd(
             return;
         }
 
-        for (cInt i = 0; i < table->len; ++i)
-        {
-            tableSlot *slot = table->slots + i;
-
-            if (slot->used)
-            {
-                tableUnsafeAdd(
-                                table,
-                                new_slots,
-                                new_len,
-                                slot->key,
-                                slot->val
-                               );
-            }
-        }
+        tableRebuild(table, new_slots, new_len);
 
         free(table->slots);
 
@@ -169,8 +179,6 @@ void tableAdd(
         --table->num_ghosts;
     }
     ++table->num;
-
-    *error = SUCCESS;
 }
 
 static tableSlot *tablePosLookup(tableHash *table, cByte *key)
@@ -233,21 +241,7 @@ void tableDel(tableHash *table, cByte *key, errorCode *error)
                 return;
             }
 
-            for (cInt i = 0; i < table->len; ++i)
-            {
-                tableSlot *slot = table->slots + i;
-
-                if (slot->used)
-                {
-                    tableUnsafeAdd(
-                                    table,
-                                    new_slots,
-                                    table->len,
-                                    slot->key,
-                                    slot->val
-                                   );
-                }
-            }
+            tableRebuild(table, new_slots, table->len);
 
             free(table->slots);
 
