@@ -2,11 +2,6 @@
 #define _DIST_H
 
 #include "node.h"
-#include "types.h"
-#include "hash.h"
-#include "table.h"
-#include "errors.h"
-#include "limits.h"
 
 /* 
  * Returns distance between two nodes

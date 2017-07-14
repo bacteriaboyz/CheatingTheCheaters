@@ -16,15 +16,17 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
 
         newNode->enz = isProducer; // assign enzyme production
+        
         mapInitBacTable(&newNode->neighbors,1,err); // init neighbor table
         if (err != SUCCESS) // if there's an error
         {
             return NULL; // run away, run away
         }
 
-        addToNN(newNode,sim->param.r_d); // Add newNode to NN data struct
-
+         // Add newNode to NN data struct
+        addToNN(newNode,sim->param.r_d);
         
+        // Add neighbors and add self to neighbors
         setBac *potNei; // potential neighbors
         nnIterator(NULL,newNode); // init iterator
         nnIterator(&potNei,NULL); // get first set
@@ -44,11 +46,22 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     {
                         return NULL; // run away, run away
                     }
+                    ++newNode->num_nei; // increase num neighbors counter
+                    if (n->enz) // if neighbor is producer
+                    {
+                        ++newNode->num_r_n; // increase num producer neighbors
+                    }
+
                     mapAddBacterium(&n->neighbors,newNode,d,err);
                         // add newNode to this potential neighbor's neighborhood
                     if (err != SUCCESS) // if there's an error
                     {
                         return NULL; // run away, run away
+                    }
+                    ++n->num_nei; // increase neighbor's num neighbors counter
+                    if (newNode->enz) // if new node is producer
+                    {
+                        ++n->num_r_n; // increase neighbor's producer neighbors
                     }
                 }
 
