@@ -3,6 +3,6 @@
 
 #include "sim.h"
 
-void setupSim(simBac *sim);
+void setupSim(simBac *sim, cByte *phrase);
 
 #endif

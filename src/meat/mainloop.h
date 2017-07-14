@@ -19,6 +19,6 @@
  *  Errors:     ??
 **/
 
-cFloat mainloopCall(graphBac *graph, simBac *sim);
+void mainloopCall(graphBac *graph, simBac *sim);
 
 #endif

@@ -49,7 +49,7 @@ void transformBall(
 
     for (cInt i = 0; i < LIMITS_DIM; ++i)
     {
-        cFloat v = transformGauss(state, error)
+        cFloat v = transformGauss(state, error);
 
         if (*error == REJECT)
         {

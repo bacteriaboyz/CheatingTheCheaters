@@ -3,7 +3,7 @@
 #include "rng.h"
 #include "hash.h"
 
-void rngInitState(rngState state, char *phrase)
+void rngInitState(rngState state, cByte *phrase)
 {
     if (!state || !phrase)
     {

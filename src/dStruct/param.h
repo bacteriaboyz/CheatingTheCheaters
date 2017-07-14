@@ -11,8 +11,8 @@ typedef struct
     cInt z_max;         // Biofilm thickness, um
     cFloat gam_n;       // Death rate in the absence of antibiotic, 1/h
     cFloat lam_l;       // Plasmid loss rate at replication, 1/(cell*h)
-    cFloat lam_t        // Plasmid transfer rate, um^3/(cell*h)
-    cFloat bet_c        // Fraction of total bath concentration of substance
+    cFloat lam_t;       // Plasmid transfer rate, um^3/(cell*h)
+    cFloat bet_c;       // Fraction of total bath concentration of substance
                             //  assumed as cutoff point for radius of influence
                             // (i.e. neighborhood size), dimensionless
     cFloat r_c;         // Bacteria cell radius, um
@@ -40,9 +40,10 @@ typedef struct
                             // resistant bacteria, um/mL
     cFloat f_e;         // Relative fitness of enzyme producers to 
                             // non--producers in absence of antibiotic
-    cInt doses_t[];     // Times at which antibiotic is administered, h
-    cFloat doses_c[];   // Concentrations in blood after administering each 
-                            // each dose, ug/mL
+    cInt *doses_t;      // Pointer to an array with times at which 
+                            // antibiotic is administered, h
+    cFloat *doses_c;    // Pointer to an array with concentrations in blood 
+                            // after administering each each dose, ug/mL
     
     // Simulation parameters:
 
