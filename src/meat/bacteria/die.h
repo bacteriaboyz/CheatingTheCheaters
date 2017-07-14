@@ -2,19 +2,6 @@
 #define _DIE_H
 
 #include "sim.h"
-#include "types.h"
-#include "graph.h"
-#include "limits.h"
-#include "node.h"
-#include "hash.h"
-#include "table.h"
-#include "bucket.h"
-#include "errors.h"
-#include "stack.h"
-#include "rng.h"
-#include "nn.h"
-#include "param.h"
-
 #include "update.h"
 #include "map.h"
 
@@ -24,12 +11,13 @@
  *  neighbors.
  *
  *  Arguments:  pointer nodeBac struct to be killed
- *              graphbac struct pointer 
- *
+ *              simBac struct pointer to access everything
+ *              error pointer (table and stack errors)
+ * 
  *  Returns:    void
  *
  *  Errors:     ??
  */
-void dieNode(nodeBac *node, graphBac *graph);
+void dieNode(nodeBac *node, simBac *sim, errorCode *err);
 
 #endif

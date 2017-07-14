@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "pARep.h"
 
 void updatePARep(nodeBac *node, simBac *sim)
@@ -8,10 +9,10 @@ void updatePARep(nodeBac *node, simBac *sim)
     cFloat d; // will handle output of iterator function
 
     cInt i=0; // counts through resistant neighbors 
-    mapMagical(&n,&d,&node->neighbors); // initialize map iterator
+    mapMagical(NULL,NULL,&node->neighbors); // initialize map iterator
     while (i<node->num_r_n) // while not all resistant neighbors have been found
     {
-        mapMagical(&n,&d,&node->neighbors); // get next neighbor and distance
+        mapMagical(&n,&d,NULL); // get next neighbor and distance
         if (n->enz && n->used) // if the neighbor is a producer and is alive
         { 
             total_effort -= ( sim->c_b - abConc(d,sim) ) /\
@@ -28,5 +29,4 @@ void updatePARep(nodeBac *node, simBac *sim)
         total_effort / ( node->num_r_n + 1.0 ) * \
             // Effort distribution among producer neighbors
         sim->param.f_e; // producer penalty
-
 }
