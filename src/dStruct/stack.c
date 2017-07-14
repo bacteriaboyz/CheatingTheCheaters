@@ -9,7 +9,7 @@ bool stackIsEmpty(stackBac *stack)
 
 void stackInit(stackBac *stack, cInt len, errorCode *error)
 {
-    if (len == 0 || !(stack->data = malloc(len * sizeof(void *))))
+    if (len == 0 || !(stack->data = malloc((len + 1) * sizeof(void *))))
     {
         *error = MEM;
         return;
