@@ -1,24 +1,15 @@
-#include "dieRate.h"
-
-#include "sim.h"
-#include "types.h"
-#include "graph.h"
-#include "limits.h"
-#include "node.h"
-#include "hash.h"
-#include "table.h"
-#include "bucket.h"
-#include "errors.h"
-#include "stack.h"
-#include "rng.h"
-#include "nn.h"
-#include "param.h"
+#include "pDie.h"
 
 #include <math.h>
 
 void updatePDie(nodeBac *node, simBac *sim);
 {
-    node->p_die = ( simBac->param.gam_n * simBac->param.t_s + \
-        ( 1.0 - simBac->param.gam_n * simBac->param.t_s) ) * \
-        nodeBac->p_a_r * nodeBac->p_a_d * ( 1.0 - nodeBac->p_hgt );
+    node->p_die = ( sim->param.gam_n * sim->param.t_s + \
+        // probability of natural death this time step
+        ( 1.0 - sim->param.gam_n * sim->param.t_s) * \
+        // probability of not dying a natural death this time step
+        node->p_a_r * node->p_a_d  ) * \ 
+        // probability of attempting replication and dying in the process
+        ( 1.0 - node->p_hgt );
+        // everything assuming the cell does not undergo hgt this timestep
 }

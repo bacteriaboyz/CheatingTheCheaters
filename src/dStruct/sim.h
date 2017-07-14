@@ -9,15 +9,16 @@
 
 typedef struct
 {
+    // Structures
     nnTree tree;        // Nearest Neighbor data structure
-    rngState state;     // Random number generator stuff
-
     graphBac graph;     // Graph object with all bacteria and stuff
     paramSim param;     // Parameter struct with... parameters...
 
+    // Simulation state variables
+    rngState state;     // Random number generator stuff
     cInt t;             // Current time variable in h, not time step constant!
     cFloat c_b;         // Concentration of antibiotic in blood at current time
-    cInt dose_num;       // Tracks what dose number we are in treatment
+    cInt dose_num;      // Tracks what dose number we are in treatment
 
 } simBac;
 

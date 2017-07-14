@@ -50,10 +50,17 @@ typedef struct
 
     // Parameters calculated during initialization:
     cFloat r_d;         // Radius of diffusion cutoff, um
+    cFloat v_n;         // Volume of neighborhood sphere, um^3
+    cFloat v_t;         // Volume of total simulation
     cFloat n_n_max;     // Maximum number of bacteria in neighborhood
     cFloat n_max;       // Maximum number of bacteria in simulation
+    cFloat gam_ab;      // Concentration decay rate of antibiotic in blood, 
+                            // um*t_s/mL
+    cFloat c_h;         // Concentration of antibiotic that causes probability
+                            // of dying at replication to be 50%
+    cFloat h;           // Hill coefficient for antibiotic's Hill dose impact 
+                            // equation
 
 } paramSim;
 
 #endif
-

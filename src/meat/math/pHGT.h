@@ -1,5 +1,5 @@
-#ifndef _ANTIBIOTIC_H
-#define _ANTIBIOTIC_H
+#ifndef _PHGT_H
+#define _PHGT_H
 
 #include "sim.h"
 #include "types.h"
@@ -16,16 +16,17 @@
 #include "param.h"
 
 /* 
- * Function updates concentration of antibiotic in blood according to renal
- * renal clearance and new doses. 
+ * Function updates horizontal gene transfer probability in t step of given 
+ * bacterium 
  * 
- *  Arguments:  pointer to simulation struct, in order to access constants
+ * Arguments:   pointer to node struct to be modified
+ *              pointer to sim  struct to access constants
  * 
  *  Returns:    void
  * 
  *  Errors:     ??
  */
 
-void updateAB(simBac *sim);
+void updatePHGT(nodeBac *node, simBac *sim);
 
 #endif

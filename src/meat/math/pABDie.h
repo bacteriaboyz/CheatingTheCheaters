@@ -1,5 +1,5 @@
-#ifndef _PAREP_H
-#define _PAREP_H
+#ifndef _ABPDIE_H
+#define _ABPDIE_H
 
 #include "sim.h"
 #include "types.h"
@@ -15,19 +15,18 @@
 #include "nn.h"
 #include "param.h"
 
-#include "abLocal.h"
-
 /* 
- * Function updates probability of attempting replication in t step for node
+ * Function updates death probability at replication due to antibiotic for 
+ * given bacterium 
  * 
  *  Arguments:  pointer to node struct to be modified
- *              pointer to sim struct to access constants
+ *              pointer to sim  struct to access constants
  * 
  *  Returns:    void
  * 
  *  Errors:     ??
  */
 
-void updatePARep(nodeBac *node, simBac *sim);
+void updateABPDie(nodeBac *node, simBac *sim);
 
 #endif
