@@ -16,6 +16,7 @@
 #include "param.h"
 
 #include "update.h"
+#include "dist.h"
 
 /*
  * Creates a new node with the given characteristics at the given position.
@@ -26,13 +27,14 @@
  * 
  * Arguments:   cVec position of new node
  *              0,1 bit value if it produces enzyme
- *              graphBac pointer to access everything
- * 
+ *              simBac pointer to access everything
+ *              errorCode pointer to error
+ *  
  * Returns:     nodeBac pointer new node
  * 
  * Errors:      ?
  */
 
-nodeBac *createNode(cVec pos, cInt isProducer, graphBac *graph);
+nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err);
 
 #endif
