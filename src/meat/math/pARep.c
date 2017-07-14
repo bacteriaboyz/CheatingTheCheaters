@@ -1,23 +1,5 @@
 #include "pARep.h"
 
-#include "abLocal.h"
-#include "map.h"
-
-
-/* 
- * Function used by hash table iterator to check if neighbor is a producer.
- * If so, then the neighbor's corresponding distance is saved.
- * 
- * Arguments:   node the neighbor we're looking at right now
- *              dist that neighbor's associated distance in the hash table
- *              store_dist poiinter to the float array used to store all 
- *                  distances of producer neighbors
- * 
- * Returns:     void
- * 
- * Errors:      ?
- */
-
 void updatePARep(nodeBac *node, simBac *sim)
 {
     cFloat total_effort = 1.0 + node->num_r_n; 

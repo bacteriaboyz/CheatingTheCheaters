@@ -1,22 +1,35 @@
 #ifndef _DIE_H
 #define _DIE_H
 
+#include "sim.h"
 #include "types.h"
 #include "graph.h"
+#include "limits.h"
+#include "node.h"
+#include "hash.h"
+#include "table.h"
+#include "bucket.h"
+#include "errors.h"
+#include "stack.h"
+#include "rng.h"
+#include "nn.h"
+#include "param.h"
 
-/*  Function assigns nodeBac from graphBac struct as unused, and adds its index 
- *  inside the graphBac stack in order to be reused by a new bacteria. If the 
+#include "update.h"
+#include "map.h"
+
+/*  Function assigns nodeBac from graphBac struct as unused, and adds it to
+ *  the graphBac dead stack in order to be reused by a new bacteria. If the 
  *  bacteria was resistant, it updates the fitness function of all its 
  *  neighbors.
  *
- *  Arguments:  index of nodeBac struct to be killed inside graphBac's bacteria
- *                  array.
+ *  Arguments:  pointer nodeBac struct to be killed
  *              graphbac struct pointer 
  *
  *  Returns:    void
  *
  *  Errors:     ??
  */
-void deathBac(cInt idx, graphBac *graph);
+void dieNode(nodeBac *node, graphBac *graph);
 
 #endif

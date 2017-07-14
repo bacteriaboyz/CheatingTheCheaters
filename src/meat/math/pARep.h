@@ -16,6 +16,7 @@
 #include "param.h"
 
 #include "abLocal.h"
+#include "map.h"
 
 /* 
  * Function updates probability of attempting replication in t step for node

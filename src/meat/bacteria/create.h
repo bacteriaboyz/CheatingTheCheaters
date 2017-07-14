@@ -1,0 +1,38 @@
+#ifndef _CREATE_H
+#define _CREATE_H
+
+#include "sim.h"
+#include "types.h"
+#include "graph.h"
+#include "limits.h"
+#include "node.h"
+#include "hash.h"
+#include "table.h"
+#include "bucket.h"
+#include "errors.h"
+#include "stack.h"
+#include "rng.h"
+#include "nn.h"
+#include "param.h"
+
+#include "update.h"
+
+/*
+ * Creates a new node with the given characteristics at the given position.
+ * Reuses an unused slot in the graph if it can find one.
+ * Adds the new node into its corresponding bucket.
+ * Finds its neighbors, adds the new node to the neighbors' neighbor hashtables
+ * and updates their neighbor counters.
+ * 
+ * Arguments:   cVec position of new node
+ *              0,1 bit value if it produces enzyme
+ *              graphBac pointer to access everything
+ * 
+ * Returns:     nodeBac pointer new node
+ * 
+ * Errors:      ?
+ */
+
+nodeBac *createNode(cVec pos, cInt isProducer, graphBac *graph);
+
+#endif

@@ -1,19 +1,29 @@
 #include "die.h"
 
-void deathBac(cInt idx, graphBac *graph)
+void dieNode(nodeBac *node, graphBac *graph)
 {
-   /* graph->bacteria[idx].used = 0; // list node as unused
+   node->used = 0; // list node as unused
 
-    if (graph->bacteria[idx].enz)
+    if (node->enz) // if node was producer,
     {
-        for (cInt i=0; i < graph->bacteria[idx].len; i++)
+        nodeBac *n; // stores neighbor
+        cFloat d; // stores distance
+        mapMagical(&n,&d,&node->neighbors); // initialize iterator
+        for (cInt i=0; i < node->num_nei; i++) // iterate through neighbors
         {
-            fitnessUpdate(graph->bacteria[idx]->neighbors[i]);
+            mapMagical(&n,&d,&node->neighbors); // get next neighbor
+            --n->num_nei; // one less neighbor
+            //TODO: remove node from neighbors of n
+            
+            if (node->enz) // if node was resistance
+            {
+                --n->num_r_n; // one less resistant neighbor
+                updateNode(n); // update this neighbor's data
+            }
         }
     }
-
-    graph->stack[++graph->idx] = idx; // add node to unused nodes stack to be
-                                        // replaced
-
-    return;*/
+    
+    errorCode err; // save output of stack method
+    stackPush(&graph->dead_stack,node,&err); // add node to dead stack for reuse
+    //TODO: error?
 }
