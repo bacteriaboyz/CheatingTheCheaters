@@ -12,6 +12,8 @@ const char *errorMsg(errorCode code)
             return "Rejection sampling threshold reached.";
         case NOT_FOUND:
             return "Object not found in hash table.";
+        case INCONSISTENT:
+            return "Program in inconsistent state.";
     }
 
     return "This should never happen.";

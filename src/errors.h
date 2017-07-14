@@ -11,7 +11,8 @@ typedef enum
     SUCCESS,
     MEM,
     REJECT,
-    NOT_FOUND
+    NOT_FOUND,
+    INCONSISTENT
 } errorCode;
 
 /*
