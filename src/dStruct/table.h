@@ -78,6 +78,13 @@ typedef struct
 bool tableIsEmpty(tableHash *table);
 
 /*
+ * Tests whether the table has been initialized (only works if uninitialized
+ * tables are zeroed out).
+ */
+
+bool tableIsInit(tableHash *table);
+
+/*
  * Initializes a new hash table with the given length.
  * Possible errors: MEM
  */

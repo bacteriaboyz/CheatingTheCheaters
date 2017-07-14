@@ -9,6 +9,11 @@ bool tableIsEmpty(tableHash *table)
     return table->num == 0;
 }
 
+bool tableIsInit(tableHash *table)
+{
+    return table->slots != NULL;
+}
+
 void tableInit(
                 tableHash *table,
                 cInt table_len,
