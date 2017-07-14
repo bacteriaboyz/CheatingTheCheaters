@@ -58,8 +58,16 @@ void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table)
 
         if (slot->used)
         {
-            memcpy(bacterium, slot->key, sizeof(nodeBac *));
-            memcpy(dist, slot->val, sizeof(cFloat));
+            if (bacterium)
+            {
+                memcpy(bacterium, slot->key, sizeof(nodeBac *));
+            }
+
+            if (dist)
+            {
+                memcpy(dist, slot->val, sizeof(cFloat));
+            }
+
             pos = i + i;
             return;
         }

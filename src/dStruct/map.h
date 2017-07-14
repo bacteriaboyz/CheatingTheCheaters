@@ -50,8 +50,9 @@ void mapDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
  * two arguments NULL and the third argument containing the address of the
  * table. After that, it should be called with the third argument NULL and the
  * first two arguments containing addresses where the (bacterium, dist) pairs
- * will be written out. One it's reached then end of the table, it will write
- * out (NULL, 0) on each call.
+ * will be written out. Once it's reached then end of the table, it will write
+ * out (NULL, 0) on each call. If either address is NULL, the iterator will
+ * ignore that field on each iteration.
  */
 
 void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table);
