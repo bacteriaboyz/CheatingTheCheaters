@@ -4,6 +4,8 @@
 #include "types.h"
 #include "hash.h"
 #include "table.h"
+#include "errors.h"
+#include "limits.h"
 
 typedef struct
 {

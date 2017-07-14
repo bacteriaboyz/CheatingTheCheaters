@@ -1,6 +1,6 @@
 #include <math.h>
 
-#include "distance.h"
+#include "dist.h"
 
 cFloat distance(nodeBac *n1, nodeBac *n2)
 {

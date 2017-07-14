@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "create.h"
 
 nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
@@ -5,7 +6,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
     nodeBac *newNode = stackPop(&sim->graph.dead_stack); 
         // Get an unused node
 
-    if (n) // If there actually was a free slot...
+    if (newNode) // If there actually was a free slot...
     {
 
         // Assign new properties
@@ -21,12 +22,12 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             return NULL; // run away, run away
         }
 
-        addToNN(newNode,sim->param.r_d); // Add newNode to NN data struct //TODO: correct function name
+        addToNN(newNode,sim->param.r_d); // Add newNode to NN data struct
 
         
         setBac *potNei; // potential neighbors
-        nnIterator(NULL,newNode); // init iterator //TODO: correct function name
-        nnIterator(&potNei,NULL); // get first set //TODO: correct function name
+        nnIterator(NULL,newNode); // init iterator
+        nnIterator(&potNei,NULL); // get first set
         while (potNei) // while iteration of neighboring buckets not finished,
         {
             nodeBac *n; // iterating node pointer
@@ -54,7 +55,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                 mapMagical(&n,NULL,NULL); // move node iterator forward
             }
 
-            nnIterator(&potNei,NULL); // advance bucket iterator //TODO: correct function name
+            nnIterator(&potNei,NULL); // advance bucket iterator
         }
 
         updateNode(newNode);

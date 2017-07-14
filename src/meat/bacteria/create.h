@@ -15,6 +15,8 @@
 #include "nn.h"
 #include "param.h"
 
+#include "set.h"
+#include "map.h"
 #include "update.h"
 #include "dist.h"
 
