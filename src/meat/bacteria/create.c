@@ -22,6 +22,9 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         {
             return NULL; // run away, run away
         }
+        
+        newNode->num_nei = 0; // reset neighbor counter
+        newNode->num_r_n = 0; // reset producer neighbor counter
 
          // Add newNode to NN data struct
         addToNN(newNode,sim->param.r_d);
