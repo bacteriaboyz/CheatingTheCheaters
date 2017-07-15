@@ -13,6 +13,10 @@
 #define LIMITS_DIM 3
 #endif
 
+#if LIMITS_DIM != 3
+#error "Simulations other than 3D are left as an exercise for the reader ;)"
+#endif
+
 // How wide each coordinate is in the bucket index.
 #define LIMITS_BCOORD_WIDTH (32 / LIMITS_DIM)
 
