@@ -9,7 +9,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
 
     stackInit(&stack, sim->num_bac, error);
 
-    if(*error == MEM)
+    if (*error == MEM)
     {
         goto connectChk_error;
     }
@@ -18,7 +18,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
 
     setInit(&visited, sim->num_bac, error);
 
-    if(*error == MEM)
+    if (*error == MEM)
     {
         goto connectChk_stack_free;
     }
@@ -34,7 +34,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
     {
         nodeBac *current = stackPop(&stack);
 
-        if(!setIsMember(&visited, current));
+        if (!setIsMember(&visited, current))
         {
             mapMagical(NULL, NULL, &current->neighbors);
 
@@ -62,7 +62,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
 
     stackFree(&stack);
 
-    if(setCard(&visited) == sim->num_bac)
+    if (setCard(&visited) == sim->num_bac)
     {
         setFree(&visited);
 

@@ -1,7 +1,9 @@
 #ifndef _LIMITS_H
 #define _LIMITS_H
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846 // Fuck C99 in particular
+#endif
 
 #ifndef LIMITS_MAX_TRIES
 #define LIMITS_MAX_TRIES 128
