@@ -22,7 +22,7 @@
  *  
  * Returns:     nodeBac pointer new node
  * 
- * Errors:      ?
+ * Errors:      INCONSISTENT, MEM 
  */
 
 nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err);

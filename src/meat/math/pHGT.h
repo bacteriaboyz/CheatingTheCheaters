@@ -12,7 +12,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updatePHGT(nodeBac *node, simBac *sim);

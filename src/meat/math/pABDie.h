@@ -12,7 +12,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updatePABDie(nodeBac *node, simBac *sim);

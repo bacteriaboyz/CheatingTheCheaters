@@ -13,6 +13,8 @@
  *              simBac object to access max size of all dimensions except last
  * 
  * Returns:     cFloat distance
+ * 
+ * Errors:      --
  */
 
 cFloat distance(nodeBac *n1, nodeBac *n2, simBac *sim);

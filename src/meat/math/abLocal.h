@@ -13,7 +13,7 @@
  * 
  *  Returns:    cFloat concentration
  * 
- *  Errors:     ??
+ *  Errors:     -- 
  */
 
 cFloat abConc(cFloat d, simBac *sim);

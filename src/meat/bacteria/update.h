@@ -7,7 +7,6 @@
 #include "pABDie.h"
 #include "pRep.h"
 #include "pDie.h"
-#include "pEvt.h"
 
 /*
  * Updates the given node's probabilities and data
@@ -17,7 +16,7 @@
  * 
  * Returns:     void
  * 
- * Errors:      ?
+ * Errors:      --
  */
 
 void updateNode(nodeBac *node, simBac *sim);

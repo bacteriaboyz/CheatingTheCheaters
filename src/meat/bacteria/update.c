@@ -12,6 +12,4 @@ void updateNode(nodeBac *node, simBac *sim)
     updatePARep(node,sim); // then all do probability of attempting replication
     updatePRep(node,sim); // use the last three probabilities to update p(rep)
     updatePDie(node,sim); // as well as p(die)
-    updatePEvt(node,sim); // finally, update total evt probability with p(hgt),
-                            // p(rep), and p(die)
 }

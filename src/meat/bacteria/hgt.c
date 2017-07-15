@@ -21,8 +21,6 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
         {
             return;
         }
-
-         mapDelBacterium(&n->neighbors,node,err); // advance iterator
     }
 
     setAdd(&sim->graph.update_set,n,err); // update this node

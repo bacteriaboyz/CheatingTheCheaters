@@ -1,8 +1,8 @@
 #include "replicate.h"
 
-void replicateBac(nodeBac *node, simBac *sim, errorCode *err)
+void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
 {
-    cInt limit_iter = 10000; // iteration limit for rejection sampling
+    cInt limit_iter = LIMITS_MAX_TRIES; // iteration limit for rejection sampling
     cInt iterChk = 0; // check iteration number
     cVec pos; // will store coordinates of new bacteria
     transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
@@ -16,9 +16,9 @@ void replicateBac(nodeBac *node, simBac *sim, errorCode *err)
         && iterChk < limit_iter )
         // if last coordinate is outside bounds of simulation or beyond max iter
     {
+        ++iterChk; // advance counter
         transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
             // sample from ball
-        ++iterChk; // advance counter
         if (err != SUCCESS)
         {
             return;

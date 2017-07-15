@@ -11,7 +11,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updatePRep(nodeBac *node, simBac *sim);

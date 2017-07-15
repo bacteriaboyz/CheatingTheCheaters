@@ -13,7 +13,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updatePARep(nodeBac *node, simBac *sim);

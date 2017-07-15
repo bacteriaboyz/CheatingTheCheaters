@@ -11,7 +11,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updatePDie(nodeBac *node, simBac *sim);

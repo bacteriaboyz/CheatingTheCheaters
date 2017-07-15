@@ -15,8 +15,8 @@
 *
 *   Returns:    void
 *
-*   Errors:     REJECT
+*   Errors:     REJECT, INCONSISTENT, MEM
 **/
-void replicateBac(nodeBac *node, simBac *sim, errorCode *err);
+void replicateNode(nodeBac *node, simBac *sim, errorCode *err);
 
 #endif

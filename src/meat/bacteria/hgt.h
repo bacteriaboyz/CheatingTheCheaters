@@ -14,7 +14,7 @@
  * 
  *  Returns:    void
  *
- *  Errors:     ??
+ *  Errors:     MEM
  */
 void hgtNode(nodeBac *node, simBac *sim, errorCode *err);
 

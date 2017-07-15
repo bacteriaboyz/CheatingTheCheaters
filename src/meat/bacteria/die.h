@@ -18,7 +18,7 @@
  * 
  *  Returns:    void
  *
- *  Errors:     ??
+ *  Errors:     MEM, NOT_FOUND
  */
 void dieNode(nodeBac *node, simBac *sim, errorCode *err);
 

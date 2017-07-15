@@ -12,7 +12,7 @@
  * 
  *  Returns:    void
  * 
- *  Errors:     ??
+ *  Errors:     --
  */
 
 void updateNeiVol(nodeBac *node, simBac *sim);
