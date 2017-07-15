@@ -7,6 +7,16 @@ bool setIsEmpty(setBac *set)
     return tableIsEmpty(set);
 }
 
+bool setIsInit(setBac *set)
+{
+    return tableIsInit(set);
+}
+
+cInt setCard(setBac *set)
+{
+    return tableCard(set);
+}
+
 void setInit(setBac *set, cInt len, errorCode *error)
 {
     tableInit(set, len, sizeof(nodeBac *), sizeof(int), error);

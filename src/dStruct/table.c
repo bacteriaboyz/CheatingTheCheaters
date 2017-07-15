@@ -14,6 +14,11 @@ bool tableIsInit(tableHash *table)
     return table->slots != NULL;
 }
 
+cInt tableCard(tableHash *table)
+{
+    return table->num;
+}
+
 void tableInit(
                 tableHash *table,
                 cInt table_len,

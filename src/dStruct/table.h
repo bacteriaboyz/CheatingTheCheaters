@@ -89,6 +89,12 @@ bool tableIsInit(tableHash *table);
  * Possible errors: MEM
  */
 
+/*
+ * Returns the cardinality (number of entries) of the table.
+ */
+
+cInt tableCard(tableHash *table);
+
 void tableInit(
                 tableHash *table,
                 cInt table_len,

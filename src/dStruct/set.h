@@ -13,6 +13,19 @@ typedef tableHash setBac;
 bool setIsEmpty(setBac *set);
 
 /*
+ * Tests whether the set has been initialized (only works if uninitialized sets
+ * are zeroed out).
+ */
+
+bool setIsInit(setBac *set);
+
+/*
+ * Returns the cardinality (number of elements) of the set.
+ */
+
+cInt setCard(setBac *set);
+
+/*
  * Initializes a new set with the given length.
  * Possible errors: MEM
  */
