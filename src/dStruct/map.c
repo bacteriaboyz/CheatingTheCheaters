@@ -73,8 +73,15 @@ void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table)
         }
     }
 
-    *bacterium = NULL;
-    *dist = 0;
+    if (bacterium)
+    {
+        *bacterium = NULL;
+    }
+
+    if (dist)
+    {
+        *dist = 0;
+    }
 }
 
 void mapInitBucketTable(tableHash *table, cInt len, errorCode *error)
