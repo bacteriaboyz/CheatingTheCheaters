@@ -16,6 +16,7 @@ typedef struct
     cVec pos;               // Vector with position coordinates (x,y,z)
     cInt enz : 1;           // Producer of enzyme, 1 or 0
     cFloat c;               // Concentration of antibiotic felt at this node
+    cFloat v_n;             // Volume of neighborhood around bacteria
     cFloat p_a_r;           // Probability of attempting replication in t step
     cFloat p_a_d;           // Probability of death at replication due to AB
     cFloat p_rep;           // Effective replication probability in time step

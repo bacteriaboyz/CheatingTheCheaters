@@ -5,6 +5,7 @@
 #include "update.h"
 #include "map.h"
 #include "set.h"
+#include "dist.h"
 
 /*  Function assigns nodeBac from graphBac struct as unused, and adds it to
  *  the graphBac dead stack in order to be reused by a new bacteria. If the 

@@ -33,6 +33,27 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
             {
                 return;
             }
+
+            if ( abConc( distance( node,n,sim ) , sim ) <= n->c )
+                // if this node was this neighbor's closest producer
+            {
+                nodeBac *n_n; // iterating node pointer
+                cFloat d; // iterating distance
+                cFloat min_d = sim->param.r_d; // minimum distance to a producer
+                                            // default is max value
+                mapMagical(NULL,NULL,&node->neighbors); // init iterator
+                for (cInt i=0; i<node->num_nei; i++) // loop through all nb's
+                {
+                    mapMagical(&n_n,&d,NULL); // get next element
+                    if (d < min_d)
+                    {
+                        min_d = d; // if new min, set
+                    }
+                }
+                
+                n->c = abConc(d,sim); // set new concentration of antibiotic
+                                        // at this neighbor
+            }
         }
     }
    

@@ -20,13 +20,13 @@ void updatePARep(nodeBac *node, simBac *sim)
                 // subtract effort saved by each neighbor
             ++i; // advance resistant neighbor counter
         }
-    }
+    } 
 
     node->p_a_r = sim->param.t_s * sim->param.alp_n * \
             // base probability
-        ( 1.0 - ( node->num_nei / sim->param.n_n_max ) ) * \
+        ( 1.0 - ( node->num_nei / ( node->v_n * sim->param.rho_b ) ) ) * \
             // population density penalty
-        total_effort / ( node->num_r_n + 1.0 ) * \
+        ( total_effort / ( node->num_r_n + 1.0 ) ) * \
             // Effort distribution among producer neighbors
         sim->param.f_e; // producer penalty
 }

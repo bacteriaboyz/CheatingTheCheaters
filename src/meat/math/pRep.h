@@ -14,6 +14,6 @@
  *  Errors:     ??
  */
 
-void updateRep(nodeBac *node, simBac *sim);
+void updatePRep(nodeBac *node, simBac *sim);
 
 #endif

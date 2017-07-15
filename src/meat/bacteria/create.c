@@ -16,6 +16,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
 
         newNode->enz = isProducer; // assign enzyme production
+        updateNeiVol(newNode,sim); // update volume of neighborhood sphere
+
         if (tableIsInit(&newNode->neighbors)) // if table has been initialized,
         {
             tableReset(&newNode->neighbors); // just reset it
@@ -82,6 +84,14 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                         if (err != SUCCESS)
                         {
                             return NULL;
+                        }
+
+                        cFloat possibleNewC = abConc(distance(newNode,n,sim),sim);
+                            // [ab] due to new node
+                        if ( possibleNewC < n->c )
+                            // if this concentration is higher,
+                        {
+                            n->c = possibleNewC; // update [ab]
                         }
                     }
                 }

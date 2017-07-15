@@ -6,6 +6,7 @@
 #include "update.h"
 #include "dist.h"
 #include "set.h"
+#include "neighVol.h"
 
 /*
  * Creates a new node with the given characteristics at the given position.

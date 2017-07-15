@@ -1,5 +1,5 @@
-#ifndef _ABPDIE_H
-#define _ABPDIE_H
+#ifndef _PABDIE_H
+#define _PABDIE_H
 
 #include "sim.h"
 
@@ -15,6 +15,6 @@
  *  Errors:     ??
  */
 
-void updateABPDie(nodeBac *node, simBac *sim);
+void updatePABDie(nodeBac *node, simBac *sim);
 
 #endif

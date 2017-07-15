@@ -1,6 +1,6 @@
 #include "pRep.h"
 
-void updateRep(nodeBac *node, simBac *sim)
+void updatePRep(nodeBac *node, simBac *sim)
 {
     node->p_rep = node->p_a_r * ( 1.0 - node->p_a_d ) * \
             // probability of attempting replication and not die trying
