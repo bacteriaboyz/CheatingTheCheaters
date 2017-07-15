@@ -31,7 +31,6 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             }
         }
 
-        newNode->num_nei = 0; // reset neighbor counter
         newNode->num_r_n = 0; // reset producer neighbor counter
 
         // Add newNode to NN data struct
@@ -63,7 +62,6 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     {
                         return NULL; // run away, run away
                     }
-                    ++newNode->num_nei; // increase num neighbors counter
                     if (n->enz) // if neighbor is producer
                     {
                         ++newNode->num_r_n; // increase num producer neighbors
@@ -75,7 +73,6 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     {
                         return NULL; // run away, run away
                     }
-                    ++n->num_nei; // increase neighbor's num neighbors counter
                     if (newNode->enz) // if new node is producer
                     {
                         ++n->num_r_n; // increase neighbor's producer neighbors

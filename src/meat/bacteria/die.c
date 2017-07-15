@@ -13,11 +13,11 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
 
     nodeBac *n; // stores neighbor
     mapMagical(NULL,NULL,&node->neighbors); // initialize iterator
-    for (cInt i=0; i < node->num_nei; i++) // iterate through neighbors
+    for (cInt i=0; i < tableCard(&node->neighbors); i++)
+        // iterate through neighbors
     {
         mapMagical(&n,NULL,NULL); // get next neighbor
-        --n->num_nei; // one less neighbor from the neighbor's neighbor counter
-       
+      
         mapDelBacterium(&n->neighbors,node,err);
             // delete this node from neighbor's neighbor array
         if (err != SUCCESS) // if there's an error
@@ -42,7 +42,7 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
                 cFloat min_d = sim->param.r_d; // minimum distance to a producer
                                             // default is max value
                 mapMagical(NULL,NULL,&node->neighbors); // init iterator
-                for (cInt i=0; i<node->num_nei; i++) // loop through all nb's
+                for (cInt i=0; i<tableCard(&node->neighbors); i++) // loop through all nb's
                 {
                     mapMagical(&n_n,&d,NULL); // get next element
                     if (d < min_d)

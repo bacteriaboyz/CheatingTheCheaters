@@ -10,7 +10,6 @@
 typedef struct
 {
     tableHash neighbors;    // Hash table with neighboring nodeBac structs
-    cInt num_nei;           // Number of neighbors
     cInt num_r_n;           // Number of resistance enzyme-producing neighbors
 
     cVec pos;               // Vector with position coordinates (x,y,z)

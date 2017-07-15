@@ -8,7 +8,7 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
     
     nodeBac *n; // stores neighbor
     mapMagical(NULL,NULL,&node->neighbors); // initialize iterator
-    for (cInt i=0; i < node->num_nei; i++) // iterate through neighbors
+    for (cInt i=0; i < tableCard(&node->neighbors); i++) // iterate through neighbors
     {
         mapMagical(&n,NULL,NULL); // get next neighbor
         ++n->num_r_n; // one more resistant neighbor for this neighbor
