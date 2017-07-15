@@ -3,7 +3,13 @@
 
 void dieNode(nodeBac *node, simBac *sim, errorCode *err)
 {
-   node->used = 0; // list node as unused
+    node->used = 0; // list node as unused
+
+    --sim->num_bac; // reduces number of bacteria
+    if (node->enz)
+    {
+        --sim->num_pro; // if node was producer, reduce that counter
+    }
 
     nodeBac *n; // stores neighbor
     mapMagical(NULL,NULL,&node->neighbors); // initialize iterator
@@ -22,8 +28,8 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
         if (node->enz) // if dead node was producer,
         {
             --n->num_r_n; // neighbor has one less resistant neighbor
-            setAdd(sim->graph.update_set,n,err); // update this neighbor's data
-            if (err != SUCCESSS)
+            setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
+            if (err != SUCCESS)
             {
                 return;
             }

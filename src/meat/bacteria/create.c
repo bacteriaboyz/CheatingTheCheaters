@@ -32,9 +32,15 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         newNode->num_nei = 0; // reset neighbor counter
         newNode->num_r_n = 0; // reset producer neighbor counter
 
-         // Add newNode to NN data struct
+        // Add newNode to NN data struct
         addToNN(newNode,sim->param.r_d);
         
+        ++sim->num_bac; // stores number of bacteria
+        if (isProducer)
+        {
+            ++sim->num_pro; // if bacteria is resistant, advances that counter
+        }
+                
         // Add neighbors and add self to neighbors
         setBac *potNei; // potential neighbors
         nnIterator(NULL,newNode); // init iterator
@@ -46,7 +52,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             mapMagical(&n,NULL,NULL); // get first potential neighbor
             while (n) // while iteration not finished,
             {
-                cFloat d = distance(newNode,n); // distance between both nodes
+                cFloat d = distance(newNode,n,sim); // distance between both nodes
                 if (d < sim->param.r_d) // if within nieghborhood limits,
                 {
                     mapAddBacterium(&newNode->neighbors,n,d,err);
@@ -71,9 +77,9 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     if (newNode->enz) // if new node is producer
                     {
                         ++n->num_r_n; // increase neighbor's producer neighbors
-                        setAdd(sim->graph.update_set,n,err);
+                        setAdd(&sim->graph.update_set,n,err);
                             // neighbor added to update set
-                        if (err != SUCCESS))
+                        if (err != SUCCESS)
                         {
                             return NULL;
                         }
@@ -86,8 +92,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             nnIterator(&potNei,NULL); // advance bucket iterator
         }
         
-        setAdd(sim->graph.update_set,newNode,err); // new node must be updated
-        if (err != SUCCESS))
+        setAdd(&sim->graph.update_set,newNode,err); // new node must be updated
+        if (err != SUCCESS)
         {
             return NULL;
         }

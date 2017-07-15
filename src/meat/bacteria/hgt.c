@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "hgt.h"
 
 void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
@@ -12,8 +13,8 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
         mapMagical(&n,NULL,NULL); // get next neighbor
         ++n->num_r_n; // one more resistant neighbor for this neighbor
        
-        setAdd(sim->graph.update_set,n,err); // update this neighbor's data
-        if (err != SUCCESSS)
+        setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
+        if (err != SUCCESS)
         {
             return;
         }
@@ -21,6 +22,6 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
          mapDelBacterium(&n->neighbors,node,err); // advance iterator
     }
 
-    setAdd(sim->graph.update_set,n,err); // update this node
+    setAdd(&sim->graph.update_set,n,err); // update this node
 }
 

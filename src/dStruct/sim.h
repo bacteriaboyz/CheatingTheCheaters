@@ -19,6 +19,8 @@ typedef struct
     cInt t;             // Current time variable in h, not time step constant!
     cFloat c_b;         // Concentration of antibiotic in blood at current time
     cInt dose_num;      // Tracks what dose number we are in treatment
+    cInt num_bac;       // Number of bacteria at this moment
+    cInt num_pro;       // Number of producer bacteria at this moment
 
 } simBac;
 

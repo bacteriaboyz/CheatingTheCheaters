@@ -1,41 +1,40 @@
-#include <math.h>
-
 #include "replicate.h"
 
-void replicationBac(nodeBac *node, graphBac *graph, simBac *sim, rngState rand_State)
+void replicateBac(nodeBac *node, simBac *sim, errorCode *err)
 {
-    //TODO: assign new node location using random sampling thing
-    //      define child_X, child_Y, child_Z
-    //TODO: assign new node neighbors and distances using nn tree thing
-    //      define neigh and dist arrays, num_neigh int
-/*
-   nodeBac child =
+    cInt limit_iter = 10000; // iteration limit for rejection sampling
+    cInt iterChk = 0; // check iteration number
+    cVec pos; // will store coordinates of new bacteria
+    transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
+        // sample from ball
+    if (err != SUCCESS)
     {
-        .neighbors=neigh,
-        .distances=dist,
-        .len=num_neigh,
-        .deg=num_neigh,
-        .pos=position,
-        .fitness=0,
-        .resistant=node->resistant, // by default, same as parent
-        .used=1
-    };
-
-    if (transformUnif(sim->state, 0.0, 1.0)) < sim.p_RN * node->resistant + sim.p_NR * (!node->resistant)) //TODO: split into ifs
-        // Calculate conditional probability of child bacteria mutating
-    {
-        child.resistant = !child.resistant; // mutate from parent
+        return;
     }
 
-    fitnessUpdate(child);
-
-    if (node->resistant) // only update fitness statuses if new child is resistant
+    while ( (pos[LIMITS_DIM-1] < 0 || pos[LIMITS_DIM-1] > sim->param.x_max ) && iterChk < limit_iter )
+        // if last coordinate is outside bounds of simulation,
     {
-        for (cInt i=0; i < node->len; ++i)
+        transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
+            // sample from ball
+        ++iterChk; // advance counter
+        if (err != SUCCESS)
         {
-            fitnessUpdate(node->neighbors[i]);
+            return;
         }
     }
+    if (iterChk > limit_iter) // if surpassed iter limit,
+    {
+        *err = REJECT; // throw tantrum
+        return;
+    }
 
-    return;*/
+    cInt enz = node->enz; // parent phenotype
+    if ( transformUnif(sim->state,0,1) < sim->param.lam_l )
+        // if plasmid is lost at replication
+    {
+        enz = 0; // lose it
+    }
+
+    createNode(pos,enz,sim,err); // create node
 }
