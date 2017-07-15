@@ -7,8 +7,8 @@ typedef struct
 {
     // Physical and Biological parameters:
     
-    cFloat rho_b;       // Max biofilm density, cells/um^3
     cInt z_max;         // Biofilm thickness, um
+    cFloat d_bac;       // Distance between centers of two bacteria, um
     cFloat gam_n;       // Death rate in the absence of antibiotic, 1/h
     cFloat lam_l;       // Plasmid loss rate at replication, 1/(cell*h)
     cFloat lam_t;       // Plasmid transfer rate, um^3/(cell*h)
@@ -50,6 +50,7 @@ typedef struct
     cInt snap_freq;     // Snapshot frequency (in time steps)
 
     // Parameters calculated during initialization:
+    cFloat rho_b;       // Max biofilm density, cells/um^3
     cFloat r_d;         // Radius of diffusion cutoff, um
     cFloat v_n;         // Volume of neighborhood sphere, um^3
     cFloat v_t;         // Volume of total simulation
