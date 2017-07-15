@@ -3,8 +3,11 @@
 
 void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
 {
+    // Set conditions that are now invariant:
     node->enz = 1; // make this node a producer
-    node->p_hgt = 0; // probability of acquiring plasmid is now 0
+    node->p_hgt = 0; // probability of acquiring plasmid is now invariant at 0
+    node->c = abConc(sim->param.r_c, sim); // set concentration at cell surface
+    updatePABDie(node,sim); // update probability of AB-induced death
     
     nodeBac *n; // stores neighbor
     mapMagical(NULL,NULL,&node->neighbors); // initialize iterator
@@ -24,4 +27,3 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
 
     setAdd(&sim->graph.update_set,n,err); // update this node
 }
-

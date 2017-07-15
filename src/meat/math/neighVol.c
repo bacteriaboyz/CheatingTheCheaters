@@ -3,7 +3,7 @@
 
 void updateNeiVol(nodeBac *node, simBac *sim)
 {
-    node->v_n = sim->param.v_n; // volume of this neighborhood
+    node->v_n = sim->param.v_n; // wil contain volume of this neighborhood
     cFloat dif[2]; // contain overflow distances
     dif[0] = node->pos[LIMITS_DIM-1] + sim->param.r_d - sim->param.z_max;
         // overflow at top

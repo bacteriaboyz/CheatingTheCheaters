@@ -2,7 +2,7 @@
 
 void updateAB(simBac *sim)
 {
-    sim->c_b = ( 1 - sim->param.gam_ab ) * sim->c_b * ( sim->param.t_s );
+    sim->c_b = ( 1.0 - sim->param.gam_ab ) * sim->c_b * ( sim->param.t_s );
         // Exponential decay according to renal clearance rate
 
     if (sim->t >= sim->param.doses_t[sim->dose_num]) 

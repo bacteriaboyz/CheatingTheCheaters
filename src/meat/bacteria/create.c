@@ -10,14 +10,26 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
     {
 
         // Assign new properties
+        
         for (cInt i=0; i<LIMITS_DIM; i++) // loop across dimensions 
         {
             newNode->pos[i] = pos[i]; // assign each coordinate
         }
-
-        newNode->enz = isProducer; // assign enzyme production
         updateNeiVol(newNode,sim); // update volume of neighborhood sphere
+        newNode->num_r_n = 0; // reset producer neighbor counter
+        addToNN(newNode,sim->param.r_d); // Add newNode to NN data struct
+        newNode->enz = isProducer; // assign enzyme production
+        ++sim->num_bac; // stores number of bacteria
+        if (isProducer)
+        {
+            ++sim->num_pro; // if bacteria is producer, advances that counter
+            // Set conditions that are now invariant:
+            newNode->p_hgt = 0; // probability of acquiring plasmid is now invariant at 0
+            newNode->c = abConc(sim->param.r_c, sim); // set concentration at cell surface
+            updatePABDie(newNode,sim); // update probability of AB-induced death
 
+        }
+         
         if (tableIsInit(&newNode->neighbors)) // if table has been initialized,
         {
             tableReset(&newNode->neighbors); // just reset it
@@ -30,19 +42,9 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                 return NULL; // run away, run away
             }
         }
-
-        newNode->num_r_n = 0; // reset producer neighbor counter
-
-        // Add newNode to NN data struct
-        addToNN(newNode,sim->param.r_d);
-        
-        ++sim->num_bac; // stores number of bacteria
-        if (isProducer)
-        {
-            ++sim->num_pro; // if bacteria is resistant, advances that counter
-        }
-                
+                        
         // Add neighbors and add self to neighbors
+        
         setBac *potNei; // potential neighbors
         nnIterator(NULL,newNode); // init iterator
         nnIterator(&potNei,NULL); // get first set
@@ -65,6 +67,17 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                     if (n->enz) // if neighbor is producer
                     {
                         ++newNode->num_r_n; // increase num producer neighbors
+                        if (!newNode->enz) // if new node is not a producer
+                        {
+                            cFloat potC = abConc(d,sim); // calculate concentration due to 
+                                            // this neighbor
+                            if (newNode->c > potC) // if [ab] is less with
+                                                    // this producer as nearest 
+                                                    // neighbor,
+                            {
+                                newNode->c = potC; // set as new concentration
+                            }
+                        }
                     }
 
                     mapAddBacterium(&n->neighbors,newNode,d,err);
@@ -99,13 +112,14 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             nnIterator(&potNei,NULL); // advance bucket iterator
         }
         
+        // update this node
         setAdd(&sim->graph.update_set,newNode,err); // new node must be updated
         if (err != SUCCESS)
         {
             return NULL;
         }
     }
-    else
+    else // if there were no free nodes
     {
         *err = INCONSISTENT; // we're in trouble
     }
