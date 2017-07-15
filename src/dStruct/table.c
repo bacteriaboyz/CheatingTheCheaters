@@ -29,6 +29,8 @@ void tableInit(
 {
     cInt len_idx = 0;
 
+    table_len *= 2;
+
     if (
         table_len > table_sizes[table_num_sizes - 1] ||
         key_len > LIMITS_TABLE_ENTRY_SIZE ||
