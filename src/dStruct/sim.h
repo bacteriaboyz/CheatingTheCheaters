@@ -10,7 +10,7 @@
 typedef struct
 {
     // Structures
-    nnTree tree;        // Nearest Neighbor data structure
+    nnBuckets buckets;        // Nearest Neighbor data structure
     graphBac graph;     // Graph object with all bacteria and stuff
     paramSim param;     // Parameter struct with... parameters...
 
@@ -26,4 +26,3 @@ typedef struct
 } simBac;
 
 #endif
-
