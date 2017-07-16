@@ -9,6 +9,7 @@
 #include "replicate.h"
 #include "hgt.h"
 #include "update.h"
+#include "snapshot.h"
 
 /* At each timestep:
  * Function iterates through all nodes on graph, adding them to replication,
@@ -26,6 +27,6 @@
  *  Errors:     REJECT, INCONSISTENT, MEM, NOT_FOUND
 **/
 
-void mainloopCall(simBac *sim, errorCode *err);
+void mainloopSim(simBac *sim, errorCode *err);
 
 #endif

@@ -1,6 +1,6 @@
 #include "mainloop.h"
 
-void mainloopCall(simBac *sim, errorCode *err)
+void mainloopSim(simBac *sim, errorCode *err)
 {
     //TODO: write snapshot of graph struct to file 
     
@@ -72,6 +72,4 @@ void mainloopCall(simBac *sim, errorCode *err)
             sim->t_last_snap += sim->param.t_s; // advance last snapshot timer
         }
     }
-
-    //TODO: write snapshot of graph struct to file 
 }

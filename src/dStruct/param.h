@@ -57,7 +57,7 @@ typedef struct
     cFloat n_n_max;     // Maximum number of bacteria in neighborhood
     cFloat n_max;       // Maximum number of bacteria in simulation
     cFloat gam_ab;      // Concentration decay rate of antibiotic in blood, 
-                            // um*t_s/mL
+                            // mL^-1
     cFloat c_h;         // Concentration of antibiotic that causes probability
                             // of dying at replication to be 50%
     cFloat h;           // Hill coefficient for antibiotic's Hill dose impact 
