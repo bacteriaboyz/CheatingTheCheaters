@@ -77,6 +77,12 @@ void mapAddBucket(
                  );
 
 /*
+ * Looks up a bucket in the map. Returns NULL if not found.
+ */
+
+bucketBac *mapLookupBucket(tableHash *table, cInt idx);
+
+/*
  * Deletes a bucket from the map. The bucket itself should be freed first.
  * Possible errors: NOT FOUND
  */

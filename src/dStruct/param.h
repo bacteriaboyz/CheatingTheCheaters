@@ -7,7 +7,7 @@ typedef struct
 {
     // Physical and Biological parameters:
     
-    cInt z_max;         // Biofilm thickness, um
+    cFLoat z_max;         // Biofilm thickness, um
     cFloat d_bac;       // Distance between centers of two bacteria, um
     cFloat gam_n;       // Death rate in the absence of antibiotic, 1/h
     cFloat lam_l;       // Plasmid loss rate at replication, 1/(cell*h)
@@ -30,8 +30,7 @@ typedef struct
     cFloat k_a;         // Clearance rate of antibiotic from blood plasma, L/h
     cFloat c_i;         // Concentration of antibiotic at 50\% growth 
                             // inhibition (IC_50), um/mL
-    cFloat rho_i;       // Initial population density of bacteria in biofilm,
-                            // cells/um^3
+    cFloat z_i;         // Initial height of bacterial biofilm, cells/um^3
     cFloat phi_i;       // Initial proportion of resistant bacteria in biofilm,
                             // dimensionless
     cFloat c_m;         // Minimum Inhibitory Concentration (MIC) of antibiotic,
@@ -40,14 +39,14 @@ typedef struct
                             // resistant bacteria, um/mL
     cFloat f_e;         // Relative fitness of enzyme producers to 
                             // non--producers in absence of antibiotic
-    cInt *doses_t;      // Pointer to an array with times at which 
+    cFloat *doses_t;    // Pointer to an array with times at which 
                             // antibiotic is administered, h
     cFloat *doses_c;    // Pointer to an array with concentrations in blood 
                             // after administering each each dose, ug/mL
     
     // Simulation parameters:
 
-    cInt snap_freq;     // Snapshot frequency (in time steps)
+    cFloat snap_freq;     // Snapshot frequency, h
 
     // Parameters calculated during initialization:
     cFloat rho_b;       // Max biofilm density, cells/um^3
