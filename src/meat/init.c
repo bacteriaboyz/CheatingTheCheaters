@@ -6,14 +6,14 @@
 void initSim(simBac *sim, char *param_file, errorCode *err)
 {
     // Get parameters:
-    FILE *file;
-    file = fopen("test.txt", "r");
+    //FILE *file;
+    //file = fopen("test.txt", "r");
     // TODO: read param_file
 
     // Calculate remaining parameters:
     sim->param.v_t = pow( sim->param.x_max, 2.0 ) * sim->param.z_max;
     sim->param.n_max = sim->param.v_t / \
-        ( 4.0 * sqrt(2.0) * pow( sim->param.d_bac, 3.0 );
+        ( 4.0 * sqrt(2.0) * pow( sim->param.d_bac, 3.0 ) );
         // 3D sphere packing formula for bacterial density
     sim->param.rho_b = sim->param.n_n_max / sim->param.v_t;
     sim->param.r_d = sim->param.r_c / ( 1.0 - sim->param.bet_c );

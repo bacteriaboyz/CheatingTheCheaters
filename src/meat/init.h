@@ -7,7 +7,7 @@
 #include "create.h"
 #include "update.h"
 #include "snapshot.h"
-#include "limit.h"
+#include "limits.h"
 
 /* 
  * Function initializes simulation by reading input parameters into sim struct,
