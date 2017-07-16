@@ -19,31 +19,63 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         return;
     }
 
+    cInt num_doses = 0;
+    
     while (fgets(line, sizeof(line), file))
     {
         char *tok = strtok(line,sep);
         char *param = tok;
+        strtok(NULL,sep);
         char *valStr = tok;
         double val;
  
-        if (strcmp(param,"doses_t"))
+        if (strcmp(param,"num_doses"))
         {
-            char sep2 = ',';
-            char *tok2 = strtok(valStr,sep2);
-            while (tok2)
+            sscanf(valStr,"%lf",&num_doses);
+            cFloat[num_doses] doses_c;
+            sim->param.doses_c = &doses_c;
+            cFloat[num_doses] doses_t;
+            sim->param.doses_t = &doses_t;
+        }
+        else if (strcmp(param,"doses_t"))
+        {
+            if (num_doses)
             {
-                
-                tok2 = strtok(NULL,sep2);
-            } //TODO: finish parsing dosage arrays
-            sim->param.doses_t = val;
+                ichar sep2 = ',';
+                char *tok2 = strtok(valStr,sep2);
+                for (cInt i=0; i<num_doses; i++)
+                {
+                    sim->param.doses_t[i] = tok2;
+                    tok2 = strtok(NULL,sep2);
+                }
+                sim->param.doses_t = val;
+            }
+            else
+            {
+                err = NUM_DOSES;
+            }
         }
         else if (strcmp(param,"doses_c"))
         {
-            sim->param.phi_i = val;
+            if (num_doses)
+            {
+                ichar sep2 = ',';
+                char *tok2 = strtok(valStr,sep2);
+                for (cInt i=0; i<num_doses; i++)
+                {
+                    sim->param.doses_c[i] = tok2;
+                    tok2 = strtok(NULL,sep2);
+                }
+                sim->param.doses_t = val;
+            }
+            else
+            {
+                err = NUM_DOSES;
+            }
         }
         else
         {
-            sscanf(tok,"%lf",&val);
+            sscanf(valStr,"%lf",&val);
 
             if (strcmp(param,"z_max"))
             {
@@ -132,7 +164,6 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     }
 
     fclose(file);
-    // TODO: read param_file
 
     // Calculate remaining parameters:
     sim->param.v_t = pow( sim->param.x_max, 2.0 ) * sim->param.z_max;
