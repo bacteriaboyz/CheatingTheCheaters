@@ -133,9 +133,9 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             {
                 sim->param.c_i = val;
             }
-            else if (strcmp(param,"z_i"))
+            else if (strcmp(param,"h_i"))
             {
-                sim->param.z_i = val;
+                sim->param.h_i = val;
             }
             else if (strcmp(param,"phi_i"))
             {
@@ -155,7 +155,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             }
             else
             {
-                err = UNKNOWN_PARAMETER;
+                err = UNKNOWN_PARAM;
                 return;
             }
         }
@@ -166,10 +166,13 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     fclose(file);
 
     // Calculate remaining parameters:
+
     sim->param.v_t = pow( sim->param.x_max, 2.0 ) * sim->param.z_max;
     sim->param.n_max = sim->param.v_t / \
         ( 4.0 * sqrt(2.0) * pow( sim->param.d_bac, 3.0 ) );
         // 3D sphere packing formula for bacterial density
+        // ONLY VALID FOR 3D
+        // other D's are left as exercise for the reader :P
     sim->param.rho_b = sim->param.n_n_max / sim->param.v_t;
     sim->param.r_d = sim->param.r_c / ( 1.0 - sim->param.bet_c );
         // see document for derivation
@@ -183,6 +186,26 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts.
     
+
     // Sow initial cells
     
+    cFloat num_cells_i = sim->param.n_max * sim->param.h_i;
+    cFloat z_max_i = sim->param.z_max * sim->param.h_i;
+    for (cInt i=0; i<num_cells_i; i++)
+    {
+        cInt isProducer = 0;
+        if (transformUnif(sim->state,0,1) < sim->param.phi_i)
+        {
+            isProducer = 1;
+        }
+        
+        cVec pos;
+        for (cInt j=0; i<LIMITS_DIM-1; i++)
+        {
+            pos[i] = transformUnif(sim->state,0,sim->param.x_max);
+        }
+        pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i);
+
+        createNode(pos,isProducer,sim,err);
+    }
 }

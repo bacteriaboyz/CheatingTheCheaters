@@ -7,7 +7,7 @@ typedef struct
 {
     // Physical and Biological parameters:
     
-    cFLoat z_max;         // Biofilm thickness, um
+    cFLoat z_max;       // Biofilm thickness, um
     cFloat d_bac;       // Distance between centers of two bacteria, um
     cFloat gam_n;       // Death rate in the absence of antibiotic, 1/h
     cFloat lam_l;       // Plasmid loss rate at replication, 1/(cell*h)
@@ -30,7 +30,8 @@ typedef struct
     cFloat k_a;         // Clearance rate of antibiotic from blood plasma, L/h
     cFloat c_i;         // Concentration of antibiotic at 50\% growth 
                             // inhibition (IC_50), um/mL
-    cFloat z_i;         // Initial height of bacterial biofilm, cells/um^3
+    cFloat h_i;         // Initial height of bacterial biofilm, fraction of 
+                            // total simulation thickness
     cFloat phi_i;       // Initial proportion of resistant bacteria in biofilm,
                             // dimensionless
     cFloat c_m;         // Minimum Inhibitory Concentration (MIC) of antibiotic,

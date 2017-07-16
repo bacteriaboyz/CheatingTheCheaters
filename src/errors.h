@@ -13,7 +13,9 @@ typedef enum
     REJECT,
     NOT_FOUND,
     INCONSISTENT,
-    FILE_NOT_FOUND
+    FILE_NOT_FOUND,
+    UNKNOWN_PARAM,
+    NUM_DOSES
 } errorCode;
 
 /*
