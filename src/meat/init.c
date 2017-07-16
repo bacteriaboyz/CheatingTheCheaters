@@ -6,6 +6,7 @@
 void initSim(simBac *sim, char *param_file, errorCode *err)
 {
     // Get parameters:
+    
     FILE *file;
     file = fopen("test.txt", "r");
     cInt max_line_length = 80;
@@ -185,7 +186,20 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     sim->param.h = log( 2.0 ) / \
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts.
-    
+   
+    // Initialize sim struct
+
+    //TODO: init buckets?
+    sim->graph; //TODO? init all stacks and set
+    for () //TODO: init every node as unused, add them all to dead stack
+
+    sim->state; //TODO? init rng?
+    sim->t = 0; // init time var
+    sim->t_last_snap = 0; // init snapshot timer
+    sim->c_b = updateAB(sim) // init blood antibiotic
+    sim->dose_num = 0; // init dose number counter
+    sim->num_bac = 0;
+    sim->num_pro = 0;
 
     // Sow initial cells
     
@@ -193,10 +207,13 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
     for (cInt i=0; i<num_cells_i; i++)
     {
+        ++sim->num_bac; // advance bacteria counter
+
         cInt isProducer = 0;
         if (transformUnif(sim->state,0,1) < sim->param.phi_i)
         {
             isProducer = 1;
+            ++sim->num_pro; // advance producer bacteria counter
         }
         
         cVec pos;
