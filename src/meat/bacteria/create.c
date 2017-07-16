@@ -48,69 +48,79 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         
         setBac *potNei; // potential neighbors
         nnIterator(NULL,newNode); // init iterator
-        nnIterator(&potNei,NULL); // get first set
-        while (potNei) // while iteration of neighboring buckets not finished,
+        for (cInt i=0; i<LIMITS_BNEIGHBORS; i++) 
+            // while iteration of neighboring buckets not finished,
         {
-            nodeBac *n; // iterating node pointer
-            mapMagical(NULL,NULL,potNei); // init iterator 
-            mapMagical(&n,NULL,NULL); // get first potential neighbor
-            while (n) // while iteration not finished,
+            nnIterator(&potNei,NULL); // advance bucket iterator
+            if (potNei) // if this bucket is not empty,
             {
-                cFloat d = distance(newNode,n,sim); // distance between both nodes
-                if (d < sim->param.r_d) // if within nieghborhood limits,
+                nodeBac *n; // iterating node pointer
+                mapMagical(NULL,NULL,potNei); // init iterator 
+                mapMagical(&n,NULL,NULL); // get first potential neighbor
+                while (n) // while iteration not finished,
                 {
-                    mapAddBacterium(&newNode->neighbors,n,d,err);
-                        // add this potential neighbor to newNode's neighborhood
-                    if (err != SUCCESS) // if there's an error
+                    cFloat d = distance(newNode,n,sim); 
+                        // distance between both nodes
+                    if (d < sim->param.r_d) // if within nieghborhood limits,
                     {
-                        return NULL; // run away, run away
-                    }
-                    if (n->enz) // if neighbor is producer
-                    {
-                        ++newNode->num_r_n; // increase num producer neighbors
-                        if (!newNode->enz) // if new node is not a producer
+                        mapAddBacterium(&newNode->neighbors,n,d,err);
+                            // add this potential neighbor to newNode's 
+                                // neighborhood
+                        if (err != SUCCESS) // if there's an error
                         {
-                            cFloat potC = abConc(d,sim); // calculate concentration due to 
-                                            // this neighbor
-                            if (newNode->c > potC) // if [ab] is less with
-                                                    // this producer as nearest 
-                                                    // neighbor,
+                            return NULL; // run away, run away
+                        }
+                        if (n->enz) // if neighbor is producer
+                        {
+                            ++newNode->num_r_n; 
+                                // increase num producer neighbors
+                            if (!newNode->enz) // if new node is not a producer
                             {
-                                newNode->c = potC; // set as new concentration
+                                cFloat potC = abConc(d,sim); 
+                                    // calculate concentration due to 
+                                        // this neighbor
+                                if (newNode->c > potC) 
+                                    // if [ab] is less with this producer as 
+                                        // nearest neighbor,
+                                {
+                                    newNode->c = potC; 
+                                        // set as new concentration
+                                }
+                            }
+                        }
+
+                        mapAddBacterium(&n->neighbors,newNode,d,err);
+                            // add newNode to this potential neighbor's 
+                                // neighborhood
+                        if (err != SUCCESS) // if there's an error
+                        {
+                            return NULL; // run away, run away
+                        }
+                        if (newNode->enz) // if new node is producer
+                        {
+                            ++n->num_r_n; // increase neighbor's producer 
+                                            //neighbors
+                            setAdd(&sim->graph.update_set,n,err);
+                                // neighbor added to update set
+                            if (err != SUCCESS)
+                            {
+                                return NULL;
+                            }
+
+                            cFloat possibleNewC = \
+                                abConc(distance(newNode,n,sim),sim);
+                                // [ab] due to new node
+                            if ( possibleNewC < n->c )
+                                // if this concentration is higher,
+                            {
+                                n->c = possibleNewC; // update [ab]
                             }
                         }
                     }
 
-                    mapAddBacterium(&n->neighbors,newNode,d,err);
-                        // add newNode to this potential neighbor's neighborhood
-                    if (err != SUCCESS) // if there's an error
-                    {
-                        return NULL; // run away, run away
-                    }
-                    if (newNode->enz) // if new node is producer
-                    {
-                        ++n->num_r_n; // increase neighbor's producer neighbors
-                        setAdd(&sim->graph.update_set,n,err);
-                            // neighbor added to update set
-                        if (err != SUCCESS)
-                        {
-                            return NULL;
-                        }
-
-                        cFloat possibleNewC = abConc(distance(newNode,n,sim),sim);
-                            // [ab] due to new node
-                        if ( possibleNewC < n->c )
-                            // if this concentration is higher,
-                        {
-                            n->c = possibleNewC; // update [ab]
-                        }
-                    }
+                    mapMagical(&n,NULL,NULL); // move node iterator forward
                 }
-
-                mapMagical(&n,NULL,NULL); // move node iterator forward
-            }
-
-            nnIterator(&potNei,NULL); // advance bucket iterator
+            } 
         }
         
         // update this node

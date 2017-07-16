@@ -12,7 +12,8 @@ typedef enum
     MEM,
     REJECT,
     NOT_FOUND,
-    INCONSISTENT
+    INCONSISTENT,
+    FILE_NOT_FOUND
 } errorCode;
 
 /*

@@ -14,6 +14,8 @@ const char *errorMsg(errorCode code)
             return "Object not found in hash table.";
         case INCONSISTENT:
             return "Program in inconsistent state.";
+        case FILE_NOT_FOUND;
+            return "Input parameter file with the given address not found."
     }
 
     return "This should never happen.";
