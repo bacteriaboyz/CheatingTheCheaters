@@ -5,27 +5,37 @@
 
 typedef struct
 {
-    tableHash *bucketTable;
+    tableHash bucketTable;
 
     cVec sides;
 
     cInt counts[LIMITS_DIM];
 } nnBuckets;
 
+
 /*
- * Computes the bucket coordinates of a bacterium given its physical
- * coordinates; writes them out to "coords".
- * Possible errors: INCONSISTENT
+ * Initializes the fixed-radius near neighbors structure. Like magnets, no one
+ * is entirely sure how it works. Requires a vector describing the dimensions
+ * of each bucket and bucket counts along each dimension in the simulation
+ * space.
+ * Possible errors: MEM
  */
 
-void nnBucketCords(
-                    nnBuckets *nn,
-                    nodeBac *bacterium,
-                    cInt *coords,
-                    errorCode *error
-                  );
+void nnInit(nnBuckets *nn, cVec sides, cInt *counts, errorCode *error);
 
-void addToNN(nnBuckets *nn, nodeBac *node, cFloat radius);
+/*
+ * Adds a bacterium to the FRNN structure.
+ * Possible errors: INCONSISTENT, MEM
+ */
+
+void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error);
+
+/*
+ * Deletes a bacterium from the FRNN structure.
+ * Possible errors: INCONSISTENT, MEM
+ */
+
+void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error);
 
 /*
  * Returns the bucket a bacterium is in and all adjacent ones for locating all
@@ -42,5 +52,11 @@ void nnIterator(
                 nodeBac *bacterium,
                 errorCode *error
                );
+
+/*
+ * Frees the FRNN structure.
+ */
+
+void nnFree(nnBuckets *nn);
 
 #endif

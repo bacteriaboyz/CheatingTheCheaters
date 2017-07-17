@@ -53,7 +53,7 @@ bool setIsMember(setBac *set, nodeBac *bacterium);
 
 /*
  * Deletes a bacterium from the set.
- * Possible errors: NOT_FOUND
+ * Possible errors: MEM, NOT_FOUND
  */
 
 void setDel(setBac *set, nodeBac *bacterium, errorCode *error);

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #include "limits.h"
 #include "map.h"
@@ -17,7 +17,7 @@ static cInt nnCoords2Idx(cInt *coords)
     return idx;
 }
 
-void nnBucketCoords(
+static void nnBucketCoords(
                     nnBuckets *nn,
                     nodeBac *bacterium,
                     cInt *coords,
@@ -37,6 +37,100 @@ void nnBucketCoords(
     }
 
     *error = SUCCESS;
+}
+
+void nnInit(nnBuckets *nn, cVec sides, cInt *counts, errorCode *error)
+{
+    mapInitBucketTable(&nn->bucketTable, 1, error);
+
+    if (*error == MEM)
+    {
+        return;
+    }
+
+    memcpy(nn->sides, sides, sizeof(nn->sides));
+    memcpy(nn->counts, counts, sizeof(nn->counts));
+}
+
+
+void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
+{
+    cInt coords[LIMITS_DIM];
+    bucketBac bucket, *bucket_ptr;
+
+    nnBucketCoords(nn, bacterium, coords, error);
+
+    if (*error == INCONSISTENT)
+    {
+        return;
+    }
+
+    cInt idx = nnCoords2Idx(coords);
+
+    bucket_ptr = mapLookupBucket(&nn->bucketTable, idx);
+
+    if (bucket_ptr)
+    {
+        setAdd(&bucket, bacterium, error);
+    }
+    else
+    {
+        setInit(&bucket, 1, error);
+
+        if (*error == MEM)
+        {
+            return;
+        }
+
+        setAdd(&bucket, bacterium, error);
+
+        mapAddBucket(&nn->bucketTable, idx, &bucket, error);
+
+        if (*error == MEM)
+        {
+            setFree(&bucket);
+        }
+    }
+}
+
+void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
+{
+    cInt coords[LIMITS_DIM];
+    bucketBac *bucket_ptr;
+
+    nnBucketCoords(nn, bacterium, coords, error);
+
+    if (*error == INCONSISTENT)
+    {
+        return;
+    }
+
+    cInt idx = nnCoords2Idx(coords);
+
+    bucket_ptr = mapLookupBucket(&nn->bucketTable, idx);
+
+    if (!bucket_ptr)
+    {
+        *error = INCONSISTENT;
+        return;
+    }
+
+    setDel(bucket_ptr, bacterium, error);
+
+    switch (*error)
+    {
+        case NOT_FOUND:
+            *error = INCONSISTENT; // We want it to fall through here.
+        case MEM:
+            return;
+    }
+
+    if (setIsEmpty(bucket_ptr))
+    {
+        setFree(bucket_ptr);
+
+        mapDelBucket(&nn->bucketTable, idx, error);
+    }
 }
 
 void nnIterator(
@@ -82,11 +176,24 @@ void nnIterator(
         }
 
         *error = SUCCESS;
-        *out = mapLookupBucket(nn->bucketTable, nnCoords2Idx(new_coords));
+        *out = mapLookupBucket(&nn->bucketTable, nnCoords2Idx(new_coords));
 
         return;
     }
 
     *error = SUCCESS;
     *out = NULL;
+}
+
+void nnFree(nnBuckets *nn)
+{
+    for (cInt i = 0; i < nn->bucketTable.len; ++i)
+    {
+        if (nn->bucketTable.slots[i].used)
+        {
+            setFree((bucketBac *)&nn->bucketTable.slots[i].val);
+        }
+    }
+
+    tableFree(&nn->bucketTable);
 }

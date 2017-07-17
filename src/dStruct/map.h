@@ -39,7 +39,7 @@ cFloat mapLookupBacterium(
 
 /*
  * Deletes a bacterium from the map.
- * Possible errors: NOT_FOUND
+ * Possible errors: MEM, NOT_FOUND
  */
 
 void mapDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
@@ -84,7 +84,7 @@ bucketBac *mapLookupBucket(tableHash *table, cInt idx);
 
 /*
  * Deletes a bucket from the map. The bucket itself should be freed first.
- * Possible errors: NOT FOUND
+ * Possible errors: MEM, NOT FOUND
  */
 
 void mapDelBucket(tableHash *table, cInt idx, errorCode *error);

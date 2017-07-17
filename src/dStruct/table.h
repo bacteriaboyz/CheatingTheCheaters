@@ -85,15 +85,18 @@ bool tableIsEmpty(tableHash *table);
 bool tableIsInit(tableHash *table);
 
 /*
- * Initializes a new hash table with the given length.
- * Possible errors: MEM
- */
-
-/*
  * Returns the cardinality (number of entries) of the table.
  */
 
 cInt tableCard(tableHash *table);
+
+/*
+ * Initializes a new hash table with the given length. You are guaranteed to be
+ * able to add "table_len" elements to the table before running into the
+ * possibility of a MEM error. Deleting elements can trigger an error at any
+ * time, as the table may rebuild itself to get rid of "garbage."
+ * Possible errors: MEM
+ */
 
 void tableInit(
                 tableHash *table,
@@ -126,7 +129,7 @@ cByte *tableLookup(tableHash *table, cByte *key);
 
 /*
  * Deletes an entry from the hash table.
- * Possible errors: NOT_FOUND
+ * Possible errors: MEM, NOT_FOUND
  */
 
 void tableDel(tableHash *table, cByte *key, errorCode *error);
