@@ -21,7 +21,7 @@ void snapshotSim(simBac *sim, errorCode *err)
 
     FILE *vtk_f;
     char vtk_file_name[LIMITS_MAX_LINE_LEN];
-    snprintf(vtk_file_name, LIMITS_MAX_LINE_LEN, "pos_%s_%f.vtk", sim->param.name_run, sim->t);
+    snprintf(vtk_file_name, LIMITS_MAX_LINE_LEN, "pos_%s_%.4f.vtk", sim->param.name_run, sim->t);
     vtk_f = fopen(vtk_file_name, "w");
 
     if(!vtk_f)
@@ -32,7 +32,7 @@ void snapshotSim(simBac *sim, errorCode *err)
 
     FILE *vtk_f2;
     char vtk_file_name2[LIMITS_MAX_LINE_LEN];
-    snprintf(vtk_file_name2, LIMITS_MAX_LINE_LEN, "col_%s_%f.vtk", sim->param.name_run, sim->t);
+    snprintf(vtk_file_name2, LIMITS_MAX_LINE_LEN, "col_%s_%.4f.vtk", sim->param.name_run, sim->t);
     vtk_f2 = fopen(vtk_file_name2, "w");
 
     if(!vtk_f2)

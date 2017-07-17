@@ -48,8 +48,7 @@ typedef struct
     // Simulation parameters:
 
     cFloat snap_freq;   // Snapshot frequency, h
-    char *rng_phrase;   // Random Number Generator phrase used as state seed
-    char *name_run;     // Stores name of this run
+    char name_run[LIMITS_MAX_LINE_LEN];     // Stores name of this run
     
     // Parameters calculated during initialization:
     cFloat rho_b;       // Max biofilm density, cells/um^3

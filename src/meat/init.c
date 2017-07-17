@@ -44,13 +44,9 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         char *valStr = tok; // save token as value string
         double val; // will save numerical value, if any
 
-        if (strcmp(param,"rng_phrase") == 0) // if rng seed phrase
-        {
-            sim->param.rng_phrase = valStr; // no need to parse as double
-        }
         if (strcmp(param,"name_run") == 0) // if name of run
         {
-            sim->param.name_run = valStr; // no need to parse as double
+            strcpy(sim->param.name_run,valStr); // no need to parse as double
         }
         else if (strcmp(param,"doses_t") == 0) // if dose array,
         {
@@ -223,7 +219,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     }
 
     FILE *ts_f; // time series file pointer
-    char ts_file_name[80];
+    char ts_file_name[LIMITS_MAX_LINE_LEN+16];
     sprintf(ts_file_name, \
         "time_series_%s.csv",sim->param.name_run);
         // prints time series file name to variable

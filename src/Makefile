@@ -1,7 +1,7 @@
 EXENAME = idontknow
 CC = gcc
 LD = gcc
-CFLAGS = -std=c99 -Wall -Werror -Wno-switch
+CFLAGS = -std=c99 -Wall -Werror -Wno-switch -Wno-format-truncation
 LDFLAGS = -lm
 
 OPTIMIZE = -O2 -march=native -s
