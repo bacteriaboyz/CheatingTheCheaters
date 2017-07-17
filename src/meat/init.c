@@ -13,6 +13,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     if (!file)
     {
         *err = FILE_NOT_FOUND;
+        fclose(file);
         return;
     }
     cInt max_line_length = 80;
@@ -22,6 +23,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     if (!file)
     {
         *err = FILE_NOT_FOUND;
+        fclose(file);
         return;
     }
 
@@ -62,6 +64,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             else // if dose arrays not initialized,
             {
                 *err = NUM_DOSES; // tantrum
+                fclose(file);
+                return;
             }
         }
         else if (strcmp(param,"doses_c")) // same as above, now concentrations
@@ -83,6 +87,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             else
             {
                 *err = NUM_DOSES;
+                fclose(file);
+                return;
             }
         }
         else // if value is scalar
@@ -172,6 +178,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             else
             {
                 *err = UNKNOWN_PARAM;
+                fclose(file);
                 return;
             }
         }
@@ -204,7 +211,6 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
    
     // Initialize sim struct:
 
-    //TODO: init buckets?
 
     // Init graph struct:
     stackInit(&sim->graph.rep_stack,LIMITS_MAX_BACT,err);
@@ -252,26 +258,29 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     // Sow initial cells
     
     cFloat num_cells_i = sim->param.n_max * sim->param.h_i;
+        // initial number of cells
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
-    for (cInt i=0; i<num_cells_i; i++)
+        // maximum z height of cells initially
+    for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
     {
         ++sim->num_bac; // advance bacteria counter
 
-        cInt isProducer = 0;
+        cInt isProducer = 0; // default not producer
         if (transformUnif(sim->state,0,1) < sim->param.phi_i)
+            // random distribute producers according to initial proportion
         {
             isProducer = 1;
             ++sim->num_pro; // advance producer bacteria counter
         }
         
         cVec pos;
-        for (cInt j=0; j<LIMITS_DIM-1; ++j)
+        for (cInt j=0; j<LIMITS_DIM-1; ++j) // assign all dims except last
         {
             pos[j] = transformUnif(sim->state,0,sim->param.x_max);
         }
-        pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i);
+        pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i); // do last
 
-        createNode(pos,isProducer,sim,err);
+        createNode(pos,isProducer,sim,err); // create bacteria
         if (*err != SUCCESS)
         {
             return;
