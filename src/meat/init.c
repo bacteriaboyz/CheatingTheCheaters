@@ -3,11 +3,20 @@
 #include <string.h>
 
 #include "init.h"
+#include "limits.h"
+
+#ifndef INIT_SEP1
+#define INIT_SEP1 "="
+#endif
+
+#ifndef INIT_SEP2
+#define INIT_SEP2 ","
+#endif
 
 void initSim(simBac *sim, char *param_file, errorCode *err)
 {
     // Get parameters:
-    
+
     FILE *file;
     file = fopen(param_file, "r");
     if (!file)
@@ -16,9 +25,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         fclose(file);
         return;
     }
-    cInt max_line_length = 80;
-    char sep = '='; // separates parameter name and value in input file
-    char line[max_line_length];
+    char line[LIMITS_MAX_LINE_LEN];
 
     if (!file)
     {
@@ -31,26 +38,25 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
 
     while (fgets(line, sizeof(line), file)) // for every line of parameter file
     {
-        char *tok = strtok(line,&sep); // initialize strtok iterator
+        char *tok = strtok(line,INIT_SEP1); // initialize strtok iterator
         char *param = tok; // saves first token as parameter name
-        tok = strtok(NULL,&sep); // get next token
+        tok = strtok(NULL,INIT_SEP2); // get next token
         char *valStr = tok; // save token as value string
         double val; // will save numerical value, if any
- 
-        if (strcmp(param,"rng_phrase")) // if rng seed phrase
+
+        if (strcmp(param,"rng_phrase") == 0) // if rng seed phrase
         {
             sim->param.rng_phrase = valStr; // no need to parse as double
         }
-        if (strcmp(param,"name_run")) // if name of run
+        if (strcmp(param,"name_run") == 0) // if name of run
         {
             sim->param.name_run = valStr; // no need to parse as double
         }
-        else if (strcmp(param,"doses_t")) // if dose array,
+        else if (strcmp(param,"doses_t") == 0) // if dose array,
         {
             if (num_doses) // if dose arrays have been initialized,
             {
-                char sep2 = ','; // separates values of dose times
-                char *tok2 = strtok(valStr,&sep2); // get first dose time
+                char *tok2 = strtok(valStr,INIT_SEP2); // get first dose time
                 cFloat doses_t[num_doses]; // init array of dosage times
                 sim->param.doses_t = doses_t; // assign pointer in param
                 for (cInt i=0; i<num_doses; i++) // for every dose,
@@ -58,7 +64,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
                     cFloat d; // store float value of dose
                     sscanf(tok2,"%lf",&d); // parse as float
                     sim->param.doses_t[i] = d; // record the dose
-                    tok2 = strtok(NULL,&sep2); // advance token
+                    tok2 = strtok(NULL,INIT_SEP2); // advance token
                 }
             }
             else // if dose arrays not initialized,
@@ -68,20 +74,19 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
                 return;
             }
         }
-        else if (strcmp(param,"doses_c")) // same as above, now concentrations
+        else if (strcmp(param,"doses_c") == 0) // same as above, now concentrations
         {
             if (num_doses)
             {
-                char sep2 = ',';
-                char *tok2 = strtok(valStr,&sep2);
-                cFloat doses_c[num_doses]; 
+                char *tok2 = strtok(valStr, INIT_SEP2);
+                cFloat doses_c[num_doses];
                 sim->param.doses_c = doses_c;
                 for (cInt i=0; i<num_doses; i++)
                 {
                     cFloat d;
                     sscanf(tok2,"%lf",&d);
                     sim->param.doses_c[i] = d;
-                    tok2 = strtok(NULL,&sep2);
+                    tok2 = strtok(NULL,INIT_SEP2);
                 }
             }
             else
@@ -95,83 +100,83 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         {
             sscanf(valStr,"%lf",&val);
 
-            if (strcmp(param,"num_doses")) // if specifying number of doses,
+            if (strcmp(param,"num_doses") == 0) // if specifying number of doses,
             {
                 num_doses = val; // assign value to number of doses
             }
-            else if (strcmp(param,"z_max"))
+            else if (strcmp(param,"z_max") == 0)
             {
                 sim->param.z_max = val;
             }
-            else if (strcmp(param,"d_bac"))
+            else if (strcmp(param,"d_bac") == 0)
             {
                 sim->param.d_bac = val;
             }
-            else if (strcmp(param,"gam_n"))
+            else if (strcmp(param,"gam_n") == 0)
             {
                 sim->param.gam_n = val;
             }
-            else if (strcmp(param,"lam_l"))
+            else if (strcmp(param,"lam_l") == 0)
             {
                 sim->param.lam_l = val;
             }
-            else if (strcmp(param,"lam_t"))
+            else if (strcmp(param,"lam_t") == 0)
             {
                 sim->param.lam_t = val;
             }
-            else if (strcmp(param,"bet_c"))
+            else if (strcmp(param,"bet_c") == 0)
             {
                 sim->param.bet_c = val;
             }
-            else if (strcmp(param,"r_c"))
+            else if (strcmp(param,"r_c") == 0)
             {
                 sim->param.r_c = val;
             }
-            else if (strcmp(param,"alp_n"))
+            else if (strcmp(param,"alp_n") == 0)
             {
                 sim->param.alp_n = val;
             }
-            else if (strcmp(param,"x_max"))
+            else if (strcmp(param,"x_max") == 0)
             {
                 sim->param.x_max = val;
             }
-            else if (strcmp(param,"t_s"))
+            else if (strcmp(param,"t_s") == 0)
             {
                 sim->param.t_s = val;
             }
-            else if (strcmp(param,"t_max"))
+            else if (strcmp(param,"t_max") == 0)
             {
                 sim->param.t_max = val;
             }
-            else if (strcmp(param,"v_w"))
+            else if (strcmp(param,"v_w") == 0)
             {
                 sim->param.v_w = val;
             }
-            else if (strcmp(param,"k_a"))
+            else if (strcmp(param,"k_a") == 0)
             {
                 sim->param.k_a = val;
             }
-            else if (strcmp(param,"c_i"))
+            else if (strcmp(param,"c_i") == 0)
             {
                 sim->param.c_i = val;
             }
-            else if (strcmp(param,"h_i"))
+            else if (strcmp(param,"h_i") == 0)
             {
                 sim->param.h_i = val;
             }
-            else if (strcmp(param,"phi_i"))
+            else if (strcmp(param,"phi_i") == 0)
             {
                 sim->param.phi_i = val;
             }
-            else if (strcmp(param,"c_m"))
+            else if (strcmp(param,"c_m") == 0)
             {
                 sim->param.c_m = val;
             }
-            else if (strcmp(param,"c_c"))
+            else if (strcmp(param,"c_c") == 0)
             {
                 sim->param.c_c = val;
             }
-            else if (strcmp(param,"f_e"))
+            else if (strcmp(param,"f_e") == 0)
             {
                 sim->param.f_e = val;
             }
@@ -182,8 +187,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
                 return;
             }
         }
-        
-        tok = strtok(NULL,&sep);
+
+        tok = strtok(NULL,INIT_SEP1);
     }
 
     fclose(file);
@@ -208,20 +213,11 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     sim->param.h = log( 2.0 ) / \
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts.
-   
-    // Initialize sim struct:
 
-
-    // Init graph struct: TODO: take this away
-    stackInit(&sim->graph.rep_stack,LIMITS_MAX_BACT,err);
-    stackInit(&sim->graph.die_stack,LIMITS_MAX_BACT,err);
-    stackInit(&sim->graph.hgt_stack,LIMITS_MAX_BACT,err);
-    stackInit(&sim->graph.dead_stack,LIMITS_MAX_BACT,err);
-    setInit(&sim->graph.update_set,LIMITS_MAX_BACT,err);
-
-    for (cInt i=0; i<LIMITS_MAX_BACT; i++) 
+    for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
         // set every node as unused, add them all to dead stack
     {
+        // Memory should be zeroed out
         sim->graph.bacteria[i].used = 0;
         stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
     }
@@ -236,6 +232,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     if (!ts_f)
     {
         *err = ERROR_CREATE_FILE;
+        fclose(ts_f);
         return;
     }
     cInt pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
@@ -243,18 +240,13 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     if (pChk < 0)
     {
         *err = PRINT_FAIL;
+        fclose(ts_f);
         return;
     }
     sim->t_series_file = ts_f; // save time series file
 
-    rngInitState(sim->state,sim->param.rng_phrase); //TODO init rng?
-    sim->t = 0; // init time var
-    sim->t_last_snap = 0; // init snapshot timer
     updateAB(sim); // init blood antibiotic
-    sim->dose_num = 0; // init dose number counter
-    sim->num_bac = 0;
-    sim->num_pro = 0;
-    
+
     cVec b_dims; // will store bucket dimensions
     cInt num_b[LIMITS_DIM]; // contain number of buckets in each dim
     for (cInt i=0; i<LIMITS_DIM-1; ++i)
@@ -278,7 +270,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     }
 
     // Sow initial cells
-    
+
     cFloat num_cells_i = sim->param.n_max * sim->param.h_i;
         // initial number of cells
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
@@ -294,7 +286,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             isProducer = 1;
             ++sim->num_pro; // advance producer bacteria counter
         }
-        
+
         cVec pos;
         for (cInt j=0; j<LIMITS_DIM-1; ++j) // assign all dims except last
         {
@@ -308,6 +300,6 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             return;
         }
     }
-    
+
     *err = SUCCESS;
 }
