@@ -7,6 +7,7 @@ LDFLAGS = -lm
 OPTIMIZE = -O2 -march=native
 DEBUG = -O0 -g
 PROFILE = -pg
+STRIP = -s
 
 OBJECTS = $(shell find . -name "*.c" | sed "s/\.c/.o/g") ../jsmn/jsmn.o
 INCLUDE = $(shell find . -type d | sed "s/^/-I/;s/\n/ /") -I../jsmn
@@ -17,11 +18,12 @@ ifdef debug
 	CFLAGS += $(DEBUG)
 else
 	CFLAGS += $(OPTIMIZE)
-	LDFLAGS += -s
+	LDFLAGS += $(STRIP)
 endif
 
 ifdef profile
 	CFLAGS += $(PROFILE)
+	LDFLAGS += $(PROFILE)
 endif
 
 $(EXENAME) : $(OBJECTS)
