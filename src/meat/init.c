@@ -212,7 +212,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     // Initialize sim struct:
 
 
-    // Init graph struct:
+    // Init graph struct: TODO: take this away
     stackInit(&sim->graph.rep_stack,LIMITS_MAX_BACT,err);
     stackInit(&sim->graph.die_stack,LIMITS_MAX_BACT,err);
     stackInit(&sim->graph.hgt_stack,LIMITS_MAX_BACT,err);
@@ -254,6 +254,28 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     sim->dose_num = 0; // init dose number counter
     sim->num_bac = 0;
     sim->num_pro = 0;
+    
+    cVec b_dims; // will store bucket dimensions
+    cInt num_b[LIMITS_DIM]; // contain number of buckets in each dim
+    for (cInt i=0; i<LIMITS_DIM-1; ++i)
+    {
+        num_b[i] = floor( sim->param.x_max / sim->param.r_d ); // num buckets
+        b_dims[i] = sim->param.x_max / num_b[i]; // set this bucket dimension
+        if (num_b[i] < 1) // if under 1, reset to 1
+        {
+            num_b[i] = 1;
+        }
+    }
+
+    num_b[LIMITS_DIM-1] = floor( sim->param.z_max / sim->param.r_d );
+        // num buckets on z axis
+    b_dims[LIMITS_DIM-1] = sim->param.z_max / num_b[LIMITS_DIM-1]; // set this bucket dim
+
+    nnInit(&sim->buckets,b_dims,num_b,err); // initialize nearest neighbor ds
+    if (*err != SUCCESS)
+    {
+        return;
+    }
 
     // Sow initial cells
     

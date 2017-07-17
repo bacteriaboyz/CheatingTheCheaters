@@ -8,7 +8,6 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
 
     if (newNode) // If there actually was a free slot...
     {
-
         // Assign new properties
         
         newNode->used = 1; // set used to true        
