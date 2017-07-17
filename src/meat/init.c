@@ -272,7 +272,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i);
 
         createNode(pos,isProducer,sim,err);
-        if (err != SUCCESS)
+        if (*err != SUCCESS)
         {
             return;
         }

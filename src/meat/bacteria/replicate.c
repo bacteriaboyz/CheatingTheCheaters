@@ -7,7 +7,7 @@ void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
     cVec pos; // will store coordinates of new bacteria
     transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
         // sample from ball
-    if (err != SUCCESS)
+    if (*err != SUCCESS)
     {
         return;
     }
@@ -19,7 +19,7 @@ void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
         ++iterChk; // advance counter
         transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
             // sample from ball
-        if (err != SUCCESS)
+        if (*err != SUCCESS)
         {
             return;
         }

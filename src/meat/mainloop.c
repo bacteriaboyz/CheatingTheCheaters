@@ -35,7 +35,7 @@ void mainloopSim(simBac *sim, errorCode *err)
         while (node) // while node is not null
         {
             replicateNode(node,sim,err); // replicate this node
-            if (err != SUCCESS)
+            if (*err != SUCCESS)
             {
                 return;
             }
@@ -45,7 +45,7 @@ void mainloopSim(simBac *sim, errorCode *err)
         while (node) // while node is not null
         {
             dieNode(node,sim,err); // kill this node
-            if (err != SUCCESS)
+            if (*err != SUCCESS)
             {
                 return;
             }
@@ -55,7 +55,7 @@ void mainloopSim(simBac *sim, errorCode *err)
         while (node) // while node is not null
         {
             hgtNode(node,sim,err); // HGT to this node
-            if (err != SUCCESS)
+            if (*err != SUCCESS)
             {
                 return;
             }

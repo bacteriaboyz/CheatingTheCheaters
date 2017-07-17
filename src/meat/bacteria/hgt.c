@@ -17,7 +17,7 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
         ++n->num_r_n; // one more resistant neighbor for this neighbor
        
         setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
-        if (err != SUCCESS)
+        if (*err != SUCCESS)
         {
             return;
         }

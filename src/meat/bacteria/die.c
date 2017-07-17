@@ -20,7 +20,7 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
       
         mapDelBacterium(&n->neighbors,node,err);
             // delete this node from neighbor's neighbor array
-        if (err != SUCCESS) // if there's an error
+        if (*err != SUCCESS) // if there's an error
         {
             return; // run away, run away
         }
@@ -29,7 +29,7 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
         {
             --n->num_r_n; // neighbor has one less resistant neighbor
             setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
-            if (err != SUCCESS)
+            if (*err != SUCCESS)
             {
                 return;
             }

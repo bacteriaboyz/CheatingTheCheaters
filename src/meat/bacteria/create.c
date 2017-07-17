@@ -18,13 +18,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
         updateNeiVol(newNode,sim); // update volume of neighborhood sphere
         newNode->num_r_n = 0; // reset producer neighbor counter
-        nnBuckets *nn = malloc(sizeof(nnBuckets)); // used to retrieve bucket
-        nnIterator(nn,NULL,newNode,err); // retrieve bucket
-        if (err != SUCCESS)
-        {
-            return NULL;
-        }
-        addToNN(nn,newNode,sim->param.r_d);
+        nnAdd(sim->buckets,newNode,err);
             // Add newNode to NN data struct
         newNode->enz = isProducer; // assign enzyme production
         ++sim->num_bac; // stores number of bacteria
@@ -45,7 +39,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         else // if not,
         {
             mapInitBacTable(&newNode->neighbors,1,err); // init neighbor table
-            if (err != SUCCESS) // if there's an error
+            if (*err != SUCCESS) // if there's an error
             {
                 return NULL; // run away, run away
             }
@@ -55,7 +49,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         
         setBac *potNei; // potential neighbors
         nnIterator(NULL,&potNei,newNode,err); // init iterator
-        if (err != SUCCESS)
+        if (*err != SUCCESS)
         {
             return NULL;
         }
@@ -63,7 +57,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
             // while iteration of neighboring buckets not finished,
         {
             nnIterator(NULL,&potNei,NULL,err); // advance bucket iterator
-            if (err != SUCCESS)
+            if (*err != SUCCESS)
             {
                 return NULL;
             }
@@ -81,7 +75,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                         mapAddBacterium(&newNode->neighbors,n,d,err);
                             // add this potential neighbor to newNode's 
                                 // neighborhood
-                        if (err != SUCCESS) // if there's an error
+                        if (*err != SUCCESS) // if there's an error
                         {
                             return NULL; // run away, run away
                         }
@@ -107,7 +101,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                         mapAddBacterium(&n->neighbors,newNode,d,err);
                             // add newNode to this potential neighbor's 
                                 // neighborhood
-                        if (err != SUCCESS) // if there's an error
+                        if (*err != SUCCESS) // if there's an error
                         {
                             return NULL; // run away, run away
                         }
@@ -117,7 +111,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                                             //neighbors
                             setAdd(&sim->graph.update_set,n,err);
                                 // neighbor added to update set
-                            if (err != SUCCESS)
+                            if (*err != SUCCESS)
                             {
                                 return NULL;
                             }
@@ -140,7 +134,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         
         // update this node
         setAdd(&sim->graph.update_set,newNode,err); // new node must be updated
-        if (err != SUCCESS)
+        if (*err != SUCCESS)
         {
             return NULL;
         }
