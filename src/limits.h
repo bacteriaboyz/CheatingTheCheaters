@@ -38,4 +38,8 @@
 #define LIMITS_TABLE_ENTRY_SIZE 64 // size of Intel cache line
 #endif
 
+#ifndef LIMITS_MAX_LINE_LEN
+#define LIMITS_MAX_LINE_LEN 80
+#endif
+
 #endif
