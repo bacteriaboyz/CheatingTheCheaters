@@ -50,6 +50,8 @@ void nnInit(nnBuckets *nn, cVec sides, cInt *counts, errorCode *error)
 
     memcpy(nn->sides, sides, sizeof(nn->sides));
     memcpy(nn->counts, counts, sizeof(nn->counts));
+
+    *error = SUCCESS;
 }
 
 
@@ -91,6 +93,8 @@ void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
             setFree(&bucket);
         }
     }
+
+    *error = SUCCESS;
 }
 
 void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
@@ -131,6 +135,8 @@ void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
 
         mapDelBucket(&nn->bucketTable, idx, error);
     }
+
+    *error = SUCCESS;
 }
 
 void nnIterator(
