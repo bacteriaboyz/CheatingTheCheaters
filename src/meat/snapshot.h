@@ -15,5 +15,5 @@
  * Errors:		FILE_NOT_FOUND
  */
  
- void snapshotSim(simBac *sim, FILE *fp, errorCode *err);
+ void snapshotSim(simBac *sim, errorCode *err);
 #endif
