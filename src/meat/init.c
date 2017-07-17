@@ -9,7 +9,12 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     // Get parameters:
     
     FILE *file;
-    file = fopen("test.txt", "r");
+    file = fopen(param_file, "r");
+    if (!file)
+    {
+        *err = FILE_NOT_FOUND;
+        return;
+    }
     cInt max_line_length = 80;
     char sep = '='; // separates parameter name and value in input file
     char line[max_line_length];
@@ -33,7 +38,11 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         if (strcmp(param,"rng_phrase")) // if rng seed phrase
         {
             sim->param.rng_phrase = valStr; // no need to parse as double
-        } 
+        }
+        if (strcmp(param,"name_run")) // if name of run
+        {
+            sim->param.name_run = valStr; // no need to parse as double
+        }
         else if (strcmp(param,"doses_t")) // if dose array,
         {
             if (num_doses) // if dose arrays have been initialized,
@@ -204,11 +213,33 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     stackInit(&sim->graph.dead_stack,LIMITS_MAX_BACT,err);
     setInit(&sim->graph.update_set,LIMITS_MAX_BACT,err);
 
-    for (cInt i=0; i<LIMITS_MAX_BACT; i++) // set every node as unused, add them all to dead stack
+    for (cInt i=0; i<LIMITS_MAX_BACT; i++) 
+        // set every node as unused, add them all to dead stack
     {
         sim->graph.bacteria[i].used = 0;
         stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
     }
+
+    FILE *ts_f; // time series file pointer
+    char ts_file_name[80];
+    sprintf(ts_file_name, \
+        "time_series_%s.csv",sim->param.name_run);
+        // prints time series file name to variable
+
+    ts_f = fopen(ts_file_name,"w"); // open csv file
+    if (!ts_f)
+    {
+        *err = ERROR_CREATE_FILE;
+        return;
+    }
+    cInt pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
+        // print csv file header
+    if (pChk < 0)
+    {
+        *err = PRINT_FAIL;
+        return;
+    }
+    sim->t_series_file = ts_f; // save time series file
 
     rngInitState(sim->state,sim->param.rng_phrase); //TODO init rng?
     sim->t = 0; // init time var

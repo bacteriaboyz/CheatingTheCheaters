@@ -49,7 +49,8 @@ typedef struct
 
     cFloat snap_freq;   // Snapshot frequency, h
     char *rng_phrase;   // Random Number Generator phrase used as state seed
-
+    char *name_run;     // Stores name of this run
+    
     // Parameters calculated during initialization:
     cFloat rho_b;       // Max biofilm density, cells/um^3
     cFloat r_d;         // Radius of diffusion cutoff, um

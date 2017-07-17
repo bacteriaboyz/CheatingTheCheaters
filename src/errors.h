@@ -15,7 +15,9 @@ typedef enum
     INCONSISTENT,
     FILE_NOT_FOUND,
     UNKNOWN_PARAM,
-    NUM_DOSES
+    NUM_DOSES,
+    ERROR_CREATE_FILE,
+    PRINT_FAIL
 } errorCode;
 
 /*

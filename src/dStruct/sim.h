@@ -1,6 +1,8 @@
 #ifndef _SIM_H
 #define _SIM_H
 
+#include <stdio.h>
+
 #include "types.h"
 #include "graph.h"
 #include "rng.h"
@@ -22,6 +24,8 @@ typedef struct
     cInt dose_num;      // Tracks what dose number we are in treatment
     cInt num_bac;       // Number of bacteria at this moment
     cInt num_pro;       // Number of producer bacteria at this moment
+
+    FILE *t_series_file;// Stores pointer to time series file
 
 } simBac;
 
