@@ -4,6 +4,12 @@
 #include <math.h>
 #include <string.h>
 
+#include "abBlood.h"
+#include "create.h"
+#include "update.h"
+#include "snapshot.h"
+#include "limits.h"
+#include "transform.h"
 #include "init.h"
 #include "jsmn.h"
 #include "limits.h"

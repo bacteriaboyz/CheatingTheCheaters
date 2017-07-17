@@ -3,13 +3,6 @@
 
 #include "sim.h"
 
-#include "abBlood.h"
-#include "create.h"
-#include "update.h"
-#include "snapshot.h"
-#include "limits.h"
-#include "transform.h"
-
 /* 
  * Function initializes simulation by reading input parameters into sim struct,
  * calculating remaining parameters, creating initial population of bacteria, 

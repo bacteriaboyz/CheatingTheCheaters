@@ -60,3 +60,4 @@ thumbs.db
 *.stackdump
 idontknow
 *.csv
+*.vtk

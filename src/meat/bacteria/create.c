@@ -47,7 +47,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         // Add neighbors and add self to neighbors
         
         setBac *potNei; // potential neighbors
-        nnIterator(NULL,&potNei,newNode,err); // init iterator
+        nnIterator(&sim->buckets,&potNei,newNode,err); // init iterator
         if (*err != SUCCESS)
         {
             return NULL;
@@ -55,7 +55,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         for (cInt i=0; i<LIMITS_BNEIGHBORS; i++) 
             // while iteration of neighboring buckets not finished,
         {
-            nnIterator(NULL,&potNei,NULL,err); // advance bucket iterator
+            nnIterator(&sim->buckets,&potNei,NULL,err); // advance bucket iterator
             if (*err != SUCCESS)
             {
                 return NULL;
