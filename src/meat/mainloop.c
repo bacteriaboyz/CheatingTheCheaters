@@ -2,7 +2,7 @@
 
 void mainloopSim(simBac *sim, errorCode *err)
 {
-    //TODO: write snapshot of graph struct to file 
+    snapshotSim(sim,err); // write snapshot of graph struct to file 
     
     while (sim->t < sim->param.t_max) // main time loop, once per time step
     {
@@ -65,7 +65,8 @@ void mainloopSim(simBac *sim, errorCode *err)
             // if time since last snapshot is long enough
         {
             sim->t_last_snap = 0; // reset snapshot timer
-            //TODO: write snapshot of graph struct to file
+            
+            snapshotSim(sim,err); // write snapshot of graph struct to file
         }
         else
         {
