@@ -18,7 +18,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
         updateNeiVol(newNode,sim); // update volume of neighborhood sphere
         newNode->num_r_n = 0; // reset producer neighbor counter
-        nnAdd(sim->buckets,newNode,err);
+        nnAdd(&sim->buckets,newNode,err);
             // Add newNode to NN data struct
         newNode->enz = isProducer; // assign enzyme production
         ++sim->num_bac; // stores number of bacteria
