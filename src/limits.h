@@ -42,4 +42,8 @@
 #define LIMITS_MAX_LINE_LEN 80
 #endif
 
+#ifndef LIMITS_MAX_FILE_SIZE
+#define LIMITS_MAX_FILE_SIZE (1024 * 1024)
+#endif
+
 #endif

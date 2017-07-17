@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "cleanup.h"
 #include "limits.h"
@@ -9,6 +10,9 @@
 void cleanupSim(simBac *sim)
 {
     fclose(sim->t_series_file);
+
+    free(sim->param.doses_t);
+    free(sim->param.doses_c);
 
     nnFree(&sim->buckets);
 

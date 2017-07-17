@@ -14,9 +14,10 @@ typedef enum
     NOT_FOUND,
     INCONSISTENT,
     FILE_NOT_FOUND,
-    UNKNOWN_PARAM,
+    MALFORMED_FILE,
     NUM_DOSES,
-    ERROR_CREATE_FILE,
+    ERR_CREATE_FILE,
+    ERR_READ_FILE,
     PRINT_FAIL
 } errorCode;
 

@@ -1,8 +1,11 @@
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <string.h>
 
 #include "init.h"
+#include "jsmn.h"
 #include "limits.h"
 
 #ifndef INIT_SEP1
@@ -13,181 +16,489 @@
 #define INIT_SEP2 ","
 #endif
 
-void initSim(simBac *sim, char *param_file, errorCode *err)
+#define INIT_EQ(x, y) (strcmp((x), (y)) == 0)
+
+#define INIT_NUM_PARAMS 22
+
+static void initReadParams(
+                            simBac *sim,
+                            char *buffer,
+                            jsmntok_t *tokens,
+                            int num_tokens,
+                            errorCode *err
+                          )
 {
-    // Get parameters:
+    bool initialized[INIT_NUM_PARAMS] = { false };
 
+    for (int i = 0; i < num_tokens - 1; ++i)
+    {
+        jsmntok_t *tok = tokens + i;
+
+        if (tok->type == JSMN_STRING)
+        {
+            buffer[tok->end + 1] = '\0';
+
+            char *key = buffer + tok->start;
+
+            tok = tokens + (++i);
+
+            if (INIT_EQ(key, "name_run"))
+            {
+                strncpy(
+                        sim->param.name_run,
+                        buffer + tok->start,
+                        LIMITS_MAX_LINE_LEN - 1
+                       );
+
+                initialized[0] = true;
+            }
+            else if (INIT_EQ(key, "doses_t"))
+            {
+                if (!initialized[1])
+                {
+                    cInt num_doses = (tok - 1)->size;
+                    sim->param.num_doses = num_doses;
+                    if (!(sim->param.doses_t = malloc(
+                                                        num_doses *
+                                                        sizeof(cFloat)
+                                                      )))
+                    {
+                        *err = MEM;
+                        return;
+                    }
+
+                    if (!(sim->param.doses_c = malloc(
+                                                        num_doses *
+                                                        sizeof(cFloat)
+                                                      )))
+                    {
+                        *err = MEM;
+                        free(sim->param.doses_t);
+                        return;
+                    }
+
+                    initialized[1] = true;
+                }
+
+
+                for (cInt i = 0; i < sim->param.num_doses; ++i)
+                {
+                    if (sscanf(
+                                buffer + (tok + i)->start,
+                                "%lf",
+                                sim->param.doses_t + i
+                              ) == 0)
+                    {
+                        *err = MALFORMED_FILE;
+                        return;
+                    }
+                }
+
+                initialized[20] = true;
+            }
+            else if (INIT_EQ(key, "doses_c"))
+            {
+                if (!initialized[1])
+                {
+                    cInt num_doses = (tok - 1)->size;
+                    sim->param.num_doses = num_doses;
+                    if (!(sim->param.doses_t = malloc(
+                                                        num_doses *
+                                                        sizeof(cFloat)
+                                                      )))
+                    {
+                        *err = MEM;
+                        return;
+                    }
+
+                    if (!(sim->param.doses_c = malloc(
+                                                        num_doses *
+                                                        sizeof(cFloat)
+                                                      )))
+                    {
+                        *err = MEM;
+                        free(sim->param.doses_t);
+                        return;
+                    }
+
+                    initialized[1] = true;
+                }
+
+
+                for (cInt i = 0; i < sim->param.num_doses; ++i)
+                {
+                    if (sscanf(
+                                buffer + (tok + i)->start,
+                                "%lf",
+                                sim->param.doses_c + i
+                              ) == 0)
+                    {
+                        *err = MALFORMED_FILE;
+                        return;
+                    }
+                }
+
+                initialized[21] = true;
+            }
+            else if (INIT_EQ(key, "z_max"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.z_max
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[2] = true;
+            }
+            else if (INIT_EQ(key, "d_bac"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.d_bac
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[3] = true;
+            }
+            else if (INIT_EQ(key, "gam_n"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.gam_n
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[4] = true;
+            }
+            else if (INIT_EQ(key, "lam_l"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.lam_l
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[5] = true;
+            }
+            else if (INIT_EQ(key, "lam_t"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.lam_t
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[6] = true;
+            }
+            else if (INIT_EQ(key, "bet_c"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.bet_c
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[7] = true;
+            }
+            else if (INIT_EQ(key, "r_c"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.r_c
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[8] = true;
+            }
+            else if (INIT_EQ(key, "alp_n"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.alp_n
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[9] = true;
+            }
+            else if (INIT_EQ(key, "x_max"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.x_max
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[10] = true;
+            }
+            else if (INIT_EQ(key, "t_s"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.t_s
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[11] = true;
+            }
+            else if (INIT_EQ(key, "t_max"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.t_max
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[12] = true;
+            }
+            else if (INIT_EQ(key, "v_w"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.v_w
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[13] = true;
+            }
+            else if (INIT_EQ(key, "k_a"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.k_a
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[14] = true;
+            }
+            else if (INIT_EQ(key, "c_i"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.c_i
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[15] = true;
+            }
+            else if (INIT_EQ(key, "h_i"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.h_i
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[16] = true;
+            }
+            else if (INIT_EQ(key, "phi_i"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.phi_i
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[16] = true;
+            }
+            else if (INIT_EQ(key, "c_m"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.c_m
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[17] = true;
+            }
+            else if (INIT_EQ(key, "c_c"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.c_c
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[18] = true;
+            }
+            else if (INIT_EQ(key, "f_e"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.f_e
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[19] = true;
+            }
+        }
+    }
+
+    for (cInt i = 0; i < INIT_NUM_PARAMS; ++i)
+    {
+        if (!initialized[i])
+        {
+            *err = MALFORMED_FILE;
+            return;
+        }
+    }
+
+    *err = SUCCESS;
+}
+
+static void initReadFile(simBac *sim, char *param_file, errorCode *err)
+{
     FILE *file;
-    file = fopen(param_file, "r");
-    if (!file)
+    char *buffer;
+    jsmntok_t *tokens;
+    size_t len;
+    jsmn_parser parser;
+    int num_tokens;
+
+    // Read the param file into memory.
+
+    if (!(file = fopen(param_file, "r")))
     {
         *err = FILE_NOT_FOUND;
+        return;
+    }
+
+    if (!(buffer = malloc(LIMITS_MAX_FILE_SIZE)))
+    {
+        *err = MEM;
         fclose(file);
         return;
     }
-    char line[LIMITS_MAX_LINE_LEN];
 
-    if (!file)
+    len = fread(buffer, 1, LIMITS_MAX_FILE_SIZE, file);
+
+    if (ferror(file))
     {
-        *err = FILE_NOT_FOUND;
+        *err = ERR_READ_FILE;
         fclose(file);
+        free(buffer);
         return;
-    }
-
-    cInt num_doses = 0; // Used to store the number of doses, alloc arr sizes
-
-    while (fgets(line, sizeof(line), file)) // for every line of parameter file
-    {
-        char *tok = strtok(line,INIT_SEP1); // initialize strtok iterator
-        char *param = tok; // saves first token as parameter name
-        tok = strtok(NULL,INIT_SEP2); // get next token
-        char *valStr = tok; // save token as value string
-        double val; // will save numerical value, if any
-
-        if (strcmp(param,"name_run") == 0) // if name of run
-        {
-            strcpy(sim->param.name_run,valStr); // no need to parse as double
-        }
-        else if (strcmp(param,"doses_t") == 0) // if dose array,
-        {
-            if (num_doses) // if dose arrays have been initialized,
-            {
-                char *tok2 = strtok(valStr,INIT_SEP2); // get first dose time
-                cFloat doses_t[num_doses]; // init array of dosage times
-                sim->param.doses_t = doses_t; // assign pointer in param
-                for (cInt i=0; i<num_doses; i++) // for every dose,
-                {
-                    cFloat d; // store float value of dose
-                    sscanf(tok2,"%lf",&d); // parse as float
-                    sim->param.doses_t[i] = d; // record the dose
-                    tok2 = strtok(NULL,INIT_SEP2); // advance token
-                }
-            }
-            else // if dose arrays not initialized,
-            {
-                *err = NUM_DOSES; // tantrum
-                fclose(file);
-                return;
-            }
-        }
-        else if (strcmp(param,"doses_c") == 0) // same as above, now concentrations
-        {
-            if (num_doses)
-            {
-                char *tok2 = strtok(valStr, INIT_SEP2);
-                cFloat doses_c[num_doses];
-                sim->param.doses_c = doses_c;
-                for (cInt i=0; i<num_doses; i++)
-                {
-                    cFloat d;
-                    sscanf(tok2,"%lf",&d);
-                    sim->param.doses_c[i] = d;
-                    tok2 = strtok(NULL,INIT_SEP2);
-                }
-            }
-            else
-            {
-                *err = NUM_DOSES;
-                fclose(file);
-                return;
-            }
-        }
-        else // if value is scalar
-        {
-            sscanf(valStr,"%lf",&val);
-
-            if (strcmp(param,"num_doses") == 0) // if specifying number of doses,
-            {
-                num_doses = val; // assign value to number of doses
-            }
-            else if (strcmp(param,"z_max") == 0)
-            {
-                sim->param.z_max = val;
-            }
-            else if (strcmp(param,"d_bac") == 0)
-            {
-                sim->param.d_bac = val;
-            }
-            else if (strcmp(param,"gam_n") == 0)
-            {
-                sim->param.gam_n = val;
-            }
-            else if (strcmp(param,"lam_l") == 0)
-            {
-                sim->param.lam_l = val;
-            }
-            else if (strcmp(param,"lam_t") == 0)
-            {
-                sim->param.lam_t = val;
-            }
-            else if (strcmp(param,"bet_c") == 0)
-            {
-                sim->param.bet_c = val;
-            }
-            else if (strcmp(param,"r_c") == 0)
-            {
-                sim->param.r_c = val;
-            }
-            else if (strcmp(param,"alp_n") == 0)
-            {
-                sim->param.alp_n = val;
-            }
-            else if (strcmp(param,"x_max") == 0)
-            {
-                sim->param.x_max = val;
-            }
-            else if (strcmp(param,"t_s") == 0)
-            {
-                sim->param.t_s = val;
-            }
-            else if (strcmp(param,"t_max") == 0)
-            {
-                sim->param.t_max = val;
-            }
-            else if (strcmp(param,"v_w") == 0)
-            {
-                sim->param.v_w = val;
-            }
-            else if (strcmp(param,"k_a") == 0)
-            {
-                sim->param.k_a = val;
-            }
-            else if (strcmp(param,"c_i") == 0)
-            {
-                sim->param.c_i = val;
-            }
-            else if (strcmp(param,"h_i") == 0)
-            {
-                sim->param.h_i = val;
-            }
-            else if (strcmp(param,"phi_i") == 0)
-            {
-                sim->param.phi_i = val;
-            }
-            else if (strcmp(param,"c_m") == 0)
-            {
-                sim->param.c_m = val;
-            }
-            else if (strcmp(param,"c_c") == 0)
-            {
-                sim->param.c_c = val;
-            }
-            else if (strcmp(param,"f_e") == 0)
-            {
-                sim->param.f_e = val;
-            }
-            else
-            {
-                *err = UNKNOWN_PARAM;
-                fclose(file);
-                return;
-            }
-        }
-
-        tok = strtok(NULL,INIT_SEP1);
     }
 
     fclose(file);
+
+    // Parse the param file.
+
+    jsmn_init(&parser);
+
+    if ((num_tokens = jsmn_parse(
+                                    &parser,
+                                    buffer,
+                                    LIMITS_MAX_FILE_SIZE,
+                                    NULL,
+                                    0
+                                 )) < 0)
+    {
+        *err = MALFORMED_FILE;
+        free(buffer);
+        return;
+    }
+
+    if (!(tokens = malloc(num_tokens * sizeof(jsmntok_t))))
+    {
+        *err = MEM;
+        free(buffer);
+        return;
+    }
+
+    jsmn_parse(&parser, buffer, len, tokens, num_tokens);
+
+    initReadParams(sim, buffer, tokens, num_tokens, err);
+
+    free(buffer);
+    free(tokens);
+}
+
+
+
+void initSim(simBac *sim, char *param_file, errorCode *err)
+{
+    initReadFile(sim, param_file, err);
+
+    if (*err != SUCCESS)
+    {
+        return;
+    }
 
     // Calculate remaining parameters:
 
@@ -227,7 +538,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     ts_f = fopen(ts_file_name,"w"); // open csv file
     if (!ts_f)
     {
-        *err = ERROR_CREATE_FILE;
+        *err = ERR_CREATE_FILE;
         fclose(ts_f);
         return;
     }

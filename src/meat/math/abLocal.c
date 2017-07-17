@@ -3,7 +3,7 @@
 cFloat abConc(cFloat d, simBac *sim)
 {
     cFloat c; // stores concentration of antibiotic at this point
-    if (d < sim_param.r_c) // if distance is less than one cell radius
+    if (d < sim->param.r_c) // if distance is less than one cell radius
     {
         c = sim->param.c_c; // default lowest value
     }
