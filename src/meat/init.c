@@ -8,14 +8,6 @@
 #include "jsmn.h"
 #include "limits.h"
 
-#ifndef INIT_SEP1
-#define INIT_SEP1 "="
-#endif
-
-#ifndef INIT_SEP2
-#define INIT_SEP2 ","
-#endif
-
 #define INIT_EQ(x, y) (strcmp((x), (y)) == 0)
 
 #define INIT_NUM_PARAMS 22
@@ -54,7 +46,12 @@ static void initReadParams(
             }
             else if (INIT_EQ(key, "doses_t"))
             {
-                if (!initialized[1])
+                if (initialized[1] && (tok - 1)->size != sim->param.num_doses)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+                else if (!initialized[1])
                 {
                     cInt num_doses = (tok - 1)->size;
                     sim->param.num_doses = num_doses;
@@ -80,13 +77,12 @@ static void initReadParams(
                     initialized[1] = true;
                 }
 
-
-                for (cInt i = 0; i < sim->param.num_doses; ++i)
+                for (cInt j = 0; j < sim->param.num_doses; ++j)
                 {
                     if (sscanf(
-                                buffer + (tok + i)->start,
+                                buffer + (tok + j)->start,
                                 "%lf",
-                                sim->param.doses_t + i
+                                sim->param.doses_t + j
                               ) == 0)
                     {
                         *err = MALFORMED_FILE;
@@ -98,7 +94,12 @@ static void initReadParams(
             }
             else if (INIT_EQ(key, "doses_c"))
             {
-                if (!initialized[1])
+                if (initialized[1] && (tok - 1)->size != sim->param.num_doses)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+                else if (!initialized[1])
                 {
                     cInt num_doses = (tok - 1)->size;
                     sim->param.num_doses = num_doses;
@@ -125,12 +126,12 @@ static void initReadParams(
                 }
 
 
-                for (cInt i = 0; i < sim->param.num_doses; ++i)
+                for (cInt j = 0; j < sim->param.num_doses; ++j)
                 {
                     if (sscanf(
-                                buffer + (tok + i)->start,
+                                buffer + (tok + j)->start,
                                 "%lf",
-                                sim->param.doses_c + i
+                                sim->param.doses_c + j
                               ) == 0)
                     {
                         *err = MALFORMED_FILE;
