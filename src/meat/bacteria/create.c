@@ -18,7 +18,14 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         }
         updateNeiVol(newNode,sim); // update volume of neighborhood sphere
         newNode->num_r_n = 0; // reset producer neighbor counter
-        addToNN(newNode,sim->param.r_d); // Add newNode to NN data struct
+        nnBuckets *nn = malloc(sizeof(nnBuckets)); // used to retrieve bucket
+        nnIterator(nn,NULL,newNode,err); // retrieve bucket
+        if (err != SUCCESS)
+        {
+            return NULL;
+        }
+        addToNN(nn,newNode,sim->param.r_d);
+            // Add newNode to NN data struct
         newNode->enz = isProducer; // assign enzyme production
         ++sim->num_bac; // stores number of bacteria
         if (isProducer)
@@ -47,11 +54,19 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         // Add neighbors and add self to neighbors
         
         setBac *potNei; // potential neighbors
-        nnIterator(NULL,newNode); // init iterator
+        nnIterator(NULL,&potNei,newNode,err); // init iterator
+        if (err != SUCCESS)
+        {
+            return NULL;
+        }
         for (cInt i=0; i<LIMITS_BNEIGHBORS; i++) 
             // while iteration of neighboring buckets not finished,
         {
-            nnIterator(&potNei,NULL); // advance bucket iterator
+            nnIterator(NULL,&potNei,NULL,err); // advance bucket iterator
+            if (err != SUCCESS)
+            {
+                return NULL;
+            }
             if (potNei) // if this bucket is not empty,
             {
                 nodeBac *n; // iterating node pointer
@@ -129,6 +144,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         {
             return NULL;
         }
+
+        *err = SUCCESS; // no errors here!
     }
     else // if there were no free nodes
     {

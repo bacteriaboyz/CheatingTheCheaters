@@ -8,6 +8,7 @@
 #include "update.h"
 #include "snapshot.h"
 #include "limits.h"
+#include "transform.h"
 
 /* 
  * Function initializes simulation by reading input parameters into sim struct,

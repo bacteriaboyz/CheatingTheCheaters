@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 #include "init.h"
 
@@ -10,75 +11,80 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     FILE *file;
     file = fopen("test.txt", "r");
     cInt max_line_length = 80;
-    char sep = '=';
+    char sep = '='; // separates parameter name and value in input file
     char line[max_line_length];
-    cInt line_num = 0;
 
     if (!file)
     {
-        err = FILE_NOT_FOUND;
+        *err = FILE_NOT_FOUND;
         return;
     }
 
-    cInt num_doses = 0;
-    
-    while (fgets(line, sizeof(line), file))
+    cInt num_doses = 0; // Used to store the number of doses, alloc arr sizes
+
+    while (fgets(line, sizeof(line), file)) // for every line of parameter file
     {
-        char *tok = strtok(line,sep);
-        char *param = tok;
-        strtok(NULL,sep);
-        char *valStr = tok;
-        double val;
+        char *tok = strtok(line,&sep); // initialize strtok iterator
+        char *param = tok; // saves first token as parameter name
+        tok = strtok(NULL,&sep); // get next token
+        char *valStr = tok; // save token as value string
+        double val; // will save numerical value, if any
  
-        if (strcmp(param,"num_doses"))
+        if (strcmp(param,"rng_phrase")) // if rng seed phrase
         {
-            sscanf(valStr,"%lf",&num_doses);
-            cFloat[num_doses] doses_c;
-            sim->param.doses_c = &doses_c;
-            cFloat[num_doses] doses_t;
-            sim->param.doses_t = &doses_t;
+            sim->param.rng_phrase = valStr; // no need to parse as double
+        } 
+        else if (strcmp(param,"doses_t")) // if dose array,
+        {
+            if (num_doses) // if dose arrays have been initialized,
+            {
+                char sep2 = ','; // separates values of dose times
+                char *tok2 = strtok(valStr,&sep2); // get first dose time
+                cFloat doses_t[num_doses]; // init array of dosage times
+                sim->param.doses_t = doses_t; // assign pointer in param
+                for (cInt i=0; i<num_doses; i++) // for every dose,
+                {
+                    cFloat d; // store float value of dose
+                    sscanf(tok2,"%lf",&d); // parse as float
+                    sim->param.doses_t[i] = d; // record the dose
+                    tok2 = strtok(NULL,&sep2); // advance token
+                }
+            }
+            else // if dose arrays not initialized,
+            {
+                *err = NUM_DOSES; // tantrum
+            }
         }
-        else if (strcmp(param,"doses_t"))
+        else if (strcmp(param,"doses_c")) // same as above, now concentrations
         {
             if (num_doses)
             {
-                ichar sep2 = ',';
-                char *tok2 = strtok(valStr,sep2);
+                char sep2 = ',';
+                char *tok2 = strtok(valStr,&sep2);
+                cFloat doses_c[num_doses]; 
+                sim->param.doses_c = doses_c;
                 for (cInt i=0; i<num_doses; i++)
                 {
-                    sim->param.doses_t[i] = tok2;
-                    tok2 = strtok(NULL,sep2);
+                    cFloat d;
+                    sscanf(tok2,"%lf",&d);
+                    sim->param.doses_c[i] = d;
+                    tok2 = strtok(NULL,&sep2);
                 }
-                sim->param.doses_t = val;
             }
             else
             {
-                err = NUM_DOSES;
+                *err = NUM_DOSES;
             }
         }
-        else if (strcmp(param,"doses_c"))
-        {
-            if (num_doses)
-            {
-                ichar sep2 = ',';
-                char *tok2 = strtok(valStr,sep2);
-                for (cInt i=0; i<num_doses; i++)
-                {
-                    sim->param.doses_c[i] = tok2;
-                    tok2 = strtok(NULL,sep2);
-                }
-                sim->param.doses_t = val;
-            }
-            else
-            {
-                err = NUM_DOSES;
-            }
-        }
-        else
+        else // if value is scalar
         {
             sscanf(valStr,"%lf",&val);
 
-            if (strcmp(param,"z_max"))
+            if (strcmp(param,"num_doses")) // if specifying number of doses,
+            {
+                num_doses = val; // assign value to number of doses
+            }
+            else if (strcmp(param,"z_max"))
             {
                 sim->param.z_max = val;
             }
@@ -156,12 +162,12 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             }
             else
             {
-                err = UNKNOWN_PARAM;
+                *err = UNKNOWN_PARAM;
                 return;
             }
         }
         
-        tok = strtok(NULL,sep);
+        tok = strtok(NULL,&sep);
     }
 
     fclose(file);
@@ -187,16 +193,27 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts.
    
-    // Initialize sim struct
+    // Initialize sim struct:
 
     //TODO: init buckets?
-    sim->graph; //TODO? init all stacks and set
-    for () //TODO: init every node as unused, add them all to dead stack
 
-    sim->state; //TODO? init rng?
+    // Init graph struct:
+    stackInit(&sim->graph.rep_stack,LIMITS_MAX_BACT,err);
+    stackInit(&sim->graph.die_stack,LIMITS_MAX_BACT,err);
+    stackInit(&sim->graph.hgt_stack,LIMITS_MAX_BACT,err);
+    stackInit(&sim->graph.dead_stack,LIMITS_MAX_BACT,err);
+    setInit(&sim->graph.update_set,LIMITS_MAX_BACT,err);
+
+    for (cInt i=0; i<LIMITS_MAX_BACT; i++) // set every node as unused, add them all to dead stack
+    {
+        sim->graph.bacteria[i].used = 0;
+        stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
+    }
+
+    rngInitState(sim->state,sim->param.rng_phrase); //TODO init rng?
     sim->t = 0; // init time var
     sim->t_last_snap = 0; // init snapshot timer
-    sim->c_b = updateAB(sim) // init blood antibiotic
+    updateAB(sim); // init blood antibiotic
     sim->dose_num = 0; // init dose number counter
     sim->num_bac = 0;
     sim->num_pro = 0;
@@ -217,12 +234,18 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         }
         
         cVec pos;
-        for (cInt j=0; i<LIMITS_DIM-1; i++)
+        for (cInt j=0; j<LIMITS_DIM-1; ++j)
         {
-            pos[i] = transformUnif(sim->state,0,sim->param.x_max);
+            pos[j] = transformUnif(sim->state,0,sim->param.x_max);
         }
         pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i);
 
         createNode(pos,isProducer,sim,err);
+        if (err != SUCCESS)
+        {
+            return;
+        }
     }
+    
+    *err = SUCCESS;
 }
