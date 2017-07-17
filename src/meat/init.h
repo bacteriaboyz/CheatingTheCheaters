@@ -22,7 +22,7 @@
  *  Returns:    void
  *
  *  Errors:     REJECT, INCONSISTENT, MEM, FILE_NOT_FOUND, UNKNOWN_PARAM, 
- *              NUM_DOSES
+ *              NUM_DOSES, ERR_CREATE_FILE, PRINT_FAIL
 **/
 
 void initSim(simBac *sim, char *param_file, errorCode *err);

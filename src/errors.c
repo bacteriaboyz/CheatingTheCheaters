@@ -21,8 +21,13 @@ const char *errorMsg(errorCode code)
                 recognized by the input file parser.";
         case NUM_DOSES:
             return "The dosage time array or dosage concentration array was \
-                passed before the number of doses in the parameter input \
+                passed \nbefore the number of doses in the parameter input \
                 file.";
+        case ERROR_CREATE_FILE:
+            return "There was a problem creating a file (csv or vtk output \
+                files";
+        case PRINT_FAIL:
+            return "Could not print to file correctly (csv or vtk files).";
     }
 
     return "This should never happen.";
