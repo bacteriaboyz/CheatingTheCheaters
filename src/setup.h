@@ -3,6 +3,10 @@
 
 #include "sim.h"
 
-void setupSim(simBac *sim, cByte *phrase);
+/*
+ * Allocates memory for the simulation but does not initialize anything.
+ */
+
+void setupSim(simBac *sim, cByte *phrase, errorCode *error);
 
 #endif

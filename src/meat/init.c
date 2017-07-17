@@ -213,13 +213,13 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
         // set every node as unused, add them all to dead stack
     {
-        // Memory should be zeroed out
-        sim->graph.bacteria[i].used = 0;
         stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
     }
 
     FILE *ts_f; // time series file pointer
+
     char ts_file_name[LIMITS_MAX_LINE_LEN+16];
+
     sprintf(ts_file_name, \
         "time_series_%s.csv",sim->param.name_run);
         // prints time series file name to variable
