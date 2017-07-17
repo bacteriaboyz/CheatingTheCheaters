@@ -7,7 +7,7 @@ typedef struct
 {
     // Physical and Biological parameters:
     
-    cFloat z_max;       // Biofilm thickness, um
+    cFloat z_max;       // Biofilm thickness, max value, um
     cFloat d_bac;       // Distance between centers of two bacteria, um
     cFloat gam_n;       // Death rate in the absence of antibiotic, 1/h
     cFloat lam_l;       // Plasmid loss rate at replication, 1/(cell*h)
@@ -40,6 +40,7 @@ typedef struct
                             // resistant bacteria, um/mL
     cFloat f_e;         // Relative fitness of enzyme producers to 
                             // non--producers in absence of antibiotic
+    cInt num_doses;     // Number of doses being administered
     cFloat *doses_t;    // Pointer to an array with times at which 
                             // antibiotic is administered, h
     cFloat *doses_c;    // Pointer to an array with concentrations in blood 

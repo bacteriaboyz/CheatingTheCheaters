@@ -10,11 +10,14 @@ void updateAB(simBac *sim)
         sim->c_b = 0;
     }
     
-    if (sim->t >= sim->param.doses_t[sim->dose_num]) 
-        // If we're at the next dosing time...
+    if (sim->dose_num < sim->param.num_doses) // if under total number of doses
     {
-        sim->c_b += sim->param.doses_c[sim->dose_num]; 
-            // Add concentration of next dose to blood       
-        ++sim->dose_num; // Advance dose counter
+        if (sim->t >= sim->param.doses_t[sim->dose_num]) 
+            // If we're at the next dosing time...
+        {
+            sim->c_b += sim->param.doses_c[sim->dose_num]; 
+                // Add concentration of next dose to blood       
+            ++sim->dose_num; // Advance dose counter
+        }
     }
 }
