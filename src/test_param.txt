@@ -20,3 +20,4 @@ phi_i:0.1
 c_m:20
 c_c:2
 f_e:0.8
+snap_freq:2

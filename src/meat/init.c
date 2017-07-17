@@ -10,7 +10,7 @@
 
 #define INIT_EQ(x, y) (strcmp((x), (y)) == 0)
 
-#define INIT_NUM_PARAMS 22
+#define INIT_NUM_PARAMS 23
 
 static void initReadParams(
                             simBac *sim,
@@ -26,9 +26,9 @@ static void initReadParams(
     {
         jsmntok_t *tok = tokens + i;
 
-        if (tok->type == JSMN_STRING)
+        if (tok->type == JSMN_PRIMITIVE)
         {
-            buffer[tok->end + 1] = '\0';
+            buffer[tok->end] = '\0';
 
             char *key = buffer + tok->start;
 
@@ -36,6 +36,8 @@ static void initReadParams(
 
             if (INIT_EQ(key, "name_run"))
             {
+                buffer[tok->end] = '\0';
+
                 strncpy(
                         sim->param.name_run,
                         buffer + tok->start,
@@ -46,14 +48,14 @@ static void initReadParams(
             }
             else if (INIT_EQ(key, "doses_t"))
             {
-                if (initialized[1] && (tok - 1)->size != sim->param.num_doses)
+                if (initialized[1] && tok->size != sim->param.num_doses)
                 {
                     *err = MALFORMED_FILE;
                     return;
                 }
                 else if (!initialized[1])
                 {
-                    cInt num_doses = (tok - 1)->size;
+                    cInt num_doses = tok->size;
                     sim->param.num_doses = num_doses;
                     if (!(sim->param.doses_t = malloc(
                                                         num_doses *
@@ -76,6 +78,8 @@ static void initReadParams(
 
                     initialized[1] = true;
                 }
+
+                tok = tokens + (++i);
 
                 for (cInt j = 0; j < sim->param.num_doses; ++j)
                 {
@@ -90,18 +94,20 @@ static void initReadParams(
                     }
                 }
 
-                initialized[20] = true;
+                i += sim->param.num_doses - 1;
+
+                initialized[21] = true;
             }
             else if (INIT_EQ(key, "doses_c"))
             {
-                if (initialized[1] && (tok - 1)->size != sim->param.num_doses)
+                if (initialized[1] && tok->size != sim->param.num_doses)
                 {
                     *err = MALFORMED_FILE;
                     return;
                 }
                 else if (!initialized[1])
                 {
-                    cInt num_doses = (tok - 1)->size;
+                    cInt num_doses = tok->size;
                     sim->param.num_doses = num_doses;
                     if (!(sim->param.doses_t = malloc(
                                                         num_doses *
@@ -125,6 +131,7 @@ static void initReadParams(
                     initialized[1] = true;
                 }
 
+                tok = tokens + (++i);
 
                 for (cInt j = 0; j < sim->param.num_doses; ++j)
                 {
@@ -139,7 +146,9 @@ static void initReadParams(
                     }
                 }
 
-                initialized[21] = true;
+                i += sim->param.num_doses - 1;
+
+                initialized[22] = true;
             }
             else if (INIT_EQ(key, "z_max"))
             {
@@ -407,6 +416,20 @@ static void initReadParams(
 
                 initialized[19] = true;
             }
+            else if (INIT_EQ(key, "snap_freq"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.snap_freq
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[20] = true;
+            }
         }
     }
 
@@ -465,7 +488,7 @@ static void initReadFile(simBac *sim, char *param_file, errorCode *err)
     if ((num_tokens = jsmn_parse(
                                     &parser,
                                     buffer,
-                                    LIMITS_MAX_FILE_SIZE,
+                                    len,
                                     NULL,
                                     0
                                  )) < 0)
@@ -481,6 +504,8 @@ static void initReadFile(simBac *sim, char *param_file, errorCode *err)
         free(buffer);
         return;
     }
+
+    jsmn_init(&parser);
 
     jsmn_parse(&parser, buffer, len, tokens, num_tokens);
 
