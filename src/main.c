@@ -58,6 +58,6 @@ int main(int argc, char **argv)
 
 main_error:
     cleanupSim(&sim);
-    fprintf(stderr, "Error: %s", errorMsg(error));
+    fprintf(stderr, "Error: %s\n", errorMsg(error));
     return EXIT_FAILURE;
 }
