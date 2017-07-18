@@ -11,9 +11,9 @@ void updateAB(simBac *sim)
         // ( 1.0 - sim->param.t_s * sim->param.gam_ab ) * sim->c_b;
         // Exponential decay according to renal clearance rate
     
-    if (sim->c_b < 0) // set 0 as min concentration
+    if (sim->c_b < sim->param.c_c / 2) // set half of c_c as min concentration
     {
-        sim->c_b = 0;
+        sim->c_b = sim->param.c_c / 2;
     }
     
     if (sim->dose_num < sim->param.num_doses) // if under total number of doses
