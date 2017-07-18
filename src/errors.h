@@ -18,7 +18,8 @@ typedef enum
     NUM_DOSES,
     ERR_CREATE_FILE,
     ERR_READ_FILE,
-    PRINT_FAIL
+    PRINT_FAIL,
+    OUT_OF_BACT
 } errorCode;
 
 /*

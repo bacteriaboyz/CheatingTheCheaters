@@ -29,6 +29,9 @@ const char *errorMsg(errorCode code)
             return "Could not read file.";
         case PRINT_FAIL:
             return "Could not print to file correctly (csv or vtk files).";
+        case OUT_OF_BACT:
+            return "The maximum number of bacteria set as a limit was \
+                surpassed.";
     }
 
     return "This should never happen.";
