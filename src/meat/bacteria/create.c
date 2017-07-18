@@ -69,7 +69,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                 {
                     cFloat d = distance(newNode,n,sim); 
                         // distance between both nodes
-                    if (d < sim->param.r_d) // if within nieghborhood limits,
+                    if (d < sim->param.r_d && n != newNode) // if within neighborhood limits,
                     {
                         mapAddBacterium(&newNode->neighbors,n,d,err);
                             // add this potential neighbor to newNode's 
