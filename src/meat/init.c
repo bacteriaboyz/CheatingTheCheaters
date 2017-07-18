@@ -651,7 +651,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         // the last bacteria should be used if connectChkGraph is to work
         if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
         {
-            *err = OUT_OF_BACT;
+            *err = NO_INIT_BACT;
             return;
         }
 

@@ -32,6 +32,8 @@ const char *errorMsg(errorCode code)
         case OUT_OF_BACT:
             return "The maximum number of bacteria set as a limit was \
                 surpassed.";
+        case NO_INIT_BACT:
+            return "No used bacteria found in last position of bacteria array";
     }
 
     return "This should never happen.";

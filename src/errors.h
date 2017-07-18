@@ -19,7 +19,8 @@ typedef enum
     ERR_CREATE_FILE,
     ERR_READ_FILE,
     PRINT_FAIL,
-    OUT_OF_BACT
+    OUT_OF_BACT,
+    NO_INIT_BACT
 } errorCode;
 
 /*

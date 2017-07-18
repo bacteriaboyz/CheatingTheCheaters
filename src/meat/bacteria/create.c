@@ -142,7 +142,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
     }
     else // if there were no free nodes
     {
-        *err = INCONSISTENT; // we're in trouble
+        *err = OUT_OF_BACT; // we're in trouble
     }
         
     return newNode;
