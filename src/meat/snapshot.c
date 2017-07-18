@@ -57,6 +57,8 @@ void snapshotSim(simBac *sim, errorCode *err)
         }
     }
     
+    snprintf("POINT_DATA %" TYPES_WRITE "\n SCALARS enzyme" TYPES_WRITE  "float\n" "LOOKUP_TABLE Producers\n"
+    
     for (cInt i = 0; i < LIMITS_MAX_BACT; ++i)
     {
         if (sim->graph.bacteria[i].used)
