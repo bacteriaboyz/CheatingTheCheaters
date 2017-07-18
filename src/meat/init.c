@@ -628,14 +628,11 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
 
         for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
         {
-            ++sim->num_bac; // advance bacteria counter
-
             cInt isProducer = 0; // default not producer
             if (transformUnif(sim->state,0,1) < sim->param.phi_i)
                 // random distribute producers according to initial proportion
             {
                 isProducer = 1;
-                ++sim->num_pro; // advance producer bacteria counter
             }
 
             cVec pos;
