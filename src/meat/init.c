@@ -534,7 +534,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
 
     // Calculate remaining parameters:
 
-    sim->param.v_t = pow( sim->param.x_max, 2.0 ) * sim->param.z_max;
+    sim->param.v_t = pow( sim->param.x_max, LIMITS_DIM ) * sim->param.z_max;
     sim->param.n_max = sim->param.v_t / \
         ( 4.0 * sqrt(2.0) * pow( sim->param.d_bac, 3.0 ) );
         // 3D sphere packing formula for bacterial density

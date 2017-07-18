@@ -17,42 +17,48 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
         // iterate through neighbors
     {
         mapMagical(&n,NULL,NULL); // get next neighbor
-      
-        mapDelBacterium(&n->neighbors,node,err);
-            // delete this node from neighbor's neighbor array
-        if (*err != SUCCESS) // if there's an error
+    
+        if (n != node) // if neighbor is not self,
         {
-            return; // run away, run away
-        }
-        
-        if (node->enz) // if dead node was producer,
-        {
-            --n->num_r_n; // neighbor has one less resistant neighbor
-            setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
-            if (*err != SUCCESS)
+            mapDelBacterium(&n->neighbors,node,err);
+                // delete this node from neighbor's neighbor array
+            if (*err != SUCCESS) // if there's an error
             {
-                return;
+                return; // run away, run away
             }
-
-            if ( abConc( distance( node,n,sim ) , sim ) <= n->c )
-                // if this node was this neighbor's closest producer
+            
+            if (node->enz) // if dead node was producer,
             {
-                nodeBac *n_n; // iterating node pointer
-                cFloat d; // iterating distance
-                cFloat min_d = sim->param.r_d; // minimum distance to a producer
-                                            // default is max value
-                mapMagical(NULL,NULL,&node->neighbors); // init iterator
-                for (cInt i=0; i<tableCard(&node->neighbors); i++) // loop through all nb's
+                --n->num_r_n; // neighbor has one less resistant neighbor
+                setAdd(&sim->graph.update_set,n,err); 
+                    // update this neighbor's data
+                if (*err != SUCCESS)
                 {
-                    mapMagical(&n_n,&d,NULL); // get next element
-                    if (d < min_d)
-                    {
-                        min_d = d; // if new min, set
-                    }
+                    return;
                 }
-                
-                n->c = abConc(d,sim); // set new concentration of antibiotic
-                                        // at this neighbor
+
+                if ( abConc( distance( node,n,sim ) , sim ) <= n->c )
+                    // if this node was this neighbor's closest producer
+                {
+                    nodeBac *n_n; // iterating node pointer
+                    cFloat d; // iterating distance
+                    cFloat min_d = sim->param.r_d;
+                        // minimum distance to a producer default is max value
+                    mapMagical(NULL,NULL,&node->neighbors); // init iterator
+                    for (cInt i=0; i<tableCard(&node->neighbors); i++)
+                        // loop through all nb's
+                    {
+                        mapMagical(&n_n,&d,NULL); // get next element
+                        if (n_n != n && d < min_d) // if neighbor is not self
+                                                    // and new min
+                        {
+                            min_d = d; // if new min, set
+                        }
+                    }
+                    
+                    n->c = abConc(d,sim); // set new concentration of antibiotic
+                                            // at this neighbor
+                }
             }
         }
     }

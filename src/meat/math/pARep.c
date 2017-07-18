@@ -13,7 +13,8 @@ void updatePARep(nodeBac *node, simBac *sim)
     while (i<node->num_r_n) // while not all resistant neighbors have been found
     {
         mapMagical(&n,&d,NULL); // get next neighbor and distance
-        if (n->enz && n->used) // if the neighbor is a producer and is alive
+        if (n != node && n->enz && n->used)
+             // if the neighbor is not self and is a producer and is alive
         { 
             total_effort -= ( sim->c_b - abConc(d,sim) ) /\
                 ( sim->c_b - sim->param.c_c ); 

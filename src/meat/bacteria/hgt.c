@@ -14,12 +14,15 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
     for (cInt i=0; i < tableCard(&node->neighbors); i++) // iterate through neighbors
     {
         mapMagical(&n,NULL,NULL); // get next neighbor
-        ++n->num_r_n; // one more resistant neighbor for this neighbor
-       
-        setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
-        if (*err != SUCCESS)
+        if (n != node) // if neighbor is not self,
         {
-            return;
+            ++n->num_r_n; // one more resistant neighbor for this neighbor
+           
+            setAdd(&sim->graph.update_set,n,err); // update this neighbor's data
+            if (*err != SUCCESS)
+            {
+                return;
+            }
         }
     }
 
