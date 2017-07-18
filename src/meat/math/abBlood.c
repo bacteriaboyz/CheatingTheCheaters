@@ -1,8 +1,14 @@
+#include <math.h>
 #include "abBlood.h"
 
 void updateAB(simBac *sim)
 {
-    sim->c_b = ( 1.0 - sim->param.gam_ab ) * sim->c_b * ( sim->param.t_s );
+    sim->c_b = sim->c_b_peak * \
+        exp( -1 * sim->param.k_a * \
+        ( sim->t - sim->doses_t[sim->dose_num-1] ) \
+        / sim->param.v_w );
+        // Exponential decay from last time spike
+        // ( 1.0 - sim->param.t_s * sim->param.gam_ab ) * sim->c_b;
         // Exponential decay according to renal clearance rate
     
     if (sim->c_b < 0) // set 0 as min concentration
