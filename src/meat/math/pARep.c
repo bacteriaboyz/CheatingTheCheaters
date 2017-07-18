@@ -18,7 +18,7 @@ void updatePARep(nodeBac *node, simBac *sim)
         if (n != node && n->enz && n->used)
              // if the neighbor is not self and is a producer and is alive
         { 
-            total_effort += ( abConc(d,sim) - sim->c_c ) /\
+            total_effort += ( abConc(d,sim) - sim->param.c_c ) /\
                 ( sim->c_b - sim->param.c_c ); 
                 // subtract effort saved by each neighbor
             ++i; // advance resistant neighbor counter
