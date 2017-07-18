@@ -19,19 +19,19 @@ const char *errorMsg(errorCode code)
         case MALFORMED_FILE:
             return "Could not understand parameter file.";
         case NUM_DOSES:
-            return "The dosage time array or dosage concentration array was \
-                passed before the number of doses in the parameter input \
-                file.";
+            return "The dosage time array or dosage concentration array was "
+                "passed before the number of doses in the parameter input "
+                "file.";
         case ERR_CREATE_FILE:
-            return "There was a problem creating a file (csv or vtk output \
-                files.";
+            return "There was a problem creating a file (csv or vtk output "
+                "files.";
         case ERR_READ_FILE:
             return "Could not read file.";
         case PRINT_FAIL:
             return "Could not print to file correctly (csv or vtk files).";
         case OUT_OF_BACT:
-            return "The maximum number of bacteria set as a limit was \
-                surpassed.";
+            return "The maximum number of bacteria set as a limit was "
+                "surpassed.";
         case NO_INIT_BACT:
             return "No used bacteria found in last position of bacteria array";
     }
