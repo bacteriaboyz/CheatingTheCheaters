@@ -3,8 +3,9 @@
 
 void updatePARep(nodeBac *node, simBac *sim)
 {
-    cFloat total_effort = 1.0 + node->num_r_n; 
+    cFloat total_effort = 1.0; 
         // will contain effort of all neighbors plus self
+        // start with self
     nodeBac *n; // will handle output of iterator function
     cFloat d; // will handle output of iterator function
 
@@ -16,7 +17,7 @@ void updatePARep(nodeBac *node, simBac *sim)
         if (n != node && n->enz && n->used)
              // if the neighbor is not self and is a producer and is alive
         { 
-            total_effort -= ( sim->c_b - abConc(d,sim) ) /\
+            total_effort += ( abConc(d,sim) - sim->c_c ) /\
                 ( sim->c_b - sim->param.c_c ); 
                 // subtract effort saved by each neighbor
             ++i; // advance resistant neighbor counter
@@ -29,7 +30,7 @@ void updatePARep(nodeBac *node, simBac *sim)
             // tableCard returns number of neighbors
         ( node->v_n * sim->param.rho_b ) ) ) * \
             // last two lines: population density penalty
-        ( total_effort / ( node->num_r_n + 1.0 ) ) * \
+        ( 1.0 - ( total_effort / ( node->num_r_n + 1.0 ) ) * \
             // Effort distribution among producer neighbors
-        sim->param.f_e; // producer penalty
+        ( 1.0 - sim->param.f_e ) ); // producer penalty
 }
