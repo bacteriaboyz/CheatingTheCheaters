@@ -40,21 +40,17 @@ void mapDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error)
     tableDel(table, TYPES_CBYTE(&bacterium), error);
 }
 
-void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table)
+void mapInitMagic(mapState *state, tableHash *table)
 {
-    static tableHash *internal_table;
-    static cInt pos;
+    state->table = table;
+    state->pos = 0;
+}
 
-    if (table)
+void mapMagical(mapState *state, nodeBac **bacterium, cFloat *dist)
+{
+    for (; state->pos < state->table->len; ++state->pos)
     {
-        internal_table = table;
-        pos = 0;
-        return;
-    }
-
-    for (; pos < internal_table->len; ++pos)
-    {
-        tableSlot *slot = internal_table->slots + pos;
+        tableSlot *slot = state->table->slots + state->pos;
 
         if (slot->used)
         {
@@ -68,7 +64,7 @@ void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table)
                 memcpy(dist, slot->val, sizeof(cFloat));
             }
 
-            ++pos;
+            ++state->pos;
             return;
         }
     }

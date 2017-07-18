@@ -6,6 +6,13 @@
 #include "table.h"
 #include "types.h"
 
+typedef struct
+{
+    tableHash *table;
+
+    cInt pos;
+} mapState;
+
 /*
  * Initializes a new bacterium map with the given length.
  * Possible errors: MEM
@@ -45,17 +52,19 @@ cFloat mapLookupBacterium(
 void mapDelBacterium(tableHash *table, nodeBac *bacterium, errorCode *error);
 
 /*
- * Provides the means of iterating over a map of bacteria (but not the means of
- * production). To initialize the iterator, it should be called with the first
- * two arguments NULL and the third argument containing the address of the
- * table. After that, it should be called with the third argument NULL and the
- * first two arguments containing addresses where the (bacterium, dist) pairs
- * will be written out. Once it's reached then end of the table, it will write
- * out (NULL, 0) on each call. If either address is NULL, the iterator will
- * ignore that field on each iteration.
+ * Initializes a state object for iteration.
  */
 
-void mapMagical(nodeBac **bacterium, cFloat *dist, tableHash *table);
+void mapInitMagic(mapState *state, tableHash *table);
+
+/*
+ * Provides the means of iterating over a map of bacteria (but not the means of
+ * production). Writes out one (bacterium, dist) pair to the addresses provided
+ * on each call. The pair (NULL, 0) is used to signal completion. The state
+ * object should be initialized with mapInitMagic().
+ */
+
+void mapMagical(mapState *state, nodeBac **bacterium, cFloat *dist);
 
 /*
  * Initializes a new bucket map with the given length.

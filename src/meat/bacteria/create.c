@@ -47,7 +47,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         // Add neighbors and add self to neighbors
         
         setBac *potNei; // potential neighbors
-        nnIterator(&sim->buckets,&potNei,newNode,err); // init iterator
+        nnState state;
+        nnInitMagic(&state, &sim->buckets,newNode,err); // init iterator
         if (*err != SUCCESS)
         {
             return NULL;
@@ -55,16 +56,14 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         for (cInt i=0; i<LIMITS_BNEIGHBORS; i++) 
             // while iteration of neighboring buckets not finished,
         {
-            nnIterator(&sim->buckets,&potNei,NULL,err); // advance bucket iterator
-            if (*err != SUCCESS)
-            {
-                return NULL;
-            }
+            nnIterator(&state, &potNei); // advance bucket iterator
+
             if (potNei) // if this bucket is not empty,
             {
                 nodeBac *n; // iterating node pointer
-                mapMagical(NULL,NULL,potNei); // init iterator 
-                mapMagical(&n,NULL,NULL); // get first potential neighbor
+                mapState state;
+                mapInitMagic(&state, potNei);
+                mapMagical(&state, &n, NULL); // get first potential neighbor
                 while (n) // while iteration not finished,
                 {
                     cFloat d = distance(newNode,n,sim); 
@@ -126,7 +125,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                         }
                     }
 
-                    mapMagical(&n,NULL,NULL); // move node iterator forward
+                    mapMagical(&state, &n, NULL); // move node iterator forward
                 }
             } 
         }

@@ -7,12 +7,13 @@ void mainloopSim(simBac *sim, errorCode *err)
     while (sim->t < sim->param.t_max) // main time loop, once per time step
     { 
         nodeBac *node; // set and stack iteration variable
-        mapMagical(NULL,NULL,&sim->graph.update_set); // init iterator on update
-        mapMagical(&node,NULL,NULL); // get first node to be updated
+        mapState state;
+        mapInitMagic(&state, &sim->graph.update_set); // init iterator on update
+        mapMagical(&state, &node, NULL); // get first node to be updated
         while (node) // loop through all nodes to be updated
         {
             updateNode(node,sim); // update this node
-            mapMagical(&node,NULL,NULL); // get first node to be updated
+            mapMagical(&state, &node, NULL); // get first node to be updated
         }
         
         sim->t += sim->param.t_s; // advance time tracker

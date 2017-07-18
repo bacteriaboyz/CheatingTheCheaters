@@ -36,11 +36,13 @@ bool connectChkGraph(simBac *sim, errorCode *error)
 
         if (!setIsMember(&visited, current))
         {
-            mapMagical(NULL, NULL, &current->neighbors);
+            mapState state;
+
+            mapInitMagic(&state, &current->neighbors);
 
             nodeBac *neighbor;
 
-            mapMagical(&neighbor, NULL, NULL);
+            mapMagical(&state, &neighbor, NULL);
 
             while (neighbor)
             {
@@ -51,7 +53,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
                     goto connectChk_both_free;
                 }
 
-                mapMagical(&neighbor, NULL, NULL);
+                mapMagical(&state, &neighbor, NULL);
             }
 
            setAdd(&visited, current, error);

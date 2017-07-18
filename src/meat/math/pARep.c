@@ -9,10 +9,11 @@ void updatePARep(nodeBac *node, simBac *sim)
     cFloat d; // will handle output of iterator function
 
     cInt i=0; // counts through resistant neighbors 
-    mapMagical(NULL,NULL,&node->neighbors); // initialize map iterator
+    mapState state;
+    mapInitMagic(&state, &node->neighbors); // initialize map iterator
     while (i<node->num_r_n) // while not all resistant neighbors have been found
     {
-        mapMagical(&n,&d,NULL); // get next neighbor and distance
+        mapMagical(&state, &n, &d); // get next neighbor and distance
         if (n != node && n->enz && n->used)
              // if the neighbor is not self and is a producer and is alive
         { 

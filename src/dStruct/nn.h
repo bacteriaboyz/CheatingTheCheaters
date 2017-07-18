@@ -12,6 +12,14 @@ typedef struct
     cInt counts[LIMITS_DIM];
 } nnBuckets;
 
+typedef struct
+{
+    nnBuckets *nn;
+
+    cInt coords[LIMITS_DIM];
+    cInt offset;
+} nnState;
+
 
 /*
  * Initializes the fixed-radius near neighbors structure. Like magnets, no one
@@ -38,19 +46,28 @@ void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error);
 void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error);
 
 /*
+ * Prepares the state structure for iteration.
+ * Possible errors: INCONSISTENT
+ */
+
+void nnInitMagic(
+                    nnState *state,
+                    nnBuckets *nn,
+                    nodeBac *bacterium,
+                    errorCode *error
+                );
+
+/*
  * Returns the bucket a bacterium is in and all adjacent ones for locating all
  * fixed-radius near neighbors. It has the same general operation as
  * mapMagical(). It should be called LIMITS_BNEIGHBORS times after
  * initialization, as it may output NULL when the adjacent bucket contains no
  * bacteria.
- * Possible errors: INCONSISTENT
  */
 
 void nnIterator(
-                nnBuckets *nn,
-                setBac **out,
-                nodeBac *bacterium,
-                errorCode *error
+                nnState *state,
+                setBac **out
                );
 
 /*

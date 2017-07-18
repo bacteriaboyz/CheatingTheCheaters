@@ -139,26 +139,25 @@ void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
     *error = SUCCESS;
 }
 
-void nnIterator(
-                nnBuckets *nn,
-                setBac **out,
-                nodeBac *bacterium,
-                errorCode *error
-               )
+void nnInitMagic(
+                    nnState *state,
+                    nnBuckets *nn,
+                    nodeBac *bacterium,
+                    errorCode *error
+                )
 {
-    static cInt coords[LIMITS_DIM];
-    static cInt offset;
+    state->nn = nn;
 
-    if (bacterium)
-    {
-        nnBucketCoords(nn, bacterium, coords, error);
-        offset = 0;
-        return;
-    }
+    state->offset = 0;
 
-    for (; offset < LIMITS_BNEIGHBORS; ++offset)
+    nnBucketCoords(nn, bacterium, state->coords, error);
+}
+
+void nnIterator(nnState *state, setBac **out)
+{
+    for (; state->offset < LIMITS_BNEIGHBORS; ++state->offset)
     {
-        cInt decode = offset;
+        cInt decode = state->offset;
         cInt new_coords[LIMITS_DIM];
 
         for (cInt i = 0; i < LIMITS_DIM; ++i)
@@ -166,28 +165,30 @@ void nnIterator(
             switch (decode % 3)
             {
                 case 0:
-                    new_coords[i] = coords[i];
+                    new_coords[i] = state->coords[i];
                     break;
                 case 1:
-                    new_coords[i] = (coords[i] + 1) % nn->counts[i];
+                    new_coords[i] = (state->coords[i] + 1) %
+                                    state->nn->counts[i];
                     break;
                 case 2:
-                    new_coords[i] = coords[i] == 0 ?
-                                        nn->counts[i] - 1 :
-                                        coords[i] - 1;
+                    new_coords[i] = state->coords[i] == 0 ?
+                                        state->nn->counts[i] - 1 :
+                                        state->coords[i] - 1;
                     break;
             }
 
             decode /= 3;
         }
 
-        *error = SUCCESS;
-        *out = mapLookupBucket(&nn->bucketTable, nnCoords2Idx(new_coords));
+        *out = mapLookupBucket(
+                                &state->nn->bucketTable,
+                                nnCoords2Idx(new_coords)
+                              );
 
         return;
     }
 
-    *error = SUCCESS;
     *out = NULL;
 }
 

@@ -9,11 +9,12 @@ void hgtNode(nodeBac *node, simBac *sim, errorCode *err)
     node->c = abConc(sim->param.r_c, sim); // set concentration at cell surface
     updatePABDie(node,sim); // update probability of AB-induced death
     
+    mapState state;
     nodeBac *n; // stores neighbor
-    mapMagical(NULL,NULL,&node->neighbors); // initialize iterator
+    mapInitMagic(&state, &node->neighbors); // initialize iterator
     for (cInt i=0; i < tableCard(&node->neighbors); i++) // iterate through neighbors
     {
-        mapMagical(&n,NULL,NULL); // get next neighbor
+        mapMagical(&state, &n, NULL); // get next neighbor
         if (n != node) // if neighbor is not self,
         {
             ++n->num_r_n; // one more resistant neighbor for this neighbor
