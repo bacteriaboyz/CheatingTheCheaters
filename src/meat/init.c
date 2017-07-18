@@ -614,14 +614,9 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
 
-    bool connected = false; // stores connected status;
-    cInt nIter = 0; // keeps track of the number of iterations tried
-
-    while (!connected && nIter < LIMITS_MAX_TRIES)
+    for (cInt i=0; i < LIMITS_MAX_TRIES; ++i)
         // try until connected or tired
     {
-        stackReset(&sim->graph.dead_stack); // reset the stack
-    
         for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
             // set every node as unused, add them all to dead stack
         {
@@ -660,11 +655,22 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             *err = INCONSISTENT;
             return;
         }
-        connectChkGraph(sim,err); // Checks for one continuous clump of cells
+        
+        bool conn = connectChkGraph(sim,err); // check connection
         if (*err != SUCCESS)
         {
             return;
             *err = SUCCESS;
         }
+
+        if (conn) // Checks for one continuous clump of cells
+        {
+            break;
+        }
+        
+        sim->num_bac = 0; // reset counters
+        sim->num_pro = 0;
+        stackReset(&sim->graph.dead_stack); // reset the stack
+        nnFree(&sim->buckets); // free buckets
     }
 }
