@@ -13,20 +13,23 @@ void mainloopSim(simBac *sim, errorCode *err)
 
         for (cInt i=0; i<LIMITS_MAX_BACT; i++) // loop across all bacteria
         {
-            nodeBac *node = &sim->graph.bacteria[i]; // current node
-            cFloat r_1 = transformUnif(sim->state,0.0,1.0); // one random number
-            if ( r_1 < node->p_rep ) // if replicating this time step
+            if (sim->graph.bacteria[i].used) // only operate on used bacteria
             {
-                stackPush(&sim->graph.rep_stack,node,err); // add to repl. stack
-            }
-            else if ( r_1 < node->p_rep + node->p_die) // if dying this t step
-            {
-                stackPush(&sim->graph.die_stack,node,err); // add to die stack
-            }
-            else if ( r_1 < node->p_rep + node->p_die + node->p_hgt)
-                // if undergoing hgt this t step
-            {
-                stackPush(&sim->graph.hgt_stack,node,err); // add to hgt stack
+                nodeBac *node = &sim->graph.bacteria[i]; // current node
+                cFloat r_1 = transformUnif(sim->state,0.0,1.0); // one random number
+                if ( r_1 < node->p_rep ) // if replicating this time step
+                {
+                    stackPush(&sim->graph.rep_stack,node,err); // add to repl. stack
+                }
+                else if ( r_1 < node->p_rep + node->p_die) // if dying this t step
+                {
+                    stackPush(&sim->graph.die_stack,node,err); // add to die stack
+                }
+                else if ( r_1 < node->p_rep + node->p_die + node->p_hgt)
+                    // if undergoing hgt this t step
+                {
+                    stackPush(&sim->graph.hgt_stack,node,err); // add to hgt stack
+                }
             }
         }
 
