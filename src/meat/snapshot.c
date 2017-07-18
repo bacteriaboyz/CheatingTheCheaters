@@ -57,7 +57,7 @@ void snapshotSim(simBac *sim, errorCode *err)
         }
     }
     
-    snprintf("POINT_DATA %" TYPES_WRITE "\n SCALARS enzyme" TYPES_WRITE  "float\n" "LOOKUP_TABLE Producers\n"
+    fprintf(vtk_f,"POINT_DATA %" TYPES_WRITE "\n SCALARS enzyme float\n" "LOOKUP_TABLE Producers\n", sim->num_bac);
     
     for (cInt i = 0; i < LIMITS_MAX_BACT; ++i)
     {
