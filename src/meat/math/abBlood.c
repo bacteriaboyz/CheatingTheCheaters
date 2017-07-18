@@ -5,7 +5,7 @@ void updateAB(simBac *sim)
 {
     sim->c_b = sim->c_b_peak * \
         exp( -1 * sim->param.k_a * \
-        ( sim->t - sim->doses_t[sim->dose_num-1] ) \
+        ( sim->t - sim->param.doses_t[sim->dose_num-1] ) \
         / sim->param.v_w );
         // Exponential decay from last time spike
         // ( 1.0 - sim->param.t_s * sim->param.gam_ab ) * sim->c_b;
