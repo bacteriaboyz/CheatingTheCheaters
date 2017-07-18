@@ -6,6 +6,9 @@ void mainloopSim(simBac *sim, errorCode *err)
     
     while (sim->t < sim->param.t_max) // main time loop, once per time step
     { 
+        updateAB(sim); // Update blood antibiotic concentration, advance dosage
+                        // if necessary
+
         nodeBac *node; // set and stack iteration variable
         mapState state;
         mapInitMagic(&state, &sim->graph.update_set); // init iterator on update
@@ -18,9 +21,6 @@ void mainloopSim(simBac *sim, errorCode *err)
         
         sim->t += sim->param.t_s; // advance time tracker
         
-        updateAB(sim); // Update blood antibiotic concentration, advance dosage
-                        // if necessary
-
         for (cInt i=0; i<LIMITS_MAX_BACT; i++) // loop across all bacteria
         {
             if (sim->graph.bacteria[i].used) // only operate on used bacteria
