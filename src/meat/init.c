@@ -672,5 +672,10 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         sim->num_pro = 0;
         stackReset(&sim->graph.dead_stack); // reset the stack
         nnFree(&sim->buckets); // free buckets
+        nnInit(&sim->buckets,b_dims,num_b,err); // initialize nearest neighbor ds
+        if (*err != SUCCESS)
+        {
+            return;
+        }
     }
 }
