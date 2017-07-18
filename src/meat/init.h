@@ -2,6 +2,7 @@
 #define _INIT_H
 
 #include "sim.h"
+#include "connectChk.h"
 
 /* 
  * Function initializes simulation by reading input parameters into sim struct,

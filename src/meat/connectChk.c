@@ -23,7 +23,7 @@ bool connectChkGraph(simBac *sim, errorCode *error)
         goto connectChk_stack_free;
     }
 
-    stackPush(&stack, sim->graph.bacteria, error);
+    stackPush(&stack, sim->graph.bacteria+LIMITS_MAX_BACT-1, error);
 
     if (*error == MEM)
     {

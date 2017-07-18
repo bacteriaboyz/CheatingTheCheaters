@@ -639,6 +639,16 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             return;
         }
     }
-
-    *err = SUCCESS;
+ 
+    if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
+    {
+        *err = INCONSISTENT;
+        return;
+    }
+    connectChkGraph(sim,err); // Checks for one continuous clump of cells
+    if (*err != SUCCESS)
+    {
+        return;
+        *err = SUCCESS;
+    }
 }

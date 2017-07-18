@@ -8,13 +8,10 @@
 
 /*
  * Checks whether the graph in "sim" is connected. Requires a used bacterium to
- * be present in the first slot of the array.
+ * be present in the last slot of the array.
  * Possible errors: MEM
  */
 
 bool connectChkGraph(simBac *sim, errorCode *error);
 
 #endif
-
-
-
