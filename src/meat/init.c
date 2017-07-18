@@ -660,7 +660,6 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         if (*err != SUCCESS)
         {
             return;
-            *err = SUCCESS;
         }
 
         if (conn) // Checks for one continuous clump of cells
@@ -673,4 +672,6 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         stackReset(&sim->graph.dead_stack); // reset the stack
         nnFree(&sim->buckets); // free buckets
     }
+
+    *err = SUCCESS;
 }
