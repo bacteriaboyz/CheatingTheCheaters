@@ -69,32 +69,35 @@ void snapshotSim(simBac *sim, errorCode *err)
     chk = fprintf(vtk_f2, "LOOKUP_TABLE_colors %" TYPES_WRITE "\n", sim->num_bac);
     for (cInt i = 0; i < sim->num_bac; ++i)
     {
-        if(sim->graph.bacteria[i].enz == 1)
+        if (sim->graph.bacteria[i].used)
         {
-            r = 1;
-            b = 0;
-        }
-        else
-        {
-            r = 0;
-            b = 1;
-        }
+            if(sim->graph.bacteria[i].enz == 1)
+            {
+                r = 1;
+                b = 0;
+            }
+            else
+            {
+                r = 0;
+                b = 1;
+            }
 
-        chk = fprintf(vtk_f, "%.6e %.6e %.6e\n", \
-            sim->graph.bacteria[i].pos[0],sim->graph.bacteria[i].pos[1], \
-            sim->graph.bacteria[i].pos[2]);
+            chk = fprintf(vtk_f, "%.6e %.6e %.6e\n", \
+                sim->graph.bacteria[i].pos[0],sim->graph.bacteria[i].pos[1], \
+                sim->graph.bacteria[i].pos[2]);
 
-        if(chk < 0)
-        {
-            *err = PRINT_FAIL;
-            goto ss_jmp1;
-        }
+            if(chk < 0)
+            {
+                *err = PRINT_FAIL;
+                goto ss_jmp1;
+            }
 
-        chk = fprintf(vtk_f2, "%" TYPES_WRITE " 0 %" TYPES_WRITE " 1\n", r, b);
-        if(chk < 0)
-        {
-            *err = PRINT_FAIL;
-            goto ss_jmp1;
+            chk = fprintf(vtk_f2, "%" TYPES_WRITE " 0 %" TYPES_WRITE " 1\n", r, b);
+            if(chk < 0)
+            {
+                *err = PRINT_FAIL;
+                goto ss_jmp1;
+            }
         }
     }
 
