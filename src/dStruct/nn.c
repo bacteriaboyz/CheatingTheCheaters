@@ -73,7 +73,7 @@ void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
 
     if (bucket_ptr)
     {
-        setAdd(&bucket, bacterium, error);
+        setAdd(bucket_ptr, bacterium, error);
     }
     else
     {

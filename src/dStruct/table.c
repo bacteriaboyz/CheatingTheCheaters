@@ -125,14 +125,18 @@ static bool tableUnsafeAdd(
 
     memcpy(slot->key, key, table->key_len);
     memcpy(slot->val, val, table->val_len);
-    slot->used = 1;
 
-    if (slot->used_before)
+    if (slot->used)
     {
+        return false;
+    }
+    else if (slot->used_before)
+    {
+        slot->used = 1;
         return true;
     }
 
-    slot->used_before = 1;
+    slot->used_before = slot->used = 1;
     return false;
 }
 

@@ -614,6 +614,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
 
+    bool conn;
+
     for (cInt i=0; i < LIMITS_MAX_TRIES; ++i)
         // try until connected or tired
     {
@@ -623,7 +625,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
             sim->graph.bacteria[i].used = 0;
             stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
         }
-        
+
         for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
         {
             ++sim->num_bac; // advance bacteria counter
@@ -649,14 +651,14 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
                 return;
             }
         }
-        // the last bacteria should be used if connectChkGraph is to work    
+        // the last bacteria should be used if connectChkGraph is to work
         if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
         {
             *err = INCONSISTENT;
             return;
         }
-        
-        bool conn = connectChkGraph(sim,err); // check connection
+
+        conn = connectChkGraph(sim,err); // check connection
         if (*err != SUCCESS)
         {
             return;
@@ -666,7 +668,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         {
             break;
         }
-        
+
         sim->num_bac = 0; // reset counters
         sim->num_pro = 0;
         stackReset(&sim->graph.dead_stack); // reset the stack
@@ -678,5 +680,5 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         }
     }
 
-    *err = SUCCESS;
+    *err = conn ? SUCCESS : REJECT;
 }
