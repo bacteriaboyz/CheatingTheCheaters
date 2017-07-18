@@ -76,10 +76,10 @@ void mainloopSim(simBac *sim, errorCode *err)
             node = stackPop(&sim->graph.hgt_stack); // get first element from stack
         }
 
-        if (sim->t_last_snap > sim->param.snap_freq)
+        if (sim->t_last_snap >= sim->param.snap_freq)
             // if time since last snapshot is long enough
         {
-            sim->t_last_snap = 0; // reset snapshot timer
+            sim->t_last_snap = 1; // reset snapshot timer
             snapshotSim(sim,err); // write snapshot of graph struct to file
         }
         else
