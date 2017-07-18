@@ -600,6 +600,11 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
 
     num_b[LIMITS_DIM-1] = floor( sim->param.z_max / sim->param.r_d );
         // num buckets on z axis
+    if (num_b[LIMITS_DIM-1] < 1) // if under 0, reset to 0
+    {
+        num_b[LIMITS_DIM-1] = 1;
+    }
+
     b_dims[LIMITS_DIM-1] = sim->param.z_max / num_b[LIMITS_DIM-1]; // set this bucket dim
 
     nnInit(&sim->buckets,b_dims,num_b,err); // initialize nearest neighbor ds
