@@ -540,7 +540,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         // 3D sphere packing formula for bacterial density
         // ONLY VALID FOR 3D
         // other D's are left as exercise for the reader :P
-    sim->param.rho_b = sim->param.n_n_max / sim->param.v_t;
+    sim->param.rho_b = 1.0 / ( 4.0 * sqrt( 2.0 ) * pow( sim->param.r_c, 3.0 ) );
+        // using sphere packing density
     sim->param.r_d = sim->param.r_c / ( 1.0 - sim->param.bet_c );
         // see document for derivation
     sim->param.v_n = 4.0 * M_PI * pow( sim->param.r_d, 3.0 ) / 3.0;
