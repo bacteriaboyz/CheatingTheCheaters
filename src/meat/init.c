@@ -547,8 +547,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     sim->param.n_n_max = sim->param.rho_b * sim->param.v_n;
     sim->param.gam_ab = sim->param.t_s * sim->param.k_a / sim->param.v_w;
         // renal clearance in time step
-    sim->param.c_h = ( sim->param.c_i + sim->param.c_m ) / 2.0;
-        // midpoint, hill function is symmetrical around midoint
+    sim->param.c_h = sqrt( sim->param.c_i + sim->param.c_m );
+        // midpoint, geometric mean
     sim->param.h = log( 2.0 ) / \
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts. 
