@@ -551,13 +551,7 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         // midpoint, hill function is symmetrical around midoint
     sim->param.h = log( 2.0 ) / \
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
-        // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts.
-
-    for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
-        // set every node as unused, add them all to dead stack
-    {
-        stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
-    }
+        // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts. 
 
     FILE *ts_f; // time series file pointer
 
@@ -626,6 +620,15 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     while (!connected && nIter < LIMITS_MAX_TRIES)
         // try until connected or tired
     {
+        stackReset(&sim->graph.dead_stack); // reset the stack
+    
+        for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
+            // set every node as unused, add them all to dead stack
+        {
+            sim->graph.bacteria[i].used = 0;
+            stackPush(&sim->graph.dead_stack,&sim->graph.bacteria[i],err);
+        }
+        
         for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
         {
             ++sim->num_bac; // advance bacteria counter
