@@ -78,10 +78,12 @@ void tableReset(tableHash *table)
  * Use this function to add entries to a table without resizing. It will get
  * get caught in a loop if the table fills up. The "slots" argument is for when
  * a table is being rebuilt. Set it to NULL to add entries to the same table.
- * Returns true when we're getting rid of a ghost.
+ * It returns TABLE_OLD when an old value is being replaced, TABLE_NEW when a
+ * new entry is being added, and TABLE_GHOST when a "ghost entry" (one which
+ * has been used before but is not currently being used) is overwritten.
  */
 
-static bool tableUnsafeAdd(
+static enum { TABLE_OLD, TABLE_NEW, TABLE_GHOST } tableUnsafeAdd(
                             tableHash *table,
                             tableSlot *slots,
                             cInt new_len,
@@ -128,16 +130,16 @@ static bool tableUnsafeAdd(
 
     if (slot->used)
     {
-        return false;
+        return TABLE_OLD;
     }
     else if (slot->used_before)
     {
         slot->used = 1;
-        return true;
+        return TABLE_GHOST;
     }
 
     slot->used_before = slot->used = 1;
-    return false;
+    return TABLE_NEW;
 }
 
 // Transfers all the contents of the old table into a new one.
@@ -196,11 +198,13 @@ void tableAdd(
         table->len = new_len;
     }
 
-    if (tableUnsafeAdd(table, NULL, 0, key, val))
+    switch (tableUnsafeAdd(table, NULL, 0, key, val))
     {
-        --table->num_ghosts;
+        case TABLE_GHOST:
+            --table->num_ghosts; // We want it to fall through here.
+        case TABLE_NEW:
+            ++table->num;
     }
-    ++table->num;
 }
 
 static tableSlot *tablePosLookup(tableHash *table, cByte *key)
