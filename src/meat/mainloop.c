@@ -5,7 +5,16 @@ void mainloopSim(simBac *sim, errorCode *err)
     snapshotSim(sim,err); // write snapshot of graph struct to file 
     
     while (sim->t < sim->param.t_max) // main time loop, once per time step
-    {
+    { 
+        nodeBac *node; // set and stack iteration variable
+        mapMagical(NULL,NULL,&sim->graph.update_set); // init iterator on update
+        mapMagical(&node,NULL,NULL); // get first node to be updated
+        while (node) // loop through all nodes to be updated
+        {
+            updateNode(node,sim); // update this node
+            mapMagical(&node,NULL,NULL); // get first node to be updated
+        }
+        
         sim->t += sim->param.t_s; // advance time tracker
         
         updateAB(sim); // Update blood antibiotic concentration, advance dosage
@@ -33,7 +42,6 @@ void mainloopSim(simBac *sim, errorCode *err)
             }
         }
 
-        nodeBac *node; // stack iteration variable
         node = stackPop(&sim->graph.rep_stack); // get first element from stack
         while (node) // while node is not null
         {
