@@ -67,7 +67,7 @@ void snapshotSim(simBac *sim, errorCode *err)
         }
     }
     chk = fprintf(vtk_f2, "LOOKUP_TABLE_colors %" TYPES_WRITE "\n", sim->num_bac);
-    for (cInt i = 0; i < sim->num_bac; ++i)
+    for (cInt i = 0; i < LIMITS_MAX_BACT; ++i)
     {
         if (sim->graph.bacteria[i].used)
         {
