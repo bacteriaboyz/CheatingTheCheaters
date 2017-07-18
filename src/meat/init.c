@@ -619,41 +619,49 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
         // initial number of cells
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
-    for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
+
+    bool connected = false; // stores connected status;
+    cInt nIter = 0; // keeps track of the number of iterations tried
+
+    while (!connected && nIter < LIMITS_MAX_TRIES)
+        // try until connected or tired
     {
-        ++sim->num_bac; // advance bacteria counter
-
-        cInt isProducer = 0; // default not producer
-        if (transformUnif(sim->state,0,1) < sim->param.phi_i)
-            // random distribute producers according to initial proportion
+        for (cInt i=0; i<num_cells_i; ++i) // for every cell that will be created,
         {
-            isProducer = 1;
-            ++sim->num_pro; // advance producer bacteria counter
-        }
+            ++sim->num_bac; // advance bacteria counter
 
-        cVec pos;
-        for (cInt j=0; j<LIMITS_DIM-1; ++j) // assign all dims except last
+            cInt isProducer = 0; // default not producer
+            if (transformUnif(sim->state,0,1) < sim->param.phi_i)
+                // random distribute producers according to initial proportion
+            {
+                isProducer = 1;
+                ++sim->num_pro; // advance producer bacteria counter
+            }
+
+            cVec pos;
+            for (cInt j=0; j<LIMITS_DIM-1; ++j) // assign all dims except last
+            {
+                pos[j] = transformUnif(sim->state,0,sim->param.x_max);
+            }
+            pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i); // do last
+
+            createNode(pos,isProducer,sim,err); // create bacteria
+            if (*err != SUCCESS)
+            {
+                return;
+            }
+        }
+        // the last bacteria should be used if connectChkGraph is to work    
+        if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
         {
-            pos[j] = transformUnif(sim->state,0,sim->param.x_max);
+            *err = INCONSISTENT;
+            return;
         }
-        pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i); // do last
-
-        createNode(pos,isProducer,sim,err); // create bacteria
+        connectChkGraph(sim,err); // Checks for one continuous clump of cells
         if (*err != SUCCESS)
         {
             return;
+            *err = SUCCESS;
         }
-    }
- 
-    if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
-    {
-        *err = INCONSISTENT;
-        return;
-    }
-    connectChkGraph(sim,err); // Checks for one continuous clump of cells
-    if (*err != SUCCESS)
-    {
-        return;
-        *err = SUCCESS;
     }
 }
