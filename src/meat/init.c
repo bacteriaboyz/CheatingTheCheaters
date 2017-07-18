@@ -591,11 +591,11 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     for (cInt i=0; i<LIMITS_DIM-1; ++i)
     {
         num_b[i] = floor( sim->param.x_max / sim->param.r_d ); // num buckets
-        b_dims[i] = sim->param.x_max / num_b[i]; // set this bucket dimension
         if (num_b[i] < 1) // if under 1, reset to 1
         {
             num_b[i] = 1;
         }
+        b_dims[i] = sim->param.x_max / num_b[i]; // set this bucket dimension
     }
 
     num_b[LIMITS_DIM-1] = floor( sim->param.z_max / sim->param.r_d );
