@@ -24,6 +24,7 @@ void updateAB(simBac *sim)
             sim->c_b += sim->param.doses_c[sim->dose_num]; 
                 // Add concentration of next dose to blood       
             ++sim->dose_num; // Advance dose counter
+            sim->c_b_peak = sim->c_b; // set new peak concentration
         }
     }
 }

@@ -18,9 +18,11 @@ typedef struct
 
     // Simulation state variables
     rngState state;     // Random number generator stuff
-    cFloat t;             // Current time variable in h, not time step constant!
+    cFloat t;           // Current time variable in h, not time step constant!
     cInt t_last_snap;   // Time elapsed since last snapshot
     cFloat c_b;         // Concentration of antibiotic in blood at current time
+    cFloat c_b_peak;    // Keeps track of previous dosage peak concentration
+                            // for exponential decay function
     cInt dose_num;      // Tracks what dose number we are in treatment
     cInt num_bac;       // Number of bacteria at this moment
     cInt num_pro;       // Number of producer bacteria at this moment
