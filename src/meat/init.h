@@ -1,6 +1,8 @@
 #ifndef _INIT_H
 #define _INIT_H
 
+#include <stdbool.h>
+
 #include "sim.h"
 #include "connectChk.h"
 
@@ -11,6 +13,7 @@
  *
  *  Arguments:  pointer to the simulation struct containing everything
  *              pointer to string containing parameter file address
+ *              boolean denoting if frame-by-frame output should be done
  *              errorCode pointer to keep track of errors.
  *
  *  Returns:    void
@@ -20,6 +23,6 @@
  *              OUT_OF_BACT
 **/
 
-void initSim(simBac *sim, char *param_file, errorCode *err);
+void initSim(simBac *sim, char *param_file, bool output, errorCode *err);
 
 #endif

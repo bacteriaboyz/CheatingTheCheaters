@@ -50,6 +50,7 @@ typedef struct
 
     cFloat snap_freq;   // Snapshot frequency, h
     char name_run[LIMITS_MAX_LINE_LEN];     // Stores name of this run
+    bool output;        // True if you want frame by frame output
     
     // Parameters calculated during initialization:
     cFloat rho_b;       // Max biofilm density, cells/um^3

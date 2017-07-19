@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
 
 #include "cleanup.h"
 #include "errors.h"
@@ -23,9 +25,9 @@ int main(void)
 
 int main(int argc, char **argv)
 {
-    if (argc != 3)
+    if ( (argc != 3 && argc != 4) || (argc == 4 && strcmp(argv[3], "--quiet") != 0))
     {
-        fprintf(stderr, "Usage: %s filename seed\n", argv[0]);
+        fprintf(stderr, "Usage: %s filename seed [--quiet]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -40,7 +42,9 @@ int main(int argc, char **argv)
         goto main_error;
     }
 
-    initSim(&sim, argv[1], &error);
+    bool output = argc == 3;
+
+    initSim(&sim, argv[1], output, &error);
 
     if (error != SUCCESS)
     {

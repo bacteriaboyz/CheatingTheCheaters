@@ -1,9 +1,12 @@
+#include <stdbool.h>
 #include "mainloop.h"
 
 void mainloopSim(simBac *sim, errorCode *err)
 {
-    snapshotSim(sim,err); // write snapshot of graph struct to file 
-    
+    if (sim->param.output)
+    {
+        snapshotSim(sim,err); // write snapshot of graph struct to file 
+    }
     while (sim->t < sim->param.t_max) // main time loop, once per time step
     { 
         updateAB(sim); // Update blood antibiotic concentration, advance dosage
@@ -76,8 +79,8 @@ void mainloopSim(simBac *sim, errorCode *err)
             node = stackPop(&sim->graph.hgt_stack); // get first element from stack
         }
 
-        if (sim->t_last_snap >= sim->param.snap_freq)
-            // if time since last snapshot is long enough
+        if (sim->param.output && sim->t_last_snap >= sim->param.snap_freq)
+            // if outputting to files and time since last snapshot is long enough
         {
             sim->t_last_snap = 1; // reset snapshot timer
             snapshotSim(sim,err); // write snapshot of graph struct to file

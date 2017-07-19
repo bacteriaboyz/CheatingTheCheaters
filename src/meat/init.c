@@ -523,7 +523,7 @@ static void initReadFile(simBac *sim, char *param_file, errorCode *err)
 
 
 
-void initSim(simBac *sim, char *param_file, errorCode *err)
+void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
 {
     initReadFile(sim, param_file, err);
 
@@ -531,6 +531,8 @@ void initSim(simBac *sim, char *param_file, errorCode *err)
     {
         return;
     }
+
+    sim->param.output = output; // handle whether or not output frame info
 
     // Calculate remaining parameters:
 
