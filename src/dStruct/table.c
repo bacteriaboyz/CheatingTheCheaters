@@ -125,8 +125,8 @@ static enum { TABLE_OLD, TABLE_NEW, TABLE_GHOST } tableUnsafeAdd(
 
     tableSlot *slot = target + search_idx;
 
-    memcpy(slot->key, key, table->key_len);
-    memcpy(slot->val, val, table->val_len);
+    memcpy(&slot->key, key, table->key_len);
+    memcpy(&slot->val, val, table->val_len);
 
     if (slot->used)
     {

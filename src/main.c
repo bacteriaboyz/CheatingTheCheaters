@@ -25,7 +25,7 @@ int main(void)
 
 int main(int argc, char **argv)
 {
-    if ( (argc != 3 && argc != 4) || (argc == 4 && strcmp(argv[3], "--quiet") != 0))
+    if ((argc != 3 && argc != 4) || (argc == 4 && strcmp(argv[3], "--quiet") != 0))
     {
         fprintf(stderr, "Usage: %s filename seed [--quiet]\n", argv[0]);
         return EXIT_FAILURE;
@@ -42,9 +42,7 @@ int main(int argc, char **argv)
         goto main_error;
     }
 
-    bool output = argc == 3;
-
-    initSim(&sim, argv[1], output, &error);
+    initSim(&sim, argv[1], argc == 3, &error);
 
     if (error != SUCCESS)
     {

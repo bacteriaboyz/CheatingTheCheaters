@@ -28,7 +28,7 @@ void stackReset(stackBac *stack)
 
 void stackPush(stackBac *stack, void *ptr, errorCode *error)
 {
-    if (++stack->idx == stack->len)
+    if (++stack->idx == stack->len + 1)
     {
         void **new_data = realloc(
                                         stack->data,
