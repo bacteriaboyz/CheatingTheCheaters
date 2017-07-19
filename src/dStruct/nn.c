@@ -163,7 +163,8 @@ void nnIterator(nnState *state, setBac **out)
         cInt decode = state->offset;
         cInt new_coords[LIMITS_DIM];
 
-        for (cInt i = 0; i < LIMITS_DIM - 1; ++i)
+        cInt i = 0;
+        for (; i < LIMITS_DIM - 1; ++i)
         {
             switch (decode % 3)
             {
