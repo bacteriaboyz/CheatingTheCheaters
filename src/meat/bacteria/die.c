@@ -11,6 +11,12 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
         --sim->num_pro; // if node was producer, reduce that counter
     }
 
+    nnDel(&sim->buckets,node,err); // deletes bacterium from nn struct
+    if (*err != SUCCESS)
+    {
+        return;
+    }
+
     nodeBac *n; // stores neighbor
     mapState state1, state2;
     mapInitMagic(&state1, &node->neighbors); // initialize iterator

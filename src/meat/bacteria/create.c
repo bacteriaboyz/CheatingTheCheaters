@@ -11,7 +11,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         // Assign new properties
         
         newNode->used = 1; // set used to true        
-        for (cInt i=0; i<LIMITS_DIM; i++) // loop across dimensions 
+        for (cInt i=0; i<LIMITS_DIM; ++i) // loop across dimensions 
         {
             newNode->pos[i] = pos[i]; // assign each coordinate
         }
@@ -54,7 +54,7 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         {
             return NULL;
         }
-        for (cInt i=0; i<LIMITS_BNEIGHBORS; i++) 
+        for (cInt i=0; i<LIMITS_BNEIGHBORS; ++i) 
             // while iteration of neighboring buckets not finished,
         {
             nnIterator(&state, &potNei); // advance bucket iterator
