@@ -122,7 +122,6 @@ void tableAdd(tableHash *table, cByte *key, cByte *val, errorCode *error);
 
 /*
  * Looks up a value in the hash table.
- * Possible errors: NOT_FOUND
  */
 
 cByte *tableLookup(tableHash *table, cByte *key);

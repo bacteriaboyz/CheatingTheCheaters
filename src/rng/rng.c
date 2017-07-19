@@ -15,6 +15,12 @@ void rngInitState(rngState state, cByte *phrase)
     state[0] = hash & 0xffffffffffffffff;
     state[1] = hash >> 64;
 
+    if (state[0] == 0 && state[1] == 0)
+    {
+        state[0] = 0xd15ea5edbaddf00d;
+        state[1] = 0xdeadbeefd066f00d;
+    }
+
     for (cInt i = 0; i < 128; ++i)
     {
         rngNextBlock(state);

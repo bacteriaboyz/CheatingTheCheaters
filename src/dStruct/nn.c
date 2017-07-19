@@ -74,6 +74,11 @@ void nnAdd(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
     if (bucket_ptr)
     {
         setAdd(bucket_ptr, bacterium, error);
+
+        if (*error == MEM)
+        {
+            return;
+        }
     }
     else
     {
@@ -135,8 +140,6 @@ void nnDel(nnBuckets *nn, nodeBac *bacterium, errorCode *error)
 
         mapDelBucket(&nn->bucketTable, idx, error);
     }
-
-    *error = SUCCESS;
 }
 
 void nnInitMagic(

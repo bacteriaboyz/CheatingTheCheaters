@@ -2,7 +2,7 @@ EXENAME = idontknow
 CC = gcc
 LD = gcc
 CFLAGS = -std=c99 -Wall -Werror -Wno-switch -Wno-format-truncation
-LDFLAGS = -lm
+LDFLAGS =
 
 OPTIMIZE = -O2 -march=native
 DEBUG = -O0 -g
@@ -12,7 +12,10 @@ STRIP = -s
 OBJECTS = $(shell find . -name "*.c" | sed "s/\.c/.o/g") ../jsmn/jsmn.o
 INCLUDE = $(shell find . -type d | sed "s/^/-I/;s/\n/ /") -I../jsmn
 
-CFLAGS += $(SWITCHES) -DJSMN_PARENT_LINKS $(INCLUDE)
+LIBS = -lm
+
+CFLAGS += $(CS) -DJSMN_PARENT_LINKS $(INCLUDE)
+LDFLAGS += $(LS) $(LIBS)
 
 ifdef debug
 	CFLAGS += $(DEBUG)
