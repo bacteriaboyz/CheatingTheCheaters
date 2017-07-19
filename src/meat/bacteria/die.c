@@ -14,7 +14,7 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
     nodeBac *n; // stores neighbor
     mapState state1, state2;
     mapInitMagic(&state1, &node->neighbors); // initialize iterator
-    for (cInt i=0; i < tableCard(&node->neighbors); i++)
+    for (cInt i=0; i < tableCard(&node->neighbors); ++i)
         // iterate through neighbors
     {
         mapMagical(&state1, &n, NULL); // get next neighbor

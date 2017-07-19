@@ -13,15 +13,19 @@ void mainloopSim(simBac *sim, errorCode *err)
                         // if necessary
 
         nodeBac *node; // set and stack iteration variable
-        mapState state;
+        mapState state; // needed for iterator
         mapInitMagic(&state, &sim->graph.update_set); // init iterator on update
         mapMagical(&state, &node, NULL); // get first node to be updated
         while (node) // loop through all nodes to be updated
         {
-            updateNode(node,sim); // update this node
+            if (node->used) // if node is used
+            {
+                updateNode(node,sim); // update this node
+            }
             mapMagical(&state, &node, NULL); // get first node to be updated
         }
         
+        setReset(&sim->graph.update_set); // reset update set
         sim->t += sim->param.t_s; // advance time tracker
         
         for (cInt i=0; i<LIMITS_MAX_BACT; i++) // loop across all bacteria
