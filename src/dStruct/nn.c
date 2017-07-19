@@ -163,7 +163,7 @@ void nnIterator(nnState *state, setBac **out)
         cInt decode = state->offset;
         cInt new_coords[LIMITS_DIM];
 
-        for (cInt i = 0; i < LIMITS_DIM; ++i)
+        for (cInt i = 0; i < LIMITS_DIM - 1; ++i)
         {
             switch (decode % 3)
             {
@@ -184,11 +184,29 @@ void nnIterator(nnState *state, setBac **out)
             decode /= 3;
         }
 
+        switch (decode % 3)
+        {
+            case 0:
+                new_coords[i] = state->coords[i];
+                break;
+            case 1:
+                new_coords[i] = state->coords[i] == state->nn->counts[i] ?
+                                    state->coords[i] :
+                                    state->coords[i] + 1;
+                break;
+            case 2:
+                new_coords[i] = state->coords[i] == 0 ?
+                                    0 :
+                                    state->coords[i] - 1;
+                break;
+        }
+
         *out = mapLookupBucket(
                                 &state->nn->bucketTable,
                                 nnCoords2Idx(new_coords)
                               );
 
+        ++state->offset;
         return;
     }
 
