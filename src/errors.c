@@ -24,7 +24,7 @@ const char *errorMsg(errorCode code)
                 "file.";
         case ERR_CREATE_FILE:
             return "There was a problem creating a file (csv or vtk output "
-                "files.";
+                "files).";
         case ERR_READ_FILE:
             return "Could not read file.";
         case PRINT_FAIL:

@@ -56,6 +56,9 @@ int main(int argc, char **argv)
         goto main_error;
     }
 
+    printf("%" TYPES_WRITE ",%" TYPES_WRITE ",%f\n", \
+        sim.num_bac, sim.num_pro, sim.t);
+
     return EXIT_SUCCESS;
 
 main_error:

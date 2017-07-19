@@ -468,7 +468,7 @@ static void initReadFile(simBac *sim, char *param_file, errorCode *err)
         return;
     }
 
-    if (!(buffer = malloc(LIMITS_MAX_FILE_SIZE)))
+    if (!(buffer = calloc(LIMITS_MAX_FILE_SIZE, 1)))
     {
         *err = MEM;
         fclose(file);
@@ -556,30 +556,33 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
         ( log( 1.0 + ( sim->param.c_m / sim->param.c_i ) ) - log( 2.0 ) );
         // Hill coefficient expressed in terms of 1/3 and 2/3 total height pts. 
 
-    FILE *ts_f; // time series file pointer
-
-    char ts_file_name[LIMITS_MAX_LINE_LEN+16];
-
-    sprintf(ts_file_name, \
-        "time_series_%s.csv",sim->param.name_run);
-        // prints time series file name to variable
-
-    ts_f = fopen(ts_file_name,"w"); // open csv file
-    if (!ts_f)
+    if (sim->param.output)
     {
-        *err = ERR_CREATE_FILE;
-        fclose(ts_f);
-        return;
+        FILE *ts_f; // time series file pointer
+
+        char ts_file_name[LIMITS_MAX_LINE_LEN+17];
+
+        sprintf(ts_file_name, \
+            "time_series_%s.csv",sim->param.name_run);
+            // prints time series file name to variable
+
+        ts_f = fopen(ts_file_name,"w"); // open csv file
+        if (!ts_f)
+        {
+            *err = ERR_CREATE_FILE;
+            fclose(ts_f);
+            return;
+        }
+        cInt pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
+            // print csv file header
+        if (pChk < 0)
+        {
+            *err = PRINT_FAIL;
+            fclose(ts_f);
+            return;
+        }
+        sim->t_series_file = ts_f; // save time series file
     }
-    cInt pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
-        // print csv file header
-    if (pChk < 0)
-    {
-        *err = PRINT_FAIL;
-        fclose(ts_f);
-        return;
-    }
-    sim->t_series_file = ts_f; // save time series file
 
     updateAB(sim); // init blood antibiotic
 
