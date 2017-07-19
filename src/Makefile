@@ -21,7 +21,9 @@ ifdef debug
 	CFLAGS += $(DEBUG)
 else
 	CFLAGS += $(OPTIMIZE)
+ifndef profile
 	LDFLAGS += $(STRIP)
+endif
 endif
 
 ifdef profile
