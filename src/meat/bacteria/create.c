@@ -69,7 +69,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                 {
                     cFloat d = distance(newNode,n,sim); 
                         // distance between both nodes
-                    if (d < sim->param.r_d && n != newNode) // if within neighborhood limits,
+                    if (d < sim->param.r_d && n != newNode)
+                        // if within neighborhood limits and neighbor is not self
                     {
                         mapAddBacterium(&newNode->neighbors,n,d,err);
                             // add this potential neighbor to newNode's 
@@ -97,6 +98,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                             }
                         }
 
+                        cInt num_nei_prev = tableCard(&n->neighbors);
+                            // Used to check if adding same bacterium
                         mapAddBacterium(&n->neighbors,newNode,d,err);
                             // add newNode to this potential neighbor's 
                                 // neighborhood
@@ -104,7 +107,10 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                         {
                             return NULL; // run away, run away
                         }
-                        if (newNode->enz) // if new node is producer
+                        if (newNode->enz && \
+                            num_nei_prev + 1 == tableCard(&n->neighbors))
+                            // if new node is producer 
+                            // and was not already a neighbor
                         {
                             ++n->num_r_n; // increase neighbor's producer 
                                             //neighbors
