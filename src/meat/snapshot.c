@@ -19,8 +19,8 @@ void snapshotSim(simBac *sim, errorCode *err)
     //for the VTK file
     FILE *vtk_f;
     char vtk_file_name[LIMITS_MAX_LINE_LEN];
-    snprintf(vtk_file_name, LIMITS_MAX_LINE_LEN, "pos_%s_%.4f.vtk", \
-        sim->param.name_run, floor(sim->t/sim->param.snap_freq));
+    snprintf(vtk_file_name, LIMITS_MAX_LINE_LEN, "%s_%" TYPES_WRITE ".vtk", \
+        sim->param.name_run, (cInt)floor(sim->t / sim->param.snap_freq));
     
     vtk_f = fopen(vtk_file_name, "w");
 
@@ -56,6 +56,8 @@ void snapshotSim(simBac *sim, errorCode *err)
             
         }
     }
+    
+    fprintf(vtk_f,"POINT_DATA %" TYPES_WRITE "\n SCALARS enzyme float\n" "LOOKUP_TABLE Producers\n", sim->num_bac);
     
     for (cInt i = 0; i < LIMITS_MAX_BACT; ++i)
     {
