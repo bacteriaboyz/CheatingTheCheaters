@@ -10,7 +10,7 @@
 #endif
 
 #ifndef LIMITS_MAX_BACT
-#define LIMITS_MAX_BACT 1000
+#define LIMITS_MAX_BACT 10000
 #endif
 
 #ifndef LIMITS_DIM

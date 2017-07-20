@@ -20,6 +20,10 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         newNode->c = sim->c_b; // initialize concentration for this node
         nnAdd(&sim->buckets,newNode,err);
             // Add newNode to NN data struct
+        if (*err != SUCCESS)
+        {
+            return NULL;
+        }
         newNode->enz = isProducer; // assign enzyme production
         ++sim->num_bac; // stores number of bacteria
         if (isProducer)

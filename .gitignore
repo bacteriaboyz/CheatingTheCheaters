@@ -59,6 +59,7 @@ thumbs.db
 *.s
 *.stackdump
 idontknow
-src/test_param.txt
+*.txt
 *.csv
 *.vtk
+src/output/

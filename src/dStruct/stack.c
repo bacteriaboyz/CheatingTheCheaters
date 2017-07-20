@@ -32,7 +32,7 @@ void stackPush(stackBac *stack, void *ptr, errorCode *error)
     {
         void **new_data = realloc(
                                         stack->data,
-                                        (stack->len *= 2) * sizeof(void *)
+                                        ((stack->len *= 2) + 1) * sizeof(void *)
                                     );
 
         if (!new_data)
