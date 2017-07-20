@@ -573,7 +573,7 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
             fclose(ts_f);
             return;
         }
-        cInt pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
+        int pChk = fprintf(ts_f,"Time,Num_Bac,Num_Prod,AB_Conc\n"); 
             // print csv file header
         if (pChk < 0)
         {

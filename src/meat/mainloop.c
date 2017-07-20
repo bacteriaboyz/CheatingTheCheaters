@@ -9,20 +9,21 @@ void mainloopSim(simBac *sim, errorCode *err)
     }
     while (sim->t < sim->param.t_max) // main time loop, once per time step
     { 
+        cFloat prevAB = sim->c_b; // previous turn's AB concentration
         updateAB(sim); // Update blood antibiotic concentration, advance dosage
                         // if necessary
-
+        
         nodeBac *node; // set and stack iteration variable
         mapState state; // needed for iterator
         mapInitMagic(&state, &sim->graph.update_set); // init iterator on update
         mapMagical(&state, &node, NULL); // get first node to be updated
         while (node) // loop through all nodes to be updated
         {
-            if (node->used) // if node is used
+            if (node->used || prevAB != sim->c_b) // if node is used
             {
                 updateNode(node,sim); // update this node
             }
-            mapMagical(&state, &node, NULL); // get first node to be updated
+            mapMagical(&state, &node, NULL); // get next node to be updated
         }
         
         setReset(&sim->graph.update_set); // reset update set

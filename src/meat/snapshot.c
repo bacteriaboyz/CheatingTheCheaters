@@ -7,7 +7,7 @@
 void snapshotSim(simBac *sim, errorCode *err)
 {
     //For the csv file
-    cInt chk = fprintf(sim->t_series_file, "%.6e,%" TYPES_WRITE ",%" \
+    int chk = fprintf(sim->t_series_file, "%.6e,%" TYPES_WRITE ",%" \
         TYPES_WRITE ",%.6e\n", sim->t, sim->num_bac, sim->num_pro, sim->c_b);
 
     if(chk < 0)
