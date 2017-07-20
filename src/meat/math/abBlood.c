@@ -21,8 +21,10 @@ void updateAB(simBac *sim)
         if (sim->t >= sim->param.doses_t[sim->dose_num]) 
             // If we're at the next dosing time...
         {
-            sim->c_b += sim->param.doses_c[sim->dose_num]; 
-                // Add concentration of next dose to blood       
+            sim->c_b += sim->param.doses_c[sim->dose_num] * \
+                sim->param.t_b / sim->param.v_w; 
+                // Add concentration of next dose to blood, calculated
+                    // from net dose, body mass and total body water
             ++sim->dose_num; // Advance dose counter
             sim->c_b_peak = sim->c_b; // set new peak concentration
         }

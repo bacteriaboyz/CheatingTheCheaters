@@ -24,6 +24,7 @@ typedef struct
     cFloat v_w;         // German automobile manufacturer, horsepower
                             //  ...
                             // ...fine, total body water, L
+    cFloat t_b;         // Total body mass, kg
 
     // Control parameters:
 

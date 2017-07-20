@@ -310,6 +310,20 @@ static void initReadParams(
 
                 initialized[12] = true;
             }
+            else if (INIT_EQ(key, "t_b"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.t_b
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[13] = true;
+            }
             else if (INIT_EQ(key, "v_w"))
             {
                 if (sscanf(
