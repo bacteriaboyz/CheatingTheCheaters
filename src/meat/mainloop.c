@@ -13,27 +13,24 @@ void mainloopSim(simBac *sim, errorCode *err)
         updateAB(sim); // Update blood antibiotic concentration, advance dosage
                         // if necessary
         
-        nodeBac *node; // set and stack iteration variable
-        mapState state; // needed for iterator
-        mapInitMagic(&state, &sim->graph.update_set); // init iterator on update
-        mapMagical(&state, &node, NULL); // get first node to be updated
-        while (node) // loop through all nodes to be updated
-        {
-            if (node->used || prevAB != sim->c_b) // if node is used
-            {
-                updateNode(node,sim); // update this node
-            }
-            mapMagical(&state, &node, NULL); // get next node to be updated
-        }
-        
-        setReset(&sim->graph.update_set); // reset update set
         sim->t += sim->param.t_s; // advance time tracker
-        
+       
+        nodeBac *node; // temp var used to access stuff
+ 
         for (cInt i=0; i<LIMITS_MAX_BACT; i++) // loop across all bacteria
         {
             if (sim->graph.bacteria[i].used) // only operate on used bacteria
             {
-                nodeBac *node = &sim->graph.bacteria[i]; // current node
+                node = &sim->graph.bacteria[i]; // current node
+                
+                if (prevAB != sim->c_b || \
+                    setIsMember( &sim->graph.update_set,node ) )
+                    // if the blood ab has changed or there is some other 
+                        // rason to update this node
+                {
+                    updateNode(node,sim); // dewit
+                }
+
                 cFloat r_1 = transformUnif(sim->state,0.0,1.0); // one random number
                 if ( r_1 < node->p_rep ) // if replicating this time step
                 {
@@ -51,6 +48,8 @@ void mainloopSim(simBac *sim, errorCode *err)
             }
         }
 
+        setReset(&sim->graph.update_set); // reset update set
+        
         node = stackPop(&sim->graph.rep_stack); // get first element from stack
         while (node) // while node is not null
         {

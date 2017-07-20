@@ -15,6 +15,10 @@ void updatePARep(nodeBac *node, simBac *sim)
     while (i<node->num_r_n) // while not all resistant neighbors have been found
     {
         mapMagical(&state, &n, &d); // get next neighbor and distance
+        if (!n->used) // debugging
+        {
+            continue;
+        }
         if (n != node && n->enz && n->used)
              // if the neighbor is not self and is a producer and is alive
         { 
