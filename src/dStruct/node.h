@@ -17,6 +17,7 @@ typedef struct
                                 // 2-bit allocation (assigns 1 bit to this
                                 // more efficient than booleans).
 
+    cFloat dProd;           // Distance to the nearest enzyme producer
     cFloat c;               // Concentration of antibiotic felt at this node
     cFloat v_n;             // Volume of neighborhood around bacteria
     cFloat p_a_r;           // Probability of attempting replication in t step

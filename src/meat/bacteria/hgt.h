@@ -2,6 +2,7 @@
 #define _HGT_H
 
 #include "sim.h"
+#include "dist.h"
 #include "update.h"
 #include "map.h"
 

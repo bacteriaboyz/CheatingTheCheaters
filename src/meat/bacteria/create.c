@@ -18,6 +18,8 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
         updateNeiVol(newNode,sim); // update volume of neighborhood sphere
         newNode->num_r_n = 0; // reset producer neighbor counter
         newNode->c = sim->c_b; // initialize concentration for this node
+        newNode->dProd = sim->param.r_d; 
+            // default nearest neighbor as very far away
         nnAdd(&sim->buckets,newNode,err);
             // Add newNode to NN data struct
         if (*err != SUCCESS)
@@ -94,15 +96,12 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                                 // increase num producer neighbors
                             if (!newNode->enz) // if new node is not a producer
                             {
-                                cFloat potC = abConc(d,sim); 
-                                    // calculate concentration due to 
-                                        // this neighbor
-                                if (newNode->c > potC) 
-                                    // if [ab] is less with this producer as 
+                                if (newNode->dProd > d) 
+                                    // if this producer is closer than 
                                         // nearest neighbor,
                                 {
-                                    newNode->c = potC; 
-                                        // set as new concentration
+                                    newNode->dProd = d; 
+                                        // set as new distance
                                 }
                             }
                         }
@@ -130,13 +129,13 @@ nodeBac *createNode(cVec pos, cInt isProducer, simBac *sim, errorCode *err)
                                 return NULL;
                             }
 
-                            cFloat possibleNewC = \
-                                abConc(distance(newNode,n,sim),sim);
+                            cFloat possibleNewD = \
+                                distance(newNode,n,sim);
                                 // [ab] due to new node
-                            if ( possibleNewC < n->c )
+                            if ( possibleNewD < n->dProd )
                                 // if this concentration is higher,
                             {
-                                n->c = possibleNewC; // update [ab]
+                                n->dProd = possibleNewD; // update [ab]
                             }
                         }
                     }

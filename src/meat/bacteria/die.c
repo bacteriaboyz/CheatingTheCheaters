@@ -44,7 +44,7 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
                     return;
                 }
 
-                if ( abConc( distance( node,n,sim ) , sim ) <= n->c )
+                if ( distance( node,n,sim ) <= n->dProd )
                     // if this node was this neighbor's closest producer
                 {
                     nodeBac *n_n; // iterating node pointer
@@ -59,12 +59,9 @@ void dieNode(nodeBac *node, simBac *sim, errorCode *err)
                         if (n_n != n && d < min_d) // if neighbor is not self
                                                     // and new min
                         {
-                            min_d = d; // if new min, set
+                            n->dProd = d; // if new min, set
                         }
                     }
-
-                    n->c = abConc(d,sim); // set new concentration of antibiotic
-                                            // at this neighbor
                 }
             }
         }
