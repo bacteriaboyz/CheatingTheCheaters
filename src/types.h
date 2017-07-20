@@ -12,7 +12,13 @@
 
 typedef char cByte;
 typedef uint_fast32_t cInt;
+
+#ifdef OLD_GCC
+typedef __uint128_t cBigInt;
+#else
 typedef unsigned __int128 cBigInt;
+#endif
+
 typedef double cFloat;
 typedef cFloat cVec[LIMITS_DIM];
 
