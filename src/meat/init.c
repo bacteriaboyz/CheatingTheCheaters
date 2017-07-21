@@ -16,7 +16,7 @@
 
 #define INIT_EQ(x, y) (strcmp((x), (y)) == 0)
 
-#define INIT_NUM_PARAMS 23
+#define INIT_NUM_PARAMS 25
 
 static void initReadParams(
                             simBac *sim,
@@ -102,7 +102,7 @@ static void initReadParams(
 
                 i += sim->param.num_doses - 1;
 
-                initialized[21] = true;
+                initialized[23] = true;
             }
             else if (INIT_EQ(key, "doses_c"))
             {
@@ -154,7 +154,7 @@ static void initReadParams(
 
                 i += sim->param.num_doses - 1;
 
-                initialized[22] = true;
+                initialized[24] = true;
             }
             else if (INIT_EQ(key, "z_max"))
             {
@@ -294,7 +294,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[10] = true;
+                initialized[11] = true;
             }
             else if (INIT_EQ(key, "t_s"))
             {
@@ -308,7 +308,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[11] = true;
+                initialized[12] = true;
             }
             else if (INIT_EQ(key, "t_max"))
             {
@@ -322,7 +322,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[12] = true;
+                initialized[13] = true;
             }
             else if (INIT_EQ(key, "t_b"))
             {
@@ -336,7 +336,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[13] = true;
+                initialized[14] = true;
             }
             else if (INIT_EQ(key, "v_w"))
             {
@@ -350,7 +350,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[13] = true;
+                initialized[15] = true;
             }
             else if (INIT_EQ(key, "k_a"))
             {
@@ -364,7 +364,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[14] = true;
+                initialized[16] = true;
             }
             else if (INIT_EQ(key, "c_i"))
             {
@@ -378,7 +378,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[15] = true;
+                initialized[17] = true;
             }
             else if (INIT_EQ(key, "h_i"))
             {
@@ -392,7 +392,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[16] = true;
+                initialized[17] = true;
             }
             else if (INIT_EQ(key, "phi_i"))
             {
@@ -406,7 +406,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[16] = true;
+                initialized[18] = true;
             }
             else if (INIT_EQ(key, "c_m"))
             {
@@ -420,7 +420,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[17] = true;
+                initialized[19] = true;
             }
             else if (INIT_EQ(key, "c_c"))
             {
@@ -434,7 +434,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[18] = true;
+                initialized[20] = true;
             }
             else if (INIT_EQ(key, "f_e"))
             {
@@ -448,7 +448,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[19] = true;
+                initialized[21] = true;
             }
             else if (INIT_EQ(key, "snap_freq"))
             {
@@ -462,7 +462,7 @@ static void initReadParams(
                     return;
                 }
 
-                initialized[20] = true;
+                initialized[22] = true;
             }
         }
     }
