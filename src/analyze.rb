@@ -21,6 +21,7 @@ STEPS =
 
 def progress(message, n)
     $stderr.print "\r#{RED}#{message}#{RESET}...#{SYMBOLS[n % SYMBOLS.size]}"
+    $stderr.flush
 end
 
 def done(message)
