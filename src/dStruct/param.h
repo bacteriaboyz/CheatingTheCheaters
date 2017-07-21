@@ -19,6 +19,8 @@ typedef struct
     cFloat alp_n;       // Replication rate of non-producer bacteria in absence
                             // of antibiotic
     cFloat x_max;       // Simulation plane length, um
+    cFloat x_base_factor;   // Number of times the sim base is length is larger
+                                // than the sow base length
     cFloat t_s;         // Simulation time step, h
     cFloat t_max;       // Max simulation time, h
     cFloat v_w;         // German automobile manufacturer, horsepower

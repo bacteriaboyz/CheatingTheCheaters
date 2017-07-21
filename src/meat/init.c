@@ -268,6 +268,20 @@ static void initReadParams(
 
                 initialized[9] = true;
             }
+            else if (INIT_EQ(key, "x_base_factor"))
+            {
+                if (sscanf(
+                            buffer + tok->start,
+                            "%lf",
+                            &sim->param.x_base_factor
+                          ) == 0)
+                {
+                    *err = MALFORMED_FILE;
+                    return;
+                }
+
+                initialized[10] = true;
+            }
             else if (INIT_EQ(key, "x_max"))
             {
                 if (sscanf(
@@ -550,9 +564,8 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
 
     // Calculate remaining parameters:
 
-    cFloat base_factor = 5.0; // scale factor for base
-
-    sim->param.x_max = base_factor * sim->param.x_max; // larger base
+    sim->param.x_max = sim->param.x_base_factor * sim->param.x_max;
+        // larger base
 
     sim->param.v_t = pow( sim->param.x_max, LIMITS_DIM ) * sim->param.z_max;
     sim->param.n_max = sim->param.v_t / \
@@ -638,10 +651,10 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
     cFloat x_min_sow = sim->param.x_max / 2.0 - \
-        sim->param.x_max / ( base_factor * 2.0 );
+        sim->param.x_max / ( sim->param.x_base_factor * 2.0 );
         // min value of initial seed
     cFloat x_max_sow = sim->param.x_max / 2.0 + \
-        sim->param.x_max / ( base_factor * 2.0 );
+        sim->param.x_max / ( sim->param.x_base_factor * 2.0 );
         // min value of initial seed
 
     bool conn; // connection check var
