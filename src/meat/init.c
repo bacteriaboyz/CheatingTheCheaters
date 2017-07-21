@@ -646,7 +646,8 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
 
     // Sow initial cells
 
-    cFloat num_cells_i = sim->param.n_max * sim->param.h_i;
+    cFloat num_cells_i = sim->param.n_max * sim->param.h_i / \
+        pow( sim->param.x_base_factor, LIMITS_NUM_DIM );
         // initial number of cells
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
