@@ -44,11 +44,11 @@ static void initReadParams(
             {
                 buffer[tok->end] = '\0';
 
-                strncpy(
+                /*strncpy(
                         sim->param.name_run,
                         buffer + tok->start,
                         LIMITS_MAX_LINE_LEN - 1
-                       );
+                       );*/
 
                 initialized[0] = true;
             }
@@ -551,7 +551,7 @@ static void initReadFile(simBac *sim, char *param_file, errorCode *err)
 
 
 
-void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
+void initSim(simBac *sim, char *name_run, char *param_file, bool output, errorCode *err)
 {
     initReadFile(sim, param_file, err);
 
@@ -559,6 +559,9 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
     {
         return;
     }
+    
+    strncpy(sim->param.name_run,\
+        name_run,LIMITS_MAX_LINE_LEN - 1); // save run name    
 
     sim->param.output = output; // handle whether or not output frame info
 

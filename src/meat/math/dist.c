@@ -11,7 +11,7 @@ cFloat distance(nodeBac *n1, nodeBac *n2, simBac *sim)
     {
         cFloat d =  fabs( n1->pos[i] - n2->pos[i] ); // regular distance  
 
-#ifdef WRAP
+#ifndef NO_WRAP
         if ( d > sim->param.x_max / 2.0 )
         // if the wrapped distance is shorter than the regular distance
         {

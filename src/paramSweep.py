@@ -8,7 +8,9 @@
 from joblib import Parallel, delayed
 import multiprocessing
 from sys import argv
-m __future__ import divisioni
+from __future__ import divisioni
+import math
+import random
 
 param, param_range, base_param_fp = argv[0:4]
 
@@ -27,10 +29,17 @@ def linspace(start, stop, n):
 '''
 Creates latin hypercube sample of parameters
 '''
-def latinHyperCube(pRanges, numcuts):
+def latinHyperCube(pRanges, num_cuts):
     pArr = []
     for p in pRanges:
-        pArr.append([]) # add new dimension
+        r = range(0,num_cuts)
+        sorted(r, key=lambda *args: random.random())
+        pArr.append(r) # add new dimension
+
+    map(list, zip(*l))
+
+        param_vals = list(linspace(p[0], p[1], num_cuts))
+            # numbers of parameter values 
         
 
 '''

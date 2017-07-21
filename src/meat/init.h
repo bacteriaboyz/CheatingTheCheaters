@@ -12,6 +12,7 @@
  * and taking a snapshot of the result.
  *
  *  Arguments:  pointer to the simulation struct containing everything
+ *              pointer to string conataining name of run
  *              pointer to string containing parameter file address
  *              boolean denoting if frame-by-frame output should be done
  *              errorCode pointer to keep track of errors.
@@ -23,6 +24,6 @@
  *              OUT_OF_BACT
 **/
 
-void initSim(simBac *sim, char *param_file, bool output, errorCode *err);
+void initSim(simBac *sim, char *name_run, char *param_file, bool output, errorCode *err);
 
 #endif

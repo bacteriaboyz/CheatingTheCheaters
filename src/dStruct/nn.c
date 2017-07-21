@@ -163,7 +163,7 @@ void nnIterator(nnState *state, setBac **out)
         cInt decode = state->offset;
         cInt new_coords[LIMITS_DIM];
 
-#ifdef WRAP
+#ifndef NO_WRAP
         cInt i = 0;
         for (; i < LIMITS_DIM - 1; ++i)
         {

@@ -25,9 +25,9 @@ int main(void)
 
 int main(int argc, char **argv)
 {
-    if ((argc != 3 && argc != 4) || (argc == 4 && strcmp(argv[3], "--quiet") != 0))
+    if ((argc != 4 && argc != 5) || (argc == 5 && strcmp(argv[4], "--quiet") != 0))
     {
-        fprintf(stderr, "Usage: %s filename seed [--quiet]\n", argv[0]);
+        fprintf(stderr, "Usage: %s namerun filename seed [--quiet]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -35,14 +35,14 @@ int main(int argc, char **argv)
 
     errorCode error;
 
-    setupSim(&sim, argv[2], &error);
+    setupSim(&sim, argv[3], &error);
 
     if (error != SUCCESS)
     {
         goto main_error;
     }
 
-    initSim(&sim, argv[1], argc == 3, &error);
+    initSim(&sim, argv[1], argv[2], argc == 4, &error);
 
     if (error != SUCCESS)
     {
