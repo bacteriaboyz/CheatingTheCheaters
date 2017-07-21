@@ -62,4 +62,5 @@ idontknow
 *.txt
 *.csv
 *.vtk
+*.xz
 src/output/
