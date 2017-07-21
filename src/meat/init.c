@@ -564,7 +564,7 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
 
     // Calculate remaining parameters:
 
-    sim->param.x_max = sim->param.x_base_factor * sim->param.x_max;
+    //sim->param.x_max = sim->param.x_base_factor * sim->param.x_max;
         // larger base
 
     sim->param.v_t = pow( sim->param.x_max, LIMITS_DIM ) * sim->param.z_max;
