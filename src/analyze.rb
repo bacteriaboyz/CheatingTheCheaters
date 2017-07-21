@@ -2,6 +2,8 @@
 
 abort("Usage: #{$0} file.vtk radius x_max") unless ARGV.size == 3
 
+require_relative 'vtklib.rb'
+
 RESET = "\e[0m"
 BOLD = "\e[1m"
 RED = "\e[31m"
@@ -56,13 +58,7 @@ end
 
 $stderr.print "#{RED}#{STEPS[0]}#{RESET}..."
 
-raw = File.readlines(ARGV[0])
-
-num = /\d+/.match(raw[4])[0].to_i
-
-points = raw[5, num].map { |x| x.split.map(&:to_f) }
-
-types = raw[8 + num, num].map(&:to_i)
+num, points, types = vtkData(ARGV[0])
 
 done(STEPS[0])
 
