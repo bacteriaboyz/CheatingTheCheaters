@@ -663,7 +663,7 @@ void initSim(simBac *sim, char *name_run, char *param_file, bool output, errorCo
 
     bool conn; // connection check var
 
-    for (cInt i=0; i < LIMITS_MAX_TRIES; ++i)
+    for (cInt k=0; k < LIMITS_MAX_TRIES; ++k)
         // try until connected or tired
     {
         for (cInt i=0; i<LIMITS_MAX_BACT; ++i)
@@ -695,6 +695,17 @@ void initSim(simBac *sim, char *name_run, char *param_file, bool output, errorCo
                 return;
             }
         }
+
+        if (sim->param.phi_i < 0) // extra option: set resistant seed at center
+        {
+            cFloat ctr = sim->param.x_max / 2.0; // center of floor
+            cVec pos = {ctr,ctr,0}; // position at center of floor
+            for (cInt i=0; i<fabs(sim->param.phi_i); ++i)
+            {
+                createNode(pos,1,sim,err); // create bacteria
+            }
+        }
+
         // the last bacteria should be used if connectChkGraph is to work
         if (!sim->graph.bacteria[LIMITS_MAX_BACT-1].used)
         {
