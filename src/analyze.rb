@@ -10,7 +10,7 @@ SYMBOLS = %w(- \\ | /)
 
 P = 200000
 
-NAN = 'No information'
+NAN = '??'
 
 STEPS =
 [
@@ -28,6 +28,15 @@ end
 
 def done(message)
     $stderr.puts "#\r#{message}...#{GREEN}#{BOLD}Done#{RESET}"
+end
+
+def info(param, n, d)
+    if d.zero?
+        "#{param} #{n}/0 #{NAN} #{NAN}"
+    else
+        g = n.gcd(d)
+        "#{param} #{n}/#{d} #{n / g}/#{d / g} %.2e" % n.fdiv(d)
+    end
 end
 
 R = ARGV[1].to_f
@@ -137,11 +146,11 @@ done(STEPS[4])
 w = IO.popen('column -t >&2', 'w')
 
 w.puts <<-EOS
-Coef Rational Decimal
-R_c #{rcn}/#{rcd} #{rcd.zero? ? NAN : rcn.fdiv(rcd)}
-R_p #{rpn}/#{rpd} #{rpd.zero? ? NAN : rpn.fdiv(rpd)}
-S_c #{scn}/#{scd} #{scd.zero? ? NAN : scn.fdiv(scd)}
-S_p #{spn}/#{spd} #{spd.zero? ? NAN : spn.fdiv(spd)}
+Coef Rational Reduced Decimal
+#{info('R_c', rcn, rcd)}
+#{info('R_p', rpn, rpd)}
+#{info('S_c', scn, scd)}
+#{info('S_p', spn, spd)}
 EOS
 
 w.close
