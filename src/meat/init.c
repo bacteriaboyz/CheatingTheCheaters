@@ -550,6 +550,10 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
 
     // Calculate remaining parameters:
 
+    cFloat base_factor = 5.0; // scale factor for base
+
+    sim->param.x_max = base_factor * sim->param.x_max; // larger base
+
     sim->param.v_t = pow( sim->param.x_max, LIMITS_DIM ) * sim->param.z_max;
     sim->param.n_max = sim->param.v_t / \
         ( 4.0 * sqrt(2.0) * pow( sim->param.d_bac, 3.0 ) );
@@ -633,8 +637,14 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
         // initial number of cells
     cFloat z_max_i = sim->param.z_max * sim->param.h_i;
         // maximum z height of cells initially
+    cFloat x_min_sow = sim->param.x_max / 2.0 - \
+        sim->param.x_max / ( base_factor * 2.0 );
+        // min value of initial seed
+    cFloat x_max_sow = sim->param.x_max / 2.0 + \
+        sim->param.x_max / ( base_factor * 2.0 );
+        // min value of initial seed
 
-    bool conn;
+    bool conn; // connection check var
 
     for (cInt i=0; i < LIMITS_MAX_TRIES; ++i)
         // try until connected or tired
@@ -658,7 +668,7 @@ void initSim(simBac *sim, char *param_file, bool output, errorCode *err)
             cVec pos;
             for (cInt j=0; j<LIMITS_DIM-1; ++j) // assign all dims except last
             {
-                pos[j] = transformUnif(sim->state,0,sim->param.x_max);
+                pos[j] = transformUnif(sim->state,x_min_sow,x_max_sow);
             }
             pos[LIMITS_DIM-1] = transformUnif(sim->state,0,z_max_i); // do last
 
