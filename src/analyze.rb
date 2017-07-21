@@ -8,7 +8,9 @@ RED = "\e[31m"
 GREEN = "\e[32m"
 SYMBOLS = %w(- \\ | /)
 
-P = 1000000
+P = 200000
+
+NAN = 'No information'
 
 STEPS =
 [
@@ -132,9 +134,16 @@ end
 
 done(STEPS[4])
 
-$stderr.puts "R_c = #{rcn}/#{rcd}"
-$stderr.puts "R_p = #{rpn}/#{rpd}"
-$stderr.puts "S_c = #{scn}/#{scd}"
-$stderr.puts "S_p = #{spn}/#{spd}"
+w = IO.popen('column -t >&2', 'w')
+
+w.puts <<-EOS
+Coef Rational Decimal
+R_c #{rcn}/#{rcd} #{rcd.zero? ? NAN : rcn.fdiv(rcd)}
+R_p #{rpn}/#{rpd} #{rpd.zero? ? NAN : rpn.fdiv(rpd)}
+S_c #{scn}/#{scd} #{scd.zero? ? NAN : scn.fdiv(scd)}
+S_p #{spn}/#{spd} #{spd.zero? ? NAN : spn.fdiv(spd)}
+EOS
+
+w.close
 
 puts degs * ','
