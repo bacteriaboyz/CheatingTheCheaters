@@ -1,5 +1,31 @@
 #include "replicate.h"
 
+#ifndef WRAP_REP
+#include <stdbool.h>
+// used to avoid wraparound reproduction
+static bool insideDims(cVec pos, simBac *sim)
+{
+    bool in = true; // true if all inside limits 
+    for (cInt i = 0; i<LIMITS_DIM-1; i++) // check all dimensions are within limits
+    {
+        if (pos[i] > sim->param.x_max || pos[i] < 0)
+             // if normal dimension exceeds max or is less than zero
+        {
+            in = false; // say so
+            break; // esc loop
+        }
+    }
+
+    if (pos[LIMITS_DIM-1] < 0) 
+        // if z dimension exceeds boundaries,
+    {
+        in = false; // say so
+    }
+
+    return in;
+}
+#endif
+
 void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
 {
     cInt limit_iter = LIMITS_MAX_TRIES; // iteration limit for rejection sampling
@@ -30,6 +56,7 @@ void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
         return;
     }
 
+    #ifdef WRAP_REP
     for (cInt i=0; i<LIMITS_DIM-1; i++) // iterate through all dims except last
     {
         if (pos[i] < 0) // if out of bounds on bottom,
@@ -41,6 +68,21 @@ void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
             pos[i] -= sim->param.x_max; // wrap around top
         }
     }
+    #else
+    iterChk = 0; // reset counter
+    while ( !insideDims(pos,sim) && iterChk < limit_iter )
+        // if last coordinate is outside bounds of simulation or beyond max iter
+    {
+        ++iterChk; // advance counter
+        transformBall(sim->state,sim->param.d_bac,node->pos,pos,err);
+            // sample from ball
+        if (*err != SUCCESS)
+        {
+            return;
+        }
+    }
+    #endif
+    
 
     cInt enz = node->enz; // parent phenotype
     if ( transformUnif(sim->state,0,1) < sim->param.lam_l )
