@@ -10,11 +10,14 @@ cFloat distance(nodeBac *n1, nodeBac *n2, simBac *sim)
         // for every distance in every axis other than the non-wrapping one
     {
         cFloat d =  fabs( n1->pos[i] - n2->pos[i] ); // regular distance  
+
+#ifdef WRAP
         if ( d > sim->param.x_max / 2.0 )
         // if the wrapped distance is shorter than the regular distance
         {
             d = sim->param.x_max - d; // use wraparound distance instead
         }
+#endif
         sumSqrs += pow( d, 2.0 ); // square distance
         
         ++i; // advance counter

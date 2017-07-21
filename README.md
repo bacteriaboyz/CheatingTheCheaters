@@ -5,4 +5,4 @@ Compile flags:
 
 `OLD_GCC`: old gcc version for outdated cluster systems
 
-`NO_WRAP_REP`: don't wrap replication across xy plane (toroidal system)
+`WRAP`: wrap replication and behavior across xy plane (toroidal system)

@@ -1,6 +1,6 @@
 #include "replicate.h"
 
-#ifdef NO_WRAP_REP
+#ifndef WRAP
 #include <stdbool.h>
 // used to avoid wraparound reproduction
 static bool insideDims(cVec pos, simBac *sim)
@@ -56,7 +56,7 @@ void replicateNode(nodeBac *node, simBac *sim, errorCode *err)
         return;
     }
 
-    #ifndef NO_WRAP_REP
+    #ifdef WRAP
     for (cInt i=0; i<LIMITS_DIM-1; i++) // iterate through all dims except last
     {
         if (pos[i] < 0) // if out of bounds on bottom,
