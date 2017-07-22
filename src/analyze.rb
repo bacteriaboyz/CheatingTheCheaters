@@ -139,7 +139,7 @@ end
 
 done(STEPS[4])
 
-w = IO.popen('column -t >&2', 'w')
+w = IO.popen('column -t', 'w')
 
 w.puts <<-EOS
 Coef Rational Reduced Decimal
